@@ -1,0 +1,57 @@
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col card-login d-flex flex-column">
+            <div id="errorMessageDiv"></div>
+            <form [formGroup]="form" (ngSubmit)="authUser()">
+                <div class="card shadow">
+                    <div class="card-body m-4">
+                        <span class="login-title text-primary fw-bold"><i class="bi bi-coin me-1"></i> PFinances</span>
+                        <hr>
+                        <p class="text-info">Informe os dados abaixo para entrar.</p>
+                        <div class="form-inputs bg-light" id="emailFieldBox" (click)="inputUserNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                            <div class="field-box">
+                                <label for="username" class="text-info">E-mail</label>
+                                <input 
+                                    class="form-fields" 
+                                    id="username" 
+                                    type="email"
+                                    formControlName="emailAddress" 
+                                    (blur)="validateEmailField()">
+                            </div>
+                        </div>
+                    
+                    <div *ngIf="form.get('emailAddress')?.invalid && (form.get('emailAddress')?.dirty || form.get('emailAddress')?.touched)">
+                        <p class="text-danger mb-2">Endereço de e-mail inválido</p>
+                    </div>
+                    <div class="form-inputs bg-light" id="passwordFieldBox" (click)="inputPasswordFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="password" class="text-info">Senha</label>
+                            <input 
+                                class="form-fields" 
+                                id="password" 
+                                [type]="inputType" 
+                                formControlName="pwd"
+                                (blur)="validatePasswordField()">
+                        </div>
+                        <a style="cursor: pointer;" (click)="changeInputType()"><i [ngClass]="eyeIconClass"></i></a>
+                    </div>
+                    <div *ngIf="form.get('pwd')?.errors?.['required'] && form.get('pwd')?.touched">
+                        <p class="text-danger mb-2">Campo obrigatório</p>
+                    </div>
+                        <a class="text-primary" style="cursor: pointer;">Esqueci a senha</a>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-secondary w-100 me-2 fw-bold">Primeiro Acesso</button>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary w-100 fw-bold me-2" [disabled]="!form.valid" type="submit">Entrar</button>
+                            </div>
+                        </div>      
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
