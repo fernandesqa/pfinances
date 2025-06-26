@@ -1,1 +1,130 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.bg-primary {
+    background-color: #113059 !important;
+}
+
+.bg-secondary {
+    background-color: #313A46 !important;
+}
+
+.text-primary {
+    color: #113059 !important;
+}
+
+.text-secondary {
+    color: #313A46 !important;
+}
+
+.text-tertiary {
+    color: #5850A0
+}
+
+.border-primary {
+    border-color: #113059 !important;
+}
+
+.btn-primary {
+    background-color: #4F45A7 !important;
+    border-color: #4F45A7;
+}
+
+.btn-primary:hover {
+    background-color: #113059 !important;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #113059;
+    border-color: #113059;
+}
+
+.btn-secondary:hover {
+    background-color: #313A46;
+    border-color: #313A46;
+}
+
+.card-disabled {
+    background-color: #dddddd;
+}
+
+.p-disabled {
+    color: gray;
+}
+
+.p-menu-link:hover {
+    color: #5850A0 !important;
+}
+
+.pagination > li > .active  {
+    background-color: #113059 !important;
+}
+
+.pagination > li > a {
+    color: #113059 !important;
+}
+
+.pagination > .active > a {
+    color: white !important;
+    background-color: #113059 !important;
+    border-color: #113059 !important;
+}
+
+.form-check-input:checked {
+    background-color: #113059 !important;
+    border-color: #113059 !important;
+}
+
+
+
+/*TOOLTIP INÍCIO*/
+
+.tooltips {
+    display: inline-block;
+    background: #5850A0;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 5px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+}
+
+.arrow,
+.arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+.arrow {
+  visibility: hidden;
+}
+
+.arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.tooltips[data-popper-placement^='top'] > .arrow {
+  bottom: -4px;
+}
+
+.tooltips[data-popper-placement^='bottom'] > .arrow {
+  top: -4px;
+}
+
+.tooltips[data-popper-placement^='left'] > .arrow {
+  right: -4px;
+}
+
+.tooltips[data-popper-placement^='right'] > .arrow {
+  left: -4px;
+}
+
+
+/*TOOLTIP FIM*/
