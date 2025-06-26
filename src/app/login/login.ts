@@ -1,6 +1,10 @@
 import { Component, EventEmitter, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Message } from '../share/message';
+import { AuthService } from '../services/auth';
+import { md5 } from 'js-md5';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +13,17 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './login.css'
 })
 export class Login implements OnInit {
+
+  private isInputTypeText!: boolean;
+  inputType!: string;
+  eyeIconClass!: string;
+  private lowerCaseRefExp: RegExp = /[A-Z]/;
+  private emailRegExp: RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  form!: FormGroup;
+  message = new Message();
+  eyeIconEvent: EventEmitter<string> = new EventEmitter();
+  inputTypeEvent: EventEmitter<string> = new EventEmitter();
+  private route: Router = new Router();
 
   ngOnInit(): void {
 
@@ -25,17 +40,9 @@ export class Login implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private authService: AuthService
   ) {}
-
-  private isInputTypeText!: boolean;
-  inputType!: string;
-  eyeIconClass!: string;
-  private lowerCaseRefExp: RegExp = /[A-Z]/;
-  private emailRegExp: RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-  form!: FormGroup;
-  eyeIconEvent: EventEmitter<string> = new EventEmitter();
-  inputTypeEvent: EventEmitter<string> = new EventEmitter();
 
   //Valida o e-mail informado pelo usuário e exibe mensagem abaixo do campo caso o padrão esteja incorreto
   emailValidator(control: { value: string; }) {
@@ -108,6 +115,23 @@ export class Login implements OnInit {
   }
 
   //Chama o serviço de autenticação de usuário
-  async authUser() {}
+  async authUser() {
+    const emailField = document.getElementById('username') as HTMLInputElement;
+    const passwordField = document.getElementById('password') as HTMLInputElement;
+    this.authService.emailAddress = emailField.value;
+    this.authService.password = md5(passwordField.value);
+
+    var result =  await this.authService.Authenticate();
+
+    switch(result) {
+      case 200:
+        this.route.navigate(['resumo']);
+        break;
+      default:
+        this.message.buildAutoCloseMessage('errorMessageDiv', 'danger', 'Dados inválidos!', 2000);
+        sessionStorage.clear();
+        break;
+    }
+  }
 
 }
