@@ -16,12 +16,14 @@ export class AuthService {
             
             result = data.status;
 
-            localStorage.setItem('pFinancesUserId', data.response.id);
-            localStorage.setItem('pFinancesFamilyId', data.response.familyId);
-            localStorage.setItem('pFinancesRole', data.response.roleId);
-            localStorage.setItem('pFinancesUserName', data.response.name);
-            localStorage.setItem('pFinancesUserEmailAddress', data.response.email);
-            localStorage.setItem('pFinancesAccessToken', data.response.accessToken);
+            if(result==200) {
+                localStorage.setItem('pFinancesUserId', data.response.id);
+                localStorage.setItem('pFinancesFamilyId', data.response.familyId);
+                localStorage.setItem('pFinancesRole', data.response.roleId);
+                localStorage.setItem('pFinancesUserName', data.response.name);
+                localStorage.setItem('pFinancesUserEmailAddress', data.response.email);
+                localStorage.setItem('pFinancesAccessToken', data.response.accessToken);
+            }
 
         }).catch (error => {
             console.log(error);
