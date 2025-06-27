@@ -1,0 +1,24 @@
+.notification {
+  position: relative;
+  display: inline-block;
+}
+
+.label {
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: -10px;
+    border-radius: 50%;
+    color: #fff;
+    display: inline;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.label-danger {
+    background-color: #d9534f;
+}
+ 

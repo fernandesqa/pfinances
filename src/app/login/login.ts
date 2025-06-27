@@ -42,7 +42,9 @@ export class Login implements OnInit {
     private formBuilder: FormBuilder,
     private renderer: Renderer2,
     private authService: AuthService
-  ) {}
+  ) {
+    this.hideNavigation();
+  }
 
   //Valida o e-mail informado pelo usuário e exibe mensagem abaixo do campo caso o padrão esteja incorreto
   emailValidator(control: { value: string; }) {
@@ -114,6 +116,22 @@ export class Login implements OnInit {
     }
   }
 
+  //Oculta a barra de navegação
+  hideNavigation() {
+    var nav = document.getElementById('navigation');
+    var div = document.getElementById('navigationBottom');
+    nav?.setAttribute('class', 'navbar navbar-expand-lg bg-light p-0 d-none');
+    div?.setAttribute('class', 'container-fluid bg-secondary d-none');
+  }
+
+  //Exibe a barra de navegação
+  displayNavigation() {
+    var nav = document.getElementById('navigation');
+    var div = document.getElementById('navigationBottom');
+    nav?.setAttribute('class', 'navbar navbar-expand-lg bg-light p-0');
+    div?.setAttribute('class', 'container-fluid bg-secondary');
+  }
+
   //Chama o serviço de autenticação de usuário
   async authUser() {
     const emailField = document.getElementById('username') as HTMLInputElement;
@@ -126,10 +144,11 @@ export class Login implements OnInit {
     switch(result) {
       case 200:
         this.route.navigate(['resumo']);
+        this.displayNavigation();
         break;
       default:
         this.message.buildAutoCloseMessage('errorMessageDiv', 'danger', 'Dados inválidos!', 2000);
-        sessionStorage.clear();
+        localStorage.clear();
         break;
     }
   }
