@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Message } from '../share/message';
-import { AuthService } from '../services/auth';
+import { AuthService } from '../services/auth.service';
 import { md5 } from 'js-md5';
 import { Router } from '@angular/router';
 
@@ -148,7 +148,12 @@ export class Login implements OnInit {
         break;
       default:
         this.message.buildAutoCloseMessage('errorMessageDiv', 'danger', 'Dados inválidos!', 2000);
-        localStorage.clear();
+        localStorage.removeItem('pFinancesAccessToken');
+        localStorage.removeItem('pFinancesFamilyId');
+        localStorage.removeItem('pFinancesRole');
+        localStorage.removeItem('pFinancesUserEmailAddress');
+        localStorage.removeItem('pFinancesUserId');
+        localStorage.removeItem('pFinancesUserName');
         break;
     }
   }
