@@ -19,7 +19,7 @@ export class Login implements OnInit {
   eyeIconClass!: string;
   private lowerCaseRefExp: RegExp = /[A-Z]/;
   private emailRegExp: RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-  form!: FormGroup;
+  public form!: FormGroup;
   message = new Message();
   eyeIconEvent: EventEmitter<string> = new EventEmitter();
   inputTypeEvent: EventEmitter<string> = new EventEmitter();

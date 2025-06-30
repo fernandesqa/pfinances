@@ -1,0 +1,21 @@
+<div id="modalAddMember" tabindex="-1" aria-labelledby="modalAddMember" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 id="modalAddMember" class="modal-title fs-5 fw-bold">Adicionar Membro</h1>
+        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form" class="ng-pristine ng-invalid ng-toouched">
+            <label for="emailMember" class="text-info">E-mail: </label>
+            <input type="email" id="emailMember" formControlName="emailDependent" class="form-control ng-pristine ng-invalid ng-touched">
+            <div *ngIf="form.get('emailDependent')?.invalid && (form.get('emailDependent')?.dirty || form.get('emailDependent')?.touched)">
+                <p class="text-danger mb-2">Endereço de e-mail inválido</p>
+            </div>
+            <button class="btn btn-primary my-2" disabled>Gerar convite</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
