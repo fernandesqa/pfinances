@@ -6,6 +6,27 @@
         <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
       </div>
       <div class="modal-body">
+        <div *ngIf="dataNotFound" class="d-flex justify-content-center my-5">
+            <span class="text-info">Nenhum registro encontrado!</span>
+        </div>
+        <table *ngIf="dataFound" class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Tipo de Acesso</th>
+                    <th scope="col">Cadastro Concluído</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of usersData">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.emailAddress }}</td>
+                    <td>{{ item.role }}</td>
+                    <td>{{ item.concludedRegistry }}</td>
+                </tr>
+            </tbody>
+        </table>
         <div class="row">
             <div class="col d-flex justify-content-center">
                 <a type="button" class="my-3 text-primary">Adicionar membro</a>

@@ -14,7 +14,7 @@ export class UsersService {
   private url = this.http.getApiUrl() + '/users/';
 
   //Obtém os dados dos usuários
-  async getUsersData(userId: string, familyId: string, accessToken: string) {
+  async getUsersData(userId: string, familyId: string, accessToken: string): Promise<any> {
     this.url = this.url +userId+'/families/'+familyId;
     const data = await fetch(this.url, {
             headers: {
