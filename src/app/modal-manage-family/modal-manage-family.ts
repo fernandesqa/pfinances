@@ -22,6 +22,7 @@ export class ModalManageFamily implements OnInit {
   public dataNotFound: boolean = false;
   public dataFound: boolean = false;
   public usersData: any = [];
+  public loading: boolean = true;
 
   async ngOnInit() {
 
@@ -29,9 +30,11 @@ export class ModalManageFamily implements OnInit {
 
     //Se o endpoint não retorna dados, exibir mensagem
     if(this.data.message) {
+      this.loading = false;
       this.dataNotFound = true;
     } else {
       //Se o endpoint retorna dados, exibir os dados
+      this.loading = false;
       this.dataFound = true;
       for(var i=0; i<this.data.total; i++) {
         var concludedRegistry = 'Não';
