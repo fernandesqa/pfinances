@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Http } from '../share/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private authUrl: string = 'https://pfinances.com.br/app/apis/auth';
+    private authUrl: string = 'https://pfinances.com.br/app/apis/auth';
     emailAddress!: string;
     password!: string;
 

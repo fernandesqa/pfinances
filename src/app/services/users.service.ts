@@ -1,0 +1,31 @@
+import { Injectable } from '@angular/core';
+import { TokenExpiredCheckService } from './token-expired-check.service';
+import { Http } from '../share/http';
+import { Router } from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService {
+
+  private router = new Router
+  private token = new TokenExpiredCheckService(this.router);
+  private http = new Http(this.token);
+  private url = this.http.getApiUrl() + '/users/';
+
+  //Obtém os dados dos usuários
+  async getUsersData(userId: string, familyId: string, accessToken: string) {
+    this.url = this.url +userId+'/families/'+familyId;
+    const data = await fetch(this.url, {
+            headers: {
+                "X-Api-Key": accessToken
+            }
+        });
+
+        //VERIFICA SE O TOKEN EXPIROU
+        this.token.checkWetherTokenExpired(data.status);
+        return await data.json() ?? [];
+  }
+
+
+}
