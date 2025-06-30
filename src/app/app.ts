@@ -3,47 +3,28 @@ import { Router, RouterOutlet } from '@angular/router';
 import { Footer } from './footer/footer';
 import { AuthService } from './services/auth.service';
 import { SessionService } from './services/session.service';
-import { TokenExpiredCheckService } from './services/token-expired-check.service';
+import { ModalLogout } from './modal-logout/modal-logout';
+import { ModalManageFamily } from './modal-manage-family/modal-manage-family';
+import { UsersService } from './services/users.service';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
+    ModalManageFamily,
+    ModalLogout,
     Footer
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
   providers: [
     AuthService,
-    SessionService
+    SessionService,
+    UsersService
   ]
 })
 export class App {
   protected title = 'pfinances';
 
-  constructor(
-    private sessionService: SessionService,
-    private token: TokenExpiredCheckService,
-    private router: Router
-  ) {}
-
-  async logout() {
-    let status = await this.sessionService.deleteSession();
-    switch(status) {
-      case 201:
-        localStorage.removeItem('pFinancesAccessToken');
-        localStorage.removeItem('pFinancesFamilyId');
-        localStorage.removeItem('pFinancesRole');
-        localStorage.removeItem('pFinancesUserEmailAddress');
-        localStorage.removeItem('pFinancesUserId');
-        localStorage.removeItem('pFinancesUserName');
-        this.router.navigate(['login']);
-        break;
-      default:
-        console.log('Erro ao excluir sessão, o serviço retornou erro '+status);
-        //VERIFICA SE O TOKEN EXPIROU
-        this.token.checkWetherTokenExpired(status);
-        break;
-    }
-  }
+  constructor() {}
 }

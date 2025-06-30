@@ -15,7 +15,7 @@
                     <span id="notificationNumber" class="label label-danger" style="padding: .2em .6em .3em;">5</span>
                   </a>
                   <div class="mx-2">
-                    <a type="button" class="mx-4">
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#modalManageFamily">
                       <span class="fs-4">
                         <i class="bi bi-people-fill text-primary"></i>
                       </span>
@@ -38,19 +38,6 @@
 <div class="container">
   <router-outlet></router-outlet>
 </div>
-<div id="modalLogout" tabindex="-1" aria-labelledby="modalLogoutLabel" aria-hidden="true" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 id="modalLogoutLabel" class="modal-title fs-5 fw-bold">Confirmação</h1>
-        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
-      </div>
-      <div class="modal-body"> Deseja realmente sair?</div>
-      <div class="modal-footer">
-        <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Não</button>
-        <button (click)="logout()" type="button" data-bs-dismiss="modal" class="btn btn-primary">Sim</button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-modal-logout></app-modal-logout>
+<app-modal-manage-family>s</app-modal-manage-family>
 <app-footer></app-footer>
