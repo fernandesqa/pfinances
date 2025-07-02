@@ -5,14 +5,15 @@ import { TokenExpiredCheckService } from "../services/token-expired-check.servic
 export class Http {
     constructor(private sessionToken: TokenExpiredCheckService) {}
 
+    private token = localStorage.getItem('pFinancesAccessToken');
+
     getApiUrl(): string {
         var url = 'https://pfinances.com.br/app/apis';
         return url;
     }
 
-        //UTILIZAR ESSE MÉTODO COM REQUISIÇÕES GET
+    //UTILIZAR ESSE MÉTODO COM REQUISIÇÕES GET
     async getData(url: string) {
-        var token = sessionStorage.getItem('accessToken');
         
         const response = await fetch(url, {
             method: "GET",
@@ -21,7 +22,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": token!
+                "x-api-key": this.token!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer"
@@ -34,7 +35,6 @@ export class Http {
 
     //UTILIZAR ESSE MÉTODO COM REQUISIÇÕES GET
     async getStatusCode(url: string) {
-        var token = sessionStorage.getItem('accessToken');
         
         const response = await fetch(url, {
             method: "GET",
@@ -43,7 +43,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": token!
+                "x-api-key": this.token!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer"
@@ -57,7 +57,7 @@ export class Http {
 
     //UTILIZAR ESSE MÉTODO COM REQUISIÇÕES POST
     async postData(url: string, data: {}) {
-        var token = sessionStorage.getItem('accessToken');
+
         const response = await fetch(url, {
             method: "POST",
             mode: "cors",
@@ -65,7 +65,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": token!
+                "x-api-key": this.token!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer",
@@ -77,7 +77,7 @@ export class Http {
 
     //UTILIZAR ESSE MÉTODO EM REQUISIÇÕES PUT
     async putData(url: string, data: {}) {
-        var token = sessionStorage.getItem('accessToken');
+
         const response = await fetch(url, {
             method: "PUT",
             mode: "cors",
@@ -85,7 +85,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": token!
+                "x-api-key": this.token!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer",
@@ -97,7 +97,7 @@ export class Http {
 
     //UTILIZAR ESSE MÉTODO PARA REQUISIÇÕES DELETE
     async DeleteData(url: string) {
-        var token = sessionStorage.getItem('accessToken');
+
         const response = await fetch(url, {
             method: "DELETE",
             mode: "cors",
@@ -105,7 +105,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": token!
+                "x-api-key": this.token!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer"
