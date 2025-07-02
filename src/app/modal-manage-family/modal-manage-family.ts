@@ -34,15 +34,14 @@ export class ModalManageFamily implements OnInit {
       this.dataNotFound = true;
     } else {
       //Se o endpoint retorna dados, exibir os dados
-      this.loading = false;
-      this.dataFound = true;
       for(var i=0; i<this.data.total; i++) {
         var concludedRegistry = 'Não';
         if(this.data.data[i].firstAccess==false) {
           concludedRegistry = 'Sim';
         }
-
         this.usersData.push({name: this.data.data[i].name, emailAddress: this.data.data[i].emailAddress, role: this.data.data[i].role, concludedRegistry: concludedRegistry});
+        this.loading = false;
+        this.dataFound = true;
       }
     }
   }

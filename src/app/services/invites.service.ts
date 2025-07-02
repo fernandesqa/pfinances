@@ -1,0 +1,34 @@
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { TokenExpiredCheckService } from './token-expired-check.service';
+import { Http } from '../share/http';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class InvitesService {
+
+  private router = new Router
+  private token = new TokenExpiredCheckService(this.router);
+  private http = new Http(this.token);
+  private url = this.http.getApiUrl() + '/generate-invite';
+
+  //Gera os dados do convite do dependente
+  async generateInvite(emailAddress: string): Promise<any> {
+    let result = 0;
+    await this.http.postData(this.url, 
+      {
+        "userId": localStorage.getItem('pFinancesUserId'),
+        "familyId": localStorage.getItem('pFinancesFamilyId'),
+        "emailAddress": emailAddress
+      }
+    ).then ( (data) => {
+      result = data.response;
+    }).catch (error => {
+        console.log(error);
+        result = error;
+    });
+
+    return result;
+  }
+}
