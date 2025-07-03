@@ -24,6 +24,7 @@ export class UsersService {
 
         //VERIFICA SE O TOKEN EXPIROU
         this.token.checkWetherTokenExpired(data.status);
+        this.url = this.http.getApiUrl() + '/users/';
         return await data.json() ?? [];
   }
 

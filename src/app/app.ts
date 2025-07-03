@@ -8,6 +8,7 @@ import { ModalManageFamily } from './modal-manage-family/modal-manage-family';
 import { UsersService } from './services/users.service';
 import { ModalAddMember } from './modal-add-member/modal-add-member';
 import { InvitesService } from './services/invites.service';
+import { Users } from './share/users';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,14 @@ import { InvitesService } from './services/invites.service';
   ]
 })
 export class App {
-  protected title = 'pfinances';
+  protected title = 'pfinances';  
 
-  constructor() {}
+  private users = new Users;
+
+  loadUsers() {
+    this.users.userId = localStorage.getItem('pFinancesUserId')!;
+    this.users.familyId = localStorage.getItem('pFinancesFamilyId')!;
+    this.users.accessToken = localStorage.getItem('pFinancesAccessToken')!;
+    this.users.getUsers();
+  }
 }
