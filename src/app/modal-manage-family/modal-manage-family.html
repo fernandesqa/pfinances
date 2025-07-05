@@ -12,10 +12,11 @@
                 <a type="button" class="my-3 text-primary" data-bs-toggle="modal" data-bs-target="#modalAddMember">Adicionar membro</a>
             </div>
             <div class="col d-flex justify-content-center">
-                <a type="button" class="my-3 text-primary">Consultar convites</a>
+                <a type="button" data-bs-toggle="modal" data-bs-target="#modalInvites" class="my-3 text-primary" (click)="loadInvites()">Consultar convites</a>
             </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<app-modal-invites></app-modal-invites>
