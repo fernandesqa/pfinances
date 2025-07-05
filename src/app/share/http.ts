@@ -22,14 +22,14 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": this.token!
+                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer"
         });
         //VERIFICA SE O TOKEN EXPIROU
         this.sessionToken.checkWetherTokenExpired(response.status);
-        const responseObj = await response.json();
+        const responseObj = {status: response.status, response: await response.json()};
         return responseObj;
     }
 

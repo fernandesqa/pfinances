@@ -16,9 +16,7 @@ export class Users {
 
         this.showSpinner();
         var data: any = [];
-        var dataFound: boolean = false;
         var usersData: any = [];
-        var loading: boolean = true;
 
         data = await this.usersService.getUsersData(this.userId, this.familyId, this.accessToken);
 
@@ -61,19 +59,7 @@ export class Users {
         const result = document.getElementById('usersData') as HTMLElement;
         result.innerHTML = '';
         //cria o spinner
-        const eDiv = document.createElement('div');
-        eDiv.setAttribute('class', 'd-flex justify-content-center my-5');
-
-        const eDivSpinner = document.createElement('div');
-        eDivSpinner.setAttribute('class', 'spinner-border text-primary');
-        eDivSpinner.setAttribute('role', 'status');
-
-        const eSpanSpinner = document.createElement('span');
-        eSpanSpinner.setAttribute('class', 'sr-only');
-
-        eDivSpinner.appendChild(eSpanSpinner);
-        eDiv.appendChild(eDivSpinner);
-        result.appendChild(eDiv);
+        this.showSpinner();
         //Cria a mensagem de erro
         const eDivError = document.createElement('div');
         eDivError.setAttribute('class', 'd-flex justify-content-center my-5');
@@ -94,21 +80,8 @@ export class Users {
 
     private createUsersTable(data: any) {
         const result = document.getElementById('usersData') as HTMLElement;
-        result.innerHTML = '';
         //cria o spinner
-        const eDiv = document.createElement('div');
-        eDiv.setAttribute('class', 'd-flex justify-content-center my-5');
-
-        const eDivSpinner = document.createElement('div');
-        eDivSpinner.setAttribute('class', 'spinner-border text-primary');
-        eDivSpinner.setAttribute('role', 'status');
-
-        const eSpanSpinner = document.createElement('span');
-        eSpanSpinner.setAttribute('class', 'sr-only');
-
-        eDivSpinner.appendChild(eSpanSpinner);
-        eDiv.appendChild(eDivSpinner);
-        result.appendChild(eDiv);
+        this.showSpinner();
         //Cria a tabela
         const eTable = document.createElement('table');
         eTable.setAttribute('class', 'table table-striped');
