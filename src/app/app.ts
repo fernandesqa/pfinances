@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { Footer } from './footer/footer';
 import { AuthService } from './services/auth.service';
 import { SessionService } from './services/session.service';

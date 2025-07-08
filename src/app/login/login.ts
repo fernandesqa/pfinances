@@ -132,6 +132,11 @@ export class Login implements OnInit {
     div?.setAttribute('class', 'container-fluid bg-secondary');
   }
 
+  //Redireciona para a página de primeiro acesso
+  goToFirstAccess() {
+    this.route.navigate(['primeiro-acesso']);
+  }
+
   //Chama o serviço de autenticação de usuário
   async authUser() {
     const emailField = document.getElementById('username') as HTMLInputElement;

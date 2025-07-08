@@ -1,0 +1,46 @@
+<div class="container mt-2">
+    <div id="loginErrorMessage"></div>
+    <div class="my-2">
+        <a (click)="goToLogin()" class="text-primary fw-bold" style="cursor: pointer; text-decoration: none;">
+            <i class="bi bi-arrow-left-square"></i>
+            Voltar
+        </a>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <form class="ng-untouched ng-pristine ng-invalid">
+                <fieldset>
+                    <legend>Selecione o tipo de convite recebido:</legend>
+                    <div class="form-check">
+                        <input type="radio" name="flexRadioRole" id="flexRadioHolder" checked class="form-check-input">
+                        <label for="flexRadioHolder" class="form-check-label"> Recebi o convite da PFinances, sou usuário titular</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" name="flexRadioRole" id="flexRadioDependent" class="form-check-input">
+                        <label for="flexRadioDependent" class="form-check-label"> Recebi o convite de um familiar</label>
+                    </div>
+                </fieldset>
+                <div class="mt-4">
+                    <hr>
+                    <span>
+                        <b>Titular, informe os dados do convite abaixo:</b>
+                    </span>
+                    <br>
+                    <div id="inviteCodeFieldBox" class="form-inputs-sm bg-light mt-2" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="inviteCode" class="mt-2 text-info">Código do Convite</label>
+                            <input type="text" formControlName="inviteCode" id="inviteCode" class="form-fields ng-pristine ng-invalid ng-touched">
+                        </div>
+                    </div>
+                    <div id="emailFieldBox" class="form-inputs-md bg-light mt-2" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="email" class="mt-2 text-info">E-mail</label>
+                            <input type="text" formControlName="emailFirstAccess" id="email" class="form-fields ng-pristine ng-invalid ng-touched">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-lg w-25 fw-bold mt-2" disabled>Validar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
