@@ -5,6 +5,7 @@ import { Message } from '../share/message';
 import { AuthService } from '../services/auth.service';
 import { md5 } from 'js-md5';
 import { Router } from '@angular/router';
+import { FieldBox } from '../share/field-box';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class Login implements OnInit {
   private lowerCaseRefExp: RegExp = /[A-Z]/;
   private emailRegExp: RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   public form!: FormGroup;
+  private fieldBox = new FieldBox;
   message = new Message();
   eyeIconEvent: EventEmitter<string> = new EventEmitter();
   inputTypeEvent: EventEmitter<string> = new EventEmitter();
@@ -86,7 +88,7 @@ export class Login implements OnInit {
   //Valida se o e-mail informado está no padrão correto, quando não, então altera a cor da caixa do campo
   validateEmailField() { 
 
-    const emailBoxEl = document.getElementById('emailFieldBox');
+    const emailBoxEl = document.getElementById('emailFieldBox') as HTMLElement;
     const emailField = document.getElementById('username') as HTMLInputElement;
     
     const matches = emailField.value.match(this.emailRegExp);
@@ -95,10 +97,10 @@ export class Login implements OnInit {
     
     if(matches === null || matches2 != null) {
       //Altera a cor da borda do campo para vermelho
-      emailBoxEl?.setAttribute('style', 'box-shadow: 0 0 0 1px red');
+      this.fieldBox.changeBoxShadowColor(emailBoxEl, false);
     } else {
       //Altera a cor da borda do campo para #dce0e8
-      emailBoxEl?.setAttribute('style', 'box-shadow: 0 0 0 1px #dce0e8');
+      this.fieldBox.changeBoxShadowColor(emailBoxEl, true);
     }
     
   }
