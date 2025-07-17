@@ -47,4 +47,33 @@ export class InvitesService {
 
     return result;
   }
+
+  //Valida se o convite informado é válido
+  async validateInvite(role: string, inviteCode: string, emailAddress: string): Promise<any> {
+    let result = 0;
+    this.url = this.url + '/invite';
+    await this.http.postData(this.url, 
+      {
+        "role": role,
+        "inviteCode": inviteCode,
+        "emailAddress": emailAddress
+      }
+    ).then ( (data) => {
+      switch(data.status) {
+        case 400:
+          result = data.status;
+          this.url = this.http.getApiUrl();
+          break;
+        default:
+          result = data.response;
+          this.url = this.http.getApiUrl();
+          break;
+      }
+    }).catch (error => {
+        console.log(error);
+        result = error;
+    });
+
+    return result;
+  }
 }
