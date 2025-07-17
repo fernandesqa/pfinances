@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { Footer } from './footer/footer';
 import { AuthService } from './services/auth.service';
 import { SessionService } from './services/session.service';
@@ -9,6 +9,7 @@ import { UsersService } from './services/users.service';
 import { ModalAddMember } from './modal-add-member/modal-add-member';
 import { InvitesService } from './services/invites.service';
 import { Users } from './share/users';
+import { FirstAccessService } from './services/first-access.service';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,8 @@ import { Users } from './share/users';
     AuthService,
     SessionService,
     UsersService,
-    InvitesService
+    InvitesService,
+    FirstAccessService
   ]
 })
 export class App {

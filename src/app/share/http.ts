@@ -7,7 +7,7 @@ export class Http {
 
     private token = localStorage.getItem('pFinancesAccessToken');
 
-    getApiUrl(): string {
+    public getApiUrl(): string {
         var url = 'https://pfinances.com.br/app/apis';
         return url;
     }
@@ -65,7 +65,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": this.token!
+                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer",
@@ -85,7 +85,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": this.token!
+                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer",
@@ -105,7 +105,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": this.token!
+                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer"
