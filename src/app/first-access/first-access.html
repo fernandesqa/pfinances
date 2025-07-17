@@ -84,7 +84,7 @@
              Erro interno, por favor tente mais tarde.
         </span>
     </div>
-    <div *ngIf="holderForm" class="card mt-4">
+    <div *ngIf="isFormHolder" class="card mt-4">
         <div class="card-body">
             <legend>Preencha os campos abaixo para realizar o primeiro acesso</legend>
             <form [formGroup]="formHolder" class="ng-untouched ng-pristine ng-invalid">
@@ -163,7 +163,7 @@
                 <div *ngIf="formHolder.get('holderPwd')?.errors?.['required'] && formHolder.get('holderPwd')?.touched">
                     <p class="text-danger mb-2">Campo obrigatório!</p>
                 </div>
-                <div id="confirmHolderPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
+                <div id="confirmHolderPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputConfirmPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                     <div class="field-box">
                         <label for="confirmHolderPassword" class="mt-2 text-info">Confirmação de Senha</label>
                         <input 
@@ -171,26 +171,27 @@
                             formControlName="confirmHolderPwd" 
                             id="confirmHolderPassword" 
                             class="form-fields ng-untouched ng-pristine ng-invalid"
+                            (blur)="validateConfirmPwd()"
                         >
                     </div>
                     <a style="cursor: pointer;" (click)="changeHolderConfirmPwdInputType()">
                         <i [ngClass]="holderConfirmPwdEyeIconClass"></i>
                     </a>
                 </div>
-                <div *ngIf="formHolder.get('confirmHolderPwd')?.errors?.['required'] && formHolder.get('confirmHolderPwd')?.touched || !checkHolderPwdConfirmation()">
+                <div *ngIf="formHolder.get('confirmHolderPwd')?.errors?.['required'] && formHolder.get('confirmHolderPwd')?.touched || formHolder?.errors?.['passwordMismatch']">
                     <p class="text-danger mb-2">As senhas digitadas não coincidem</p>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="!formHolder.valid">Finalizar</button>
+                    <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="formHolder.invalid" (click)="sendHolderFirstAccess()">Finalizar</button>
                 </div>
             </form>
         </div>
     </div>
-    <div *ngIf="dependentForm" class="card mt-4">
+    <div *ngIf="isFormDependent" class="card mt-4">
         <div class="card-body">
             <legend>Preencha os campos abaixo para realizar o primeiro acesso</legend>
-            <form class="ng-untouched ng-pristine ng-invalid">
-                <div id="dependentFirstNameFieldBox" class="form-inputs-sm bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
+            <form [formGroup]="formDependent" class="ng-untouched ng-pristine ng-invalid">
+                <div id="dependentFirstNameFieldBox" class="form-inputs-sm bg-light" (click)="inputDependentFirstNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                     <div class="field-box">
                         <label for="dependentFirstName" class="mt-2 text-info">Primeiro Nome</label>
                         <input 
@@ -198,10 +199,14 @@
                             formControlName="dependentFirstName" 
                             id="dependentFirstName" 
                             class="form-fields ng-untouched ng-pristine ng-invalid"
+                            (blur)="validateDependentFirstName()"
                         >
                     </div>
                 </div>
-                <div id="dependentLastNameFieldBox" class="form-inputs-md bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
+                <div *ngIf="formDependent.get('dependentFirstName')?.errors?.['required'] && formDependent.get('dependentFirstName')?.touched">
+                    <p class="text-danger mb-2">Campo obrigatório!</p>
+                </div>
+                <div id="dependentLastNameFieldBox" class="form-inputs-md bg-light" (click)="inputDependentLastNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                     <div class="field-box">
                         <label for="dependentLastName" class="mt-2 text-info">Sobrenome</label>
                         <input 
@@ -209,36 +214,44 @@
                             formControlName="dependentLastName" 
                             id="dependentLastName" 
                             class="form-fields ng-untouched ng-pristine ng-invalid"
+                            (blur)="validateDependentLastName()"
                         >
                     </div>
+                </div>
+                <div *ngIf="formDependent.get('dependentLastName')?.errors?.['required'] && formDependent.get('dependentLastName')?.touched">
+                    <p class="text-danger mb-2">Campo obrigatório!</p>
                 </div>
                 <div id="dependentEmailFieldBox" class="form-inputs-md bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
                     <div class="field-box">
                         <label for="dependentEmail" class="mt-2 text-info">E-mail</label>
                         <input 
-                            type="text" 
-                            formControlName="dependentEmail" 
+                            type="text"
                             id="dependentEmail" 
-                            class="form-fields" 
+                            class="form-fields"
+                            [value]="emailAddress" 
                             [disabled]="true"
                         >
                     </div>
                 </div>
-                <div id="dependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
+                <div id="dependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputDependentPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                     <div class="field-box">
                         <label for="dependentPassword" class="mt-2 text-info">Senha</label>
                         <input 
                             [type]="dependentPwdInputType"
-                            formControlName="pwd" 
+                            formControlName="dependentPwd" 
                             id="dependentPassword" 
                             class="form-fields ng-untouched ng-pristine ng-invalid"
+                            (blur)="validateDependentPwd()"
                         >
                     </div>
                     <a style="cursor: pointer;" (click)="changeDependentPwdInputType()">
                         <i [ngClass]="dependentPwdEyeIconClass"></i>
                     </a>
                 </div>
-                <div id="confirmDependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
+                <div *ngIf="formDependent.get('dependentPwd')?.errors?.['required'] && formDependent.get('dependentPwd')?.touched">
+                    <p class="text-danger mb-2">Campo obrigatório!</p>
+                </div>
+                <div id="confirmDependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputConfirmDependentPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                     <div class="field-box">
                         <label for="confirmDependentPassword" class="mt-2 text-info">Confirmação de Senha</label>
                         <input 
@@ -246,16 +259,41 @@
                             formControlName="confirmDependentPwd" 
                             id="confirmDependentPassword" 
                             class="form-fields ng-untouched ng-pristine ng-invalid"
+                            (blur)="validateConfirmDependentPwd()"
                         >
                     </div>
                     <a style="cursor: pointer;" (click)="changeDependentConfirmPwdInputType()">
                         <i [ngClass]="dependentConfirmPwdEyeIconClass"></i>
                     </a>
                 </div>
+                <div *ngIf="formDependent.get('confirmDependentPwd')?.errors?.['required'] && formDependent.get('confirmDependentPwd')?.touched || formDependent?.errors?.['passwordMismatch']">
+                    <p class="text-danger mb-2">As senhas digitadas não coincidem</p>
+                </div>
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="!formDependent.valid">Finalizar</button>
+                    <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="formDependent.invalid" (click)="sendDependentFirstAccess()">Finalizar</button>
                 </div>
             </form>
         </div>
+    </div>
+    <div *ngIf="isSendingData" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+    <div *ngIf="sendingDataInternalError" class="text-center my-5">
+        <i class="bi bi-emoji-frown-fill text-primary"></i>
+        <span class="text-info">
+             Erro interno, por favor tente mais tarde.
+        </span>
+    </div>
+    <div *ngIf="conflict" class="text-center my-5">
+        <span class="text-info">
+            Primeiro acesso já realizado.
+        </span>
+    </div>
+    <div *ngIf="loginError" class="text-center my-5">
+        <span class="text-info">
+            Primeiro acesso realizado com sucesso, porém não foi possível realizar login no momento.
+        </span>
     </div>
 </div>

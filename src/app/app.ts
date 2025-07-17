@@ -9,6 +9,7 @@ import { UsersService } from './services/users.service';
 import { ModalAddMember } from './modal-add-member/modal-add-member';
 import { InvitesService } from './services/invites.service';
 import { Users } from './share/users';
+import { FirstAccessService } from './services/first-access.service';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,8 @@ import { Users } from './share/users';
     AuthService,
     SessionService,
     UsersService,
-    InvitesService
+    InvitesService,
+    FirstAccessService
   ]
 })
 export class App {

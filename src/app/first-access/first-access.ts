@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InvitesService } from '../services/invites.service';
 import { FieldBox } from '../share/field-box';
+import { md5 } from 'js-md5';
+import { FirstAccessService } from '../services/first-access.service';
+import { AuthService } from '../services/auth.service';
+import { displayNavigation } from '../share/displayNavigation';
 
 @Component({
   selector: 'app-first-access',
@@ -27,8 +31,8 @@ export class FirstAccess implements OnInit {
   public invalidData: boolean = false;
   public isLoading: boolean = false;
   public internalError: boolean = false;
-  public holderForm: boolean = false;
-  public dependentForm: boolean = false;
+  public isFormHolder: boolean = false;
+  public isFormDependent: boolean = false;
   public emailAddress: string = '';
   private fieldBox = new FieldBox;
   private isHolderPwdInputTypeText!: boolean;
@@ -51,11 +55,18 @@ export class FirstAccess implements OnInit {
   public dependentConfirmPwdEyeIconEvent: EventEmitter<string> = new EventEmitter();
   public dependentPwdInputTypeEvent: EventEmitter<string> = new EventEmitter();
   public dependentConfirmPwdInputTypeEvent: EventEmitter<string> = new EventEmitter();
+  public isSendingData: boolean = false;
+  public conflict: boolean = false;
+  public sendingDataInternalError: boolean = false;
+  private route: Router = new Router();
+  public loginError: boolean = false;
 
   constructor(
     private renderer: Renderer2,
     private formBuilder: FormBuilder,
-    private invitesService: InvitesService
+    private invitesService: InvitesService,
+    private firstAccessService: FirstAccessService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -72,9 +83,14 @@ export class FirstAccess implements OnInit {
       familyName: ['', Validators.required],
       holderPwd: ['', Validators.required],
       confirmHolderPwd: ['', Validators.required]
-    });
+    }, { validators: this.holderPasswordMatchValidator() });
 
-    this.formDependent = this.formBuilder.group({});
+    this.formDependent = this.formBuilder.group({
+      dependentFirstName: ['', Validators.required],
+      dependentLastName: ['', Validators.required],
+      dependentPwd: ['', Validators.required],
+      confirmDependentPwd: ['', Validators.required]
+    }, { validators: this.dependentPasswordMatchValidator() });
 
     this.holderPwdInputType = 'password';
     this.holderConfirmPwdInputType = 'password';
@@ -169,8 +185,8 @@ export class FirstAccess implements OnInit {
   public async validateInvite() {
     this.invalidData = false;
     this.internalError = false;
-    this.holderForm = false;
-    this.dependentForm = false;
+    this.isFormHolder = false;
+    this.isFormDependent = false;
     this.isLoading = true;
     const elInviteCode = document.getElementById('inviteCode') as HTMLInputElement;
     const elEmail = document.getElementById('email') as HTMLInputElement;
@@ -194,9 +210,9 @@ export class FirstAccess implements OnInit {
       default:
         this.isLoading = false;
         if(this.holder) {
-          this.holderForm = true;
+          this.isFormHolder = true;
         } else {
-          this.dependentForm = true;
+          this.isFormDependent = true;
         }
         break;
     }
@@ -260,7 +276,7 @@ export class FirstAccess implements OnInit {
     }
   }
 
-   //Foca no campo para digitação quando o usuário clica na caixa do campo
+  //Foca no campo para digitação quando o usuário clica na caixa do campo
   public inputPasswordFocus() {
     this.renderer.selectRootElement('#password').focus();
   }
@@ -281,6 +297,11 @@ export class FirstAccess implements OnInit {
     this.holderPwdInputTypeEvent.emit(this.holderPwdInputType);
   }
 
+  //Foca no campo para digitação quando o usuário clica na caixa do campo
+  public inputConfirmPwdFocus() {
+    this.renderer.selectRootElement('#confirmHolderPassword').focus();
+  }
+
   //Altera o tipo do input do campo de senha, conforme o usuário clica no ícone de olho
   public changeHolderConfirmPwdInputType() {
     if(this.isHolderConfirmPwdInputTypeText == false) {
@@ -297,6 +318,156 @@ export class FirstAccess implements OnInit {
     this.holderConfirmPwdInputTypeEvent.emit(this.holderConfirmPwdInputType);
   }
 
+  //Valida se o campo foi preenchido
+  public validatePassword() {
+    const holderPwdFieldBoxEl = document.getElementById('holderPasswordFieldBox') as HTMLElement;
+    const holderPwdInputEl = document.getElementById('password') as HTMLInputElement;
+
+    if(holderPwdInputEl.value==='') {
+      //Altera a cor da borda do campo para vermelho
+      this.fieldBox.changeBoxShadowColor(holderPwdFieldBoxEl, false);
+    } else {
+      //Altera a cor da borda do campo para #dce0e8
+      this.fieldBox.changeBoxShadowColor(holderPwdFieldBoxEl, true);
+    }
+  }
+
+  //Valida se o campo foi preenchido
+  public validateConfirmPwd() {
+    const holderConfirmPwdFieldBoxEl = document.getElementById('confirmHolderPasswordFieldBox') as HTMLElement;
+    const holderConfirmPwdInputEl = document.getElementById('confirmHolderPassword') as HTMLInputElement;
+
+    if(holderConfirmPwdInputEl.value==='') {
+      //Altera a cor da borda do campo para vermelho
+      this.fieldBox.changeBoxShadowColor(holderConfirmPwdFieldBoxEl, false);
+    } else {
+      //Altera a cor da borda do campo para #dce0e8
+      this.fieldBox.changeBoxShadowColor(holderConfirmPwdFieldBoxEl, true);
+    }
+  }
+
+  public holderPasswordMatchValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const password = control.get('holderPwd');
+      const confirmPassword = control.get('confirmHolderPwd');
+      
+      if (!password || !confirmPassword) {
+        return null; // Controls not found, no validation needed
+      }
+
+      return password.value === confirmPassword.value ? null : { 'passwordMismatch': true };
+    };
+  }
+
+  public async sendHolderFirstAccess() {
+    this.sendingDataInternalError = false;
+    this.conflict = false;
+    this.loginError = false;
+    this.isSendingData = true;
+    const firstNameEl = document.getElementById('holderFirstName') as HTMLInputElement;
+    const lastNameEl = document.getElementById('holderLastName') as HTMLInputElement;
+    const familyNameEl = document.getElementById('familyName') as HTMLInputElement;
+    const emailAddressEl = document.getElementById('holderEmail') as HTMLInputElement;
+    const passwordEl = document.getElementById('password') as HTMLInputElement;
+
+    var name = firstNameEl.value + ' ' + lastNameEl.value;
+    var familyName = familyNameEl.value;
+    var emailAddress = emailAddressEl.value;
+    var password = md5(passwordEl.value);
+
+    var result = await this.firstAccessService.sendHolderData(name, emailAddress, password, familyName);
+
+    switch(result) {
+      case 500:
+        this.isSendingData = false;
+        this.sendingDataInternalError = true;
+        break;
+      case 409:
+        this.isSendingData = false;
+        this.conflict = true;
+        break;
+      default:
+        this.isSendingData = false;
+        this.authService.emailAddress = emailAddress;
+        this.authService.password = password;
+        var loginResult = await this.authService.Authenticate();
+        switch(loginResult) {
+          case 200:
+            this.route.navigate(['resumo']);
+            displayNavigation();
+            break;
+          default:
+            this.loginError = true;
+            localStorage.removeItem('pFinancesAccessToken');
+            localStorage.removeItem('pFinancesFamilyId');
+            localStorage.removeItem('pFinancesRole');
+            localStorage.removeItem('pFinancesUserEmailAddress');
+            localStorage.removeItem('pFinancesUserId');
+            localStorage.removeItem('pFinancesUserName');
+            break;
+        }
+        break;
+    }
+  }
+
+  //Foca no campo para digitação quando o usuário clica na caixa do campo
+  public inputDependentFirstNameFocus() {
+    this.renderer.selectRootElement('#dependentFirstName').focus();
+  }
+
+  //Valida se o campo foi preenchido
+  public validateDependentFirstName() {
+    const dependentFirstNameFieldBoxEl = document.getElementById('dependentFirstNameFieldBox') as HTMLElement;
+    const dependentFirstNameInputEl = document.getElementById('dependentFirstName') as HTMLInputElement;
+
+    if(dependentFirstNameInputEl.value==='') {
+      //Altera a cor da borda do campo para vermelho
+      this.fieldBox.changeBoxShadowColor(dependentFirstNameFieldBoxEl, false);
+    } else {
+      //Altera a cor da borda do campo para #dce0e8
+      this.fieldBox.changeBoxShadowColor(dependentFirstNameFieldBoxEl, true);
+    }
+  }
+
+  //Foca no campo para digitação quando o usuário clica na caixa do campo
+  public inputDependentLastNameFocus() {
+    this.renderer.selectRootElement('#dependentLastName').focus();
+  }
+
+  //Valida se o campo foi preenchido
+  public validateDependentLastName() {
+    const dependentLastNameFieldBoxEl = document.getElementById('dependentLastNameFieldBox') as HTMLElement;
+    const dependentLastNameInputEl = document.getElementById('dependentLastName') as HTMLInputElement;
+
+    if(dependentLastNameInputEl.value==='') {
+      //Altera a cor da borda do campo para vermelho
+      this.fieldBox.changeBoxShadowColor(dependentLastNameFieldBoxEl, false);
+    } else {
+      //Altera a cor da borda do campo para #dce0e8
+      this.fieldBox.changeBoxShadowColor(dependentLastNameFieldBoxEl, true);
+    }
+  }
+
+   //Foca no campo para digitação quando o usuário clica na caixa do campo
+  public inputDependentPwdFocus() {
+    this.renderer.selectRootElement('#dependentPassword').focus();
+  }
+
+  //Valida se o campo foi preenchido
+  public validateDependentPwd() {
+    const dependentPwdFieldBoxEl = document.getElementById('dependentPasswordFieldBox') as HTMLElement;
+    const dependentPwdInputEl = document.getElementById('dependentPassword') as HTMLInputElement;
+
+    if(dependentPwdInputEl.value==='') {
+      //Altera a cor da borda do campo para vermelho
+      this.fieldBox.changeBoxShadowColor(dependentPwdFieldBoxEl, false);
+    } else {
+      //Altera a cor da borda do campo para #dce0e8
+      this.fieldBox.changeBoxShadowColor(dependentPwdFieldBoxEl, true);
+    }
+  }
+
+
   //Altera o tipo do input do campo de senha, conforme o usuário clica no ícone de olho
   public changeDependentPwdInputType() {
     if(this.isDependentPwdInputTypeText == false) {
@@ -311,6 +482,11 @@ export class FirstAccess implements OnInit {
 
     this.dependentPwdEyeIconEvent.emit(this.dependentPwdEyeIconClass);
     this.dependentPwdInputTypeEvent.emit(this.dependentPwdInputType);
+  }
+
+  //Foca no campo para digitação quando o usuário clica na caixa do campo
+  public inputConfirmDependentPwdFocus() {
+    this.renderer.selectRootElement('#confirmDependentPassword').focus();
   }
 
   //Altera o tipo do input do campo de senha, conforme o usuário clica no ícone de olho
@@ -330,27 +506,78 @@ export class FirstAccess implements OnInit {
   }
 
   //Valida se o campo foi preenchido
-  public validatePassword() {
-    const familyNameFieldBoxEl = document.getElementById('holderPasswordFieldBox') as HTMLElement;
-    const familyNameInputEl = document.getElementById('password') as HTMLInputElement;
+  public validateConfirmDependentPwd() {
+    const holderConfirmDependentPwdFieldBoxEl = document.getElementById('confirmDependentPasswordFieldBox') as HTMLElement;
+    const holderConfirmDependentPwdInputEl = document.getElementById('confirmDependentPassword') as HTMLInputElement;
 
-    if(familyNameInputEl.value==='') {
+    if(holderConfirmDependentPwdInputEl.value==='') {
       //Altera a cor da borda do campo para vermelho
-      this.fieldBox.changeBoxShadowColor(familyNameFieldBoxEl, false);
+      this.fieldBox.changeBoxShadowColor(holderConfirmDependentPwdFieldBoxEl, false);
     } else {
       //Altera a cor da borda do campo para #dce0e8
-      this.fieldBox.changeBoxShadowColor(familyNameFieldBoxEl, true);
+      this.fieldBox.changeBoxShadowColor(holderConfirmDependentPwdFieldBoxEl, true);
     }
   }
 
-  public checkHolderPwdConfirmation() {
-    const holderInputPwdEl = document.getElementById('password') as HTMLInputElement;
-    const holderInputConfirmPwdEl = document.getElementById('confirmHolderPassword') as HTMLInputElement;
+  public dependentPasswordMatchValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const password = control.get('dependentPwd');
+      const confirmPassword = control.get('confirmDependentPwd');
+      
+      if (!password || !confirmPassword) {
+        return null; // Controls not found, no validation needed
+      }
 
-    if(holderInputPwdEl.value===holderInputConfirmPwdEl.value) {
-      return true;
-    } else {
-      return false;
+      return password.value === confirmPassword.value ? null : { 'passwordMismatch': true };
+    };
+  }
+
+  public async sendDependentFirstAccess() {
+    this.sendingDataInternalError = false;
+    this.conflict = false;
+    this.loginError = false;
+    this.isSendingData = true;
+    const firstNameEl = document.getElementById('dependentFirstName') as HTMLInputElement;
+    const lastNameEl = document.getElementById('dependentLastName') as HTMLInputElement;
+    const emailAddressEl = document.getElementById('dependentEmail') as HTMLInputElement;
+    const passwordEl = document.getElementById('dependentPassword') as HTMLInputElement;
+
+    var name = firstNameEl.value + ' ' + lastNameEl.value;
+    var emailAddress = emailAddressEl.value;
+    var password = md5(passwordEl.value);
+
+    var result = await this.firstAccessService.sendDependentData(name, emailAddress, password);
+
+    switch(result) {
+      case 500:
+        this.isSendingData = false;
+        this.sendingDataInternalError = true;
+        break;
+      case 409:
+        this.isSendingData = false;
+        this.conflict = true;
+        break;
+      default:
+        this.isSendingData = false;
+        this.authService.emailAddress = emailAddress;
+        this.authService.password = password;
+        var loginResult = await this.authService.Authenticate();
+        switch(loginResult) {
+          case 200:
+            this.route.navigate(['resumo']);
+            displayNavigation();
+            break;
+          default:
+            this.loginError = true;
+            localStorage.removeItem('pFinancesAccessToken');
+            localStorage.removeItem('pFinancesFamilyId');
+            localStorage.removeItem('pFinancesRole');
+            localStorage.removeItem('pFinancesUserEmailAddress');
+            localStorage.removeItem('pFinancesUserId');
+            localStorage.removeItem('pFinancesUserName');
+            break;
+        }
+        break;
     }
   }
 

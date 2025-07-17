@@ -7,7 +7,7 @@ export class Http {
 
     private token = localStorage.getItem('pFinancesAccessToken');
 
-    getApiUrl(): string {
+    public getApiUrl(): string {
         var url = 'https://pfinances.com.br/app/apis';
         return url;
     }

@@ -62,11 +62,11 @@ export class InvitesService {
       switch(data.status) {
         case 400:
           result = data.status;
-          this.resetUrl();
+          this.url = this.http.getApiUrl();
           break;
         default:
           result = data.response;
-          this.resetUrl();
+          this.url = this.http.getApiUrl();
           break;
       }
     }).catch (error => {
@@ -75,9 +75,5 @@ export class InvitesService {
     });
 
     return result;
-  }
-
-  private resetUrl() {
-    this.url = this.http.getApiUrl();
   }
 }
