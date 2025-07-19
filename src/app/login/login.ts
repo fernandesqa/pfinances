@@ -7,6 +7,7 @@ import { md5 } from 'js-md5';
 import { Router } from '@angular/router';
 import { FieldBox } from '../share/field-box';
 import { displayNavigation } from '../share/displayNavigation';
+import { LocalStorage } from '../share/locasStorage';
 
 @Component({
   selector: 'app-login',
@@ -144,6 +145,7 @@ export class Login implements OnInit {
     switch(result) {
       case 200:
         this.route.navigate(['resumo']);
+        this.checkRole();
         displayNavigation()
         break;
       default:
@@ -155,6 +157,35 @@ export class Login implements OnInit {
         localStorage.removeItem('pFinancesUserId');
         localStorage.removeItem('pFinancesUserName');
         break;
+    }
+  }
+
+  private checkRole() {
+    var localStorage = new LocalStorage;
+    var role = localStorage.getRole();
+
+    if(role=='1') {
+      const divManageFamily = document.getElementById('manageFamily') as HTMLElement;
+      const aModalManageFamily = document.createElement('a');
+      const span = document.createElement('span');
+      const i = document.createElement('i');
+
+      aModalManageFamily.setAttribute('type', 'button');
+      aModalManageFamily.setAttribute('data-bs-toggle', 'modal');
+      aModalManageFamily.setAttribute('data-bs-target', '#modalManageFamily');
+      aModalManageFamily.setAttribute('onclick', 'loadUsers()');
+
+      span.setAttribute('class', 'fs-4');
+
+      i.setAttribute('class', 'bi bi-people-fill text-primary');
+
+      span.appendChild(i);
+      aModalManageFamily.appendChild(span);
+      divManageFamily.appendChild(aModalManageFamily);
+
+    } else {
+      const divManageFamily = document.getElementById('manageFamily') as HTMLElement;
+      divManageFamily.innerHTML = '';
     }
   }
 

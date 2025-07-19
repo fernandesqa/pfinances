@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './footer/footer';
 import { AuthService } from './services/auth.service';
@@ -10,10 +10,12 @@ import { ModalAddMember } from './modal-add-member/modal-add-member';
 import { InvitesService } from './services/invites.service';
 import { Users } from './share/users';
 import { FirstAccessService } from './services/first-access.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   imports: [
+    CommonModule,
     RouterOutlet,
     ModalManageFamily,
     ModalAddMember,
