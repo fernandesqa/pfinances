@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { FieldBox } from '../share/field-box';
 import { NavigationBar } from '../share/navigationBar';
 import { checkRole } from '../share/checkRole';
-import { LocalStorage } from '../share/locasStorage';
+import { LocalStorage } from '../share/localStorage';
 
 @Component({
   selector: 'app-login',
