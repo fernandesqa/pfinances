@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '../share/http';
+import { LocalStorage } from '../share/locasStorage';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +7,9 @@ import { Http } from '../share/http';
 export class AuthService {
 
     private authUrl: string = 'https://pfinances.com.br/app/apis/auth';
-    emailAddress!: string;
-    password!: string;
+    public emailAddress!: string;
+    public password!: string;
+    private localStorage = new LocalStorage;
 
     async Authenticate(): Promise<number> {
         
@@ -18,12 +19,12 @@ export class AuthService {
             result = data.status;
 
             if(result==200) {
-                localStorage.setItem('pFinancesUserId', data.response.id);
-                localStorage.setItem('pFinancesFamilyId', data.response.familyId);
-                localStorage.setItem('pFinancesRole', data.response.roleId);
-                localStorage.setItem('pFinancesUserName', data.response.name);
-                localStorage.setItem('pFinancesUserEmailAddress', data.response.email);
-                localStorage.setItem('pFinancesAccessToken', data.response.accessToken);
+                this.localStorage.setUserId(data.response.id);
+                this.localStorage.setUserName(data.response.name);
+                this.localStorage.setRole(data.response.roleId);
+                this.localStorage.setUserEmailAddress(data.response.email);
+                this.localStorage.setFamilyId(data.response.familyId);
+                this.localStorage.setAccessToken(data.response.accessToken);
             }
 
         }).catch (error => {

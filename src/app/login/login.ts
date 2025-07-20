@@ -6,7 +6,8 @@ import { AuthService } from '../services/auth.service';
 import { md5 } from 'js-md5';
 import { Router } from '@angular/router';
 import { FieldBox } from '../share/field-box';
-import { displayNavigation } from '../share/displayNavigation';
+import { NavigationBar } from '../share/navigationBar';
+import { checkRole } from '../share/checkRole';
 import { LocalStorage } from '../share/locasStorage';
 
 @Component({
@@ -28,6 +29,8 @@ export class Login implements OnInit {
   eyeIconEvent: EventEmitter<string> = new EventEmitter();
   inputTypeEvent: EventEmitter<string> = new EventEmitter();
   private route: Router = new Router();
+  private navigationBar = new NavigationBar;
+  private localStorage = new LocalStorage;
 
   ngOnInit(): void {
 
@@ -47,7 +50,7 @@ export class Login implements OnInit {
     private renderer: Renderer2,
     private authService: AuthService
   ) {
-    this.hideNavigation();
+    this.navigationBar.hideNavigation();
   }
 
   //Valida o e-mail informado pelo usuário e exibe mensagem abaixo do campo caso o padrão esteja incorreto
@@ -120,14 +123,6 @@ export class Login implements OnInit {
     }
   }
 
-  //Oculta a barra de navegação
-  private hideNavigation() {
-    var nav = document.getElementById('navigation');
-    var div = document.getElementById('navigationBottom');
-    nav?.setAttribute('class', 'navbar navbar-expand-lg bg-light p-0 d-none');
-    div?.setAttribute('class', 'container-fluid bg-secondary d-none');
-  }
-
   //Redireciona para a página de primeiro acesso
   goToFirstAccess() {
     this.route.navigate(['primeiro-acesso']);
@@ -145,47 +140,12 @@ export class Login implements OnInit {
     switch(result) {
       case 200:
         this.route.navigate(['resumo']);
-        this.checkRole();
-        displayNavigation()
+        checkRole();
         break;
       default:
         this.message.buildAutoCloseMessage('errorMessageDiv', 'danger', 'Dados inválidos!', 2000);
-        localStorage.removeItem('pFinancesAccessToken');
-        localStorage.removeItem('pFinancesFamilyId');
-        localStorage.removeItem('pFinancesRole');
-        localStorage.removeItem('pFinancesUserEmailAddress');
-        localStorage.removeItem('pFinancesUserId');
-        localStorage.removeItem('pFinancesUserName');
+        this.localStorage.removeItems();
         break;
-    }
-  }
-
-  private checkRole() {
-    var localStorage = new LocalStorage;
-    var role = localStorage.getRole();
-
-    if(role=='1') {
-      const divManageFamily = document.getElementById('manageFamily') as HTMLElement;
-      const aModalManageFamily = document.createElement('a');
-      const span = document.createElement('span');
-      const i = document.createElement('i');
-
-      aModalManageFamily.setAttribute('type', 'button');
-      aModalManageFamily.setAttribute('data-bs-toggle', 'modal');
-      aModalManageFamily.setAttribute('data-bs-target', '#modalManageFamily');
-      aModalManageFamily.setAttribute('onclick', 'loadUsers()');
-
-      span.setAttribute('class', 'fs-4');
-
-      i.setAttribute('class', 'bi bi-people-fill text-primary');
-
-      span.appendChild(i);
-      aModalManageFamily.appendChild(span);
-      divManageFamily.appendChild(aModalManageFamily);
-
-    } else {
-      const divManageFamily = document.getElementById('manageFamily') as HTMLElement;
-      divManageFamily.innerHTML = '';
     }
   }
 

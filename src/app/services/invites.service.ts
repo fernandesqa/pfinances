@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenExpiredCheckService } from './token-expired-check.service';
 import { Http } from '../share/http';
+import { LocalStorage } from '../share/locasStorage';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class InvitesService {
   private token = new TokenExpiredCheckService(this.router);
   private http = new Http(this.token);
   private url = this.http.getApiUrl();
+  private localStorage = new LocalStorage;
 
   //Gera os dados do convite do dependente
   async generateInvite(emailAddress: string): Promise<any> {
@@ -19,8 +21,8 @@ export class InvitesService {
     this.url = this.url + '/generate-invite';
     await this.http.postData(this.url, 
       {
-        "userId": localStorage.getItem('pFinancesUserId'),
-        "familyId": localStorage.getItem('pFinancesFamilyId'),
+        "userId": this.localStorage.getUserId(),
+        "familyId": this.localStorage.getFamilyId(),
         "emailAddress": emailAddress
       }
     ).then ( (data) => {
@@ -36,8 +38,8 @@ export class InvitesService {
   //Busca os convites por família
   async getInvites(): Promise<any> {
     let result: any;
-    let userId = localStorage.getItem('pFinancesUserId');
-    let familyId = localStorage.getItem('pFinancesFamilyId');
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
     this.url = this.url + '/family-invites/users/'+userId+'/families/'+familyId
     await this.http.getData(this.url).then( (data) => {
       result = data;
