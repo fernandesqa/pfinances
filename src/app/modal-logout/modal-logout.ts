@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { Router } from '@angular/router';
 import { TokenExpiredCheckService } from '../services/token-expired-check.service';
+import { LocalStorage } from '../share/locasStorage';
 
 @Component({
   selector: 'app-modal-logout',
@@ -10,6 +11,8 @@ import { TokenExpiredCheckService } from '../services/token-expired-check.servic
   styleUrl: './modal-logout.css'
 })
 export class ModalLogout {
+
+  private localStorage = new LocalStorage;
 
   constructor(
     private sessionService: SessionService,
@@ -21,12 +24,7 @@ export class ModalLogout {
     let status = await this.sessionService.deleteSession();
     switch(status) {
       case 201:
-        localStorage.removeItem('pFinancesAccessToken');
-        localStorage.removeItem('pFinancesFamilyId');
-        localStorage.removeItem('pFinancesRole');
-        localStorage.removeItem('pFinancesUserEmailAddress');
-        localStorage.removeItem('pFinancesUserId');
-        localStorage.removeItem('pFinancesUserName');
+        this.localStorage.removeItems();
         this.router.navigate(['login']);
         break;
       default:
