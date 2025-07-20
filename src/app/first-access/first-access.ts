@@ -8,7 +8,7 @@ import { md5 } from 'js-md5';
 import { FirstAccessService } from '../services/first-access.service';
 import { AuthService } from '../services/auth.service';
 import { checkRole } from '../share/checkRole';
-import { LocalStorage } from '../share/locasStorage';
+import { LocalStorage } from '../share/localStorage';
 
 @Component({
   selector: 'app-first-access',
