@@ -11,7 +11,7 @@ import { InvitesService } from './services/invites.service';
 import { Users } from './share/users';
 import { FirstAccessService } from './services/first-access.service';
 import { CommonModule } from '@angular/common';
-import { LocalStorage } from './share/locasStorage';
+import { LocalStorage } from './share/localStorage';
 @Component({
   selector: 'app-root',
   imports: [

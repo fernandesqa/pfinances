@@ -1,5 +1,5 @@
 import { NavigationBar } from "./navigationBar";
-import { LocalStorage } from "./locasStorage";
+import { LocalStorage } from "./localStorage";
 
 export function checkRole() {
     var navigationBar = new NavigationBar;

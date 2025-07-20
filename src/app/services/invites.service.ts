@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenExpiredCheckService } from './token-expired-check.service';
 import { Http } from '../share/http';
-import { LocalStorage } from '../share/locasStorage';
+import { LocalStorage } from '../share/localStorage';
 
 @Injectable({
   providedIn: 'root'
