@@ -7,7 +7,8 @@ import { FieldBox } from '../share/field-box';
 import { md5 } from 'js-md5';
 import { FirstAccessService } from '../services/first-access.service';
 import { AuthService } from '../services/auth.service';
-import { displayNavigation } from '../share/displayNavigation';
+import { checkRole } from '../share/checkRole';
+import { LocalStorage } from '../share/locasStorage';
 
 @Component({
   selector: 'app-first-access',
@@ -60,6 +61,7 @@ export class FirstAccess implements OnInit {
   public sendingDataInternalError: boolean = false;
   private route: Router = new Router();
   public loginError: boolean = false;
+  private localStorage = new LocalStorage;
 
   constructor(
     private renderer: Renderer2,
@@ -394,16 +396,11 @@ export class FirstAccess implements OnInit {
         switch(loginResult) {
           case 200:
             this.route.navigate(['resumo']);
-            displayNavigation();
+            checkRole();
             break;
           default:
             this.loginError = true;
-            localStorage.removeItem('pFinancesAccessToken');
-            localStorage.removeItem('pFinancesFamilyId');
-            localStorage.removeItem('pFinancesRole');
-            localStorage.removeItem('pFinancesUserEmailAddress');
-            localStorage.removeItem('pFinancesUserId');
-            localStorage.removeItem('pFinancesUserName');
+            this.localStorage.removeItems();
             break;
         }
         break;
@@ -565,16 +562,11 @@ export class FirstAccess implements OnInit {
         switch(loginResult) {
           case 200:
             this.route.navigate(['resumo']);
-            displayNavigation();
+            checkRole();
             break;
           default:
             this.loginError = true;
-            localStorage.removeItem('pFinancesAccessToken');
-            localStorage.removeItem('pFinancesFamilyId');
-            localStorage.removeItem('pFinancesRole');
-            localStorage.removeItem('pFinancesUserEmailAddress');
-            localStorage.removeItem('pFinancesUserId');
-            localStorage.removeItem('pFinancesUserName');
+            this.localStorage.removeItems();
             break;
         }
         break;

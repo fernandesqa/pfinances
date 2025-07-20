@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './footer/footer';
 import { AuthService } from './services/auth.service';
@@ -10,10 +10,12 @@ import { ModalAddMember } from './modal-add-member/modal-add-member';
 import { InvitesService } from './services/invites.service';
 import { Users } from './share/users';
 import { FirstAccessService } from './services/first-access.service';
-
+import { CommonModule } from '@angular/common';
+import { LocalStorage } from './share/locasStorage';
 @Component({
   selector: 'app-root',
   imports: [
+    CommonModule,
     RouterOutlet,
     ModalManageFamily,
     ModalAddMember,
@@ -34,11 +36,12 @@ export class App {
   protected title = 'pfinances';  
 
   private users = new Users;
+  private localStorage = new LocalStorage;
 
   loadUsers() {
-    this.users.userId = localStorage.getItem('pFinancesUserId')!;
-    this.users.familyId = localStorage.getItem('pFinancesFamilyId')!;
-    this.users.accessToken = localStorage.getItem('pFinancesAccessToken')!;
+    this.users.userId = this.localStorage.getUserId()!;
+    this.users.familyId = this.localStorage.getFamilyId()!;
+    this.users.accessToken = this.localStorage.getAccessToken()!;
     this.users.getUsers();
   }
 }
