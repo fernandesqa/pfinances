@@ -21,4 +21,11 @@
 .label-danger {
     background-color: #d9534f;
 }
+
+.spinner {
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: -5px;
+}
  

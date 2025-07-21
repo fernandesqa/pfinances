@@ -12,6 +12,7 @@ import { Users } from './share/users';
 import { FirstAccessService } from './services/first-access.service';
 import { CommonModule } from '@angular/common';
 import { LocalStorage } from './share/localStorage';
+import { PendingIssuesService } from './services/pending-issues.service';
 @Component({
   selector: 'app-root',
   imports: [
@@ -29,16 +30,17 @@ import { LocalStorage } from './share/localStorage';
     SessionService,
     UsersService,
     InvitesService,
-    FirstAccessService
+    FirstAccessService,
+    PendingIssuesService
   ]
 })
-export class App {
+export class App  {
   protected title = 'pfinances';  
 
   private users = new Users;
   private localStorage = new LocalStorage;
 
-  loadUsers() {
+  public loadUsers() {
     this.users.userId = this.localStorage.getUserId()!;
     this.users.familyId = this.localStorage.getFamilyId()!;
     this.users.accessToken = this.localStorage.getAccessToken()!;
