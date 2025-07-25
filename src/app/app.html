@@ -8,7 +8,7 @@
             <div class="row">
               <div class="col">
                 <div class="d-flex justify-content-end mx-2">
-                  <a type="button" class="notification">
+                  <a type="button" class="notification" data-bs-toggle="modal" data-bs-target="#modalPendingIssues">
                     <span>
                       <i class="bi bi-bell fs-4 text-primary"></i>
                     </span>
@@ -45,7 +45,7 @@
             <div class="row">
               <div class="col">
                 <div class="d-flex justify-content-end mx-2">
-                  <a type="button" class="notification">
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#modalPendingIssues" class="notification">
                     <span>
                       <i class="bi bi-bell fs-4 text-primary"></i>
                     </span>
@@ -72,4 +72,5 @@
 <app-modal-logout></app-modal-logout>
 <app-modal-manage-family></app-modal-manage-family>
 <app-modal-add-member></app-modal-add-member>
+<app-modal-pending-issues></app-modal-pending-issues>
 <app-footer></app-footer>
