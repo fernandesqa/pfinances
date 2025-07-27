@@ -133,6 +133,75 @@ export class ModalPendingIssuesResult {
         h4.setAttribute('class', 'text-primary fw-bold');
         h4.appendChild(h4Node);
         divResult.appendChild(h4);
+
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const trHead = document.createElement('tr');
+        const thDescricao = document.createElement('th');
+        const thConcluida = document.createElement('th');
+        const thDescricaoNode = document.createTextNode('Descrição');
+        const divThConcluida = document.createElement('div');
+        const thConcluidaNode = document.createTextNode('Concluída');
+        const tbody = document.createElement('tbody');
+
+        table.setAttribute('class', 'table table-bordered');
+        thConcluida.setAttribute('scope', 'col');
+        thDescricao.setAttribute('scope', 'col');
+        divThConcluida.setAttribute('class', 'd-flex justify-content-center');
+
+        thDescricao.appendChild(thDescricaoNode);
+        divThConcluida.appendChild(thConcluidaNode);
+        thConcluida.appendChild(divThConcluida);
+        trHead.appendChild(thDescricao);
+        trHead.appendChild(thConcluida);
+
+        thead.appendChild(trHead);
+
+        table.appendChild(thead);
+
+        var total = data.response.total;
+
+        for(var i=0; i<total; i++) {
+            const tr = document.createElement('tr');
+            const tdDescricao = document.createElement('td');
+            const tdDescricaoNode = document.createTextNode(data.response.data[i].pendingIssueDescription);
+
+            const tdCheckBox = document.createElement('td');
+            const divCheckBox = document.createElement('div');
+            const inputCheckBox = document.createElement('input');
+
+            divCheckBox.setAttribute('class', 'd-flex justify-content-center');
+            inputCheckBox.setAttribute('type', 'checkbox');
+            inputCheckBox.setAttribute('class', 'form-check-input');
+            inputCheckBox.setAttribute('id', data.response.data[i].pendingIssueId);
+
+            if(data.response.data[i].done) {
+                inputCheckBox.setAttribute('checked', 'true');
+                inputCheckBox.setAttribute('disabled', 'true');
+            }
+
+            tdDescricao.appendChild(tdDescricaoNode);
+            divCheckBox.appendChild(inputCheckBox);
+            tdCheckBox.appendChild(divCheckBox);
+            tr.appendChild(tdDescricao);
+            tr.appendChild(tdCheckBox);
+
+            tbody.appendChild(tr);
+        }
+
+        table.appendChild(tbody);
+        divResult.appendChild(table);
+
+        const divTotal = document.createElement('div');
+        const pTotal = document.createElement('p');
+        const pTotalNode = document.createTextNode('Total: '+data.response.total);
+
+        divTotal.setAttribute('class', 'd-flex justify-content-start ms-2');
+        pTotal.setAttribute('class', 'text-info my-2');
+
+        pTotal.appendChild(pTotalNode);
+        divTotal.appendChild(pTotal);
+        divResult.appendChild(divTotal);
     }
 
 }
