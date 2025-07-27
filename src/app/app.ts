@@ -13,6 +13,7 @@ import { FirstAccessService } from './services/first-access.service';
 import { CommonModule } from '@angular/common';
 import { LocalStorage } from './share/localStorage';
 import { PendingIssuesService } from './services/pending-issues.service';
+import { ModalPendingIssues } from './modal-pending-issues/modal-pending-issues';
 @Component({
   selector: 'app-root',
   imports: [
@@ -21,6 +22,7 @@ import { PendingIssuesService } from './services/pending-issues.service';
     ModalManageFamily,
     ModalAddMember,
     ModalLogout,
+    ModalPendingIssues,
     Footer
   ],
   templateUrl: './app.html',
