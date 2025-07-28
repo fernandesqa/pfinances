@@ -1,9 +1,11 @@
 import { PendingIssuesService } from "../services/pending-issues.service";
 import { LocalStorage } from "./localStorage";
+import { ModalPendingIssuesResult } from "./modalPendingIssuesResult";
 
 export class PendingIssues {
     private pendingIssuesService = new PendingIssuesService;
     private localStorage = new LocalStorage;
+    private pendingIssuesResult = new ModalPendingIssuesResult;
 
     public async loadPendingIssues() {
 
@@ -23,6 +25,8 @@ export class PendingIssues {
             divSpinner.appendChild(spanSpinner);
             divHolderNotification.appendChild(divSpinner);
 
+            this.pendingIssuesResult.showSpinner();
+
             //Busca as pendências
             var pendingIssues = await this.pendingIssuesService.getCurrentMonth();
             var totalPendingIssues = pendingIssues.response.pendings;
@@ -41,6 +45,9 @@ export class PendingIssues {
 
                 //Exibe a quantidade de notificações pendentes
                 divHolderNotification.appendChild(spanNotificationNumber);
+
+                //Lista as pendências no modal de pendências
+                this.pendingIssuesResult.pendingIssuesList(pendingIssues);
             } else if(totalPendingIssues >= 10) {
                 //Cria o span com a quantidade de notificações pendentes
                 const spanNotificationNumber = document.createElement('span');
@@ -55,9 +62,13 @@ export class PendingIssues {
 
                 //Exibe a quantidade de notificações pendentes
                 divHolderNotification.appendChild(spanNotificationNumber);
+
+                //Lista as pendências no modal de pendências
+                this.pendingIssuesResult.pendingIssuesList(pendingIssues);
             } else {
                 //Se não há pendencias, para com a exibição do carregamento de pendências
                 divHolderNotification.innerHTML = '';
+                this.pendingIssuesResult.dataNotFound();
             }
         } else {
             //Apresenta o spinner para indicar o carregamento das pendências
@@ -72,6 +83,8 @@ export class PendingIssues {
 
             divSpinner.appendChild(spanSpinner);
             divDependentNotification.appendChild(divSpinner);
+
+            this.pendingIssuesResult.showSpinner();
 
             //Busca as pendências
             var pendingIssues = await this.pendingIssuesService.getCurrentMonth();
@@ -91,6 +104,9 @@ export class PendingIssues {
 
                 //Exibe a quantidade de notificações pendentes
                 divDependentNotification.appendChild(spanNotificationNumber);
+
+                //Lista as pendências no modal de pendências
+                this.pendingIssuesResult.pendingIssuesList(pendingIssues);
             } else if(totalPendingIssues >= 10) {
                 //Cria o span com a quantidade de notificações pendentes
                 const spanNotificationNumber = document.createElement('span');
@@ -105,9 +121,13 @@ export class PendingIssues {
 
                 //Exibe a quantidade de notificações pendentes
                 divDependentNotification.appendChild(spanNotificationNumber);
+
+                //Lista as pendências no modal de pendências
+                this.pendingIssuesResult.pendingIssuesList(pendingIssues);
             } else {
                 //Se não há pendencias, para com a exibição do carregamento de pendências
                 divDependentNotification.innerHTML = '';
+                this.pendingIssuesResult.dataNotFound();
             }
         }
     }
