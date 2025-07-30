@@ -95,6 +95,26 @@ export class Http {
         return responseObj;
     }
 
+    //UTILIZAR ESSE MÉTODO EM REQUISIÇÕES PATCH
+    async patchData(url: string, data: {}) {
+
+        const response = await fetch(url, {
+            method: "PATCH",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify(data)
+        });
+        const responseObj = {status: response.status, response: await response.json()}
+        return responseObj;
+    }
+
     //UTILIZAR ESSE MÉTODO PARA REQUISIÇÕES DELETE
     async DeleteData(url: string) {
 
