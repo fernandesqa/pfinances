@@ -11,7 +11,7 @@ import { InvitesService } from './services/invites.service';
 import { Users } from './share/users';
 import { FirstAccessService } from './services/first-access.service';
 import { CommonModule } from '@angular/common';
-import { LocalStorage } from './share/localStorage';
+import { LocalStorage } from './share/local-storage';
 import { PendingIssuesService } from './services/pending-issues.service';
 import { ModalPendingIssues } from './modal-pending-issues/modal-pending-issues';
 @Component({
@@ -48,4 +48,5 @@ export class App  {
     this.users.accessToken = this.localStorage.getAccessToken()!;
     this.users.getUsers();
   }
+
 }
