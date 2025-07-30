@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PendingIssues } from '../share/pending-issues';
 import { CommonModule } from '@angular/common';
+import { PendingIssuesService } from '../services/pending-issues.service';
 
 @Component({
   selector: 'app-modal-pending-issues',
@@ -17,15 +18,24 @@ export class ModalPendingIssues implements OnInit {
   public dataNotFound: boolean = false;
   public dataFound: boolean = false;
   public pendingIssuesData: any;
+  public internalError: boolean = false;
   public data: any;
   public total: number = 0;
   private updateControl: any = [];
+  private pendingIssuesUpdate: any = [];
+
+  constructor(
+    private pendingIssuesService: PendingIssuesService
+  ) {}
 
   ngOnInit(): void {
     this.loadPendingIssues();
   }
 
   public async loadPendingIssues() {
+    this.dataFound = false;
+    this.dataNotFound = false;
+    this.internalError = false;
     this.isLoadingPendingIssues = true;
     this.pendingIssuesData = await this.pendingIssues.loadPendingIssues();
     switch(this.pendingIssuesData.status) {
@@ -43,6 +53,10 @@ export class ModalPendingIssues implements OnInit {
       case 404:
         this.isLoadingPendingIssues = false;
         this.dataNotFound = true;
+        break;
+      default:
+        this.isLoadingPendingIssues = false;
+        this.internalError = true;
         break;
     }
   }
@@ -70,6 +84,19 @@ export class ModalPendingIssues implements OnInit {
         updateButton.setAttribute('disabled', '');
       }
     }
+  }
+
+  public async updatePendingIssuesStatus() {
+    this.pendingIssuesUpdate = [];
+    for(var i=0; i<this.updateControl.length; i++) {
+      if(this.updateControl[i].selected) {
+        this.pendingIssuesUpdate.push({"pendingIssueId": this.updateControl[i].id, "done": true});
+      }
+    }
+
+    //Atualiza o status das pendências
+    await this.pendingIssuesService.updatePendingIssueStatus(this.pendingIssuesUpdate);
+    this.loadPendingIssues();
   }
   
 }

@@ -28,4 +28,17 @@ export class PendingIssuesService {
 
     return result;
   }
+
+  //Atualiza o status das pendências
+  public async updatePendingIssueStatus(pendingIssues: any): Promise<any> {
+    let result: any;
+    let userId = this.localStorage.getUserId();
+    this.url = this.url + '/pending-issues/users/'+userId+'/update-status';
+    await this.http.patchData(this.url, 
+      {
+        "pendingIssues": pendingIssues
+      }
+    )
+
+  }
 }

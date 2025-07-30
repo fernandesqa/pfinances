@@ -141,6 +141,7 @@ export class Login implements OnInit {
       case 200:
         this.route.navigate(['resumo']);
         checkRole();
+        window.location.reload();
         break;
       default:
         this.message.buildAutoCloseMessage('errorMessageDiv', 'danger', 'Dados inválidos!', 2000);

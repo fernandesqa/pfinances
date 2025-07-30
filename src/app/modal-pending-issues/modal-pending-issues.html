@@ -25,6 +25,12 @@
           </a>
         </div>
 
+        <div *ngIf="internalError" class="d-flex justify-content-center my-5">
+          <span class="text-info">
+            <i class="bi bi-emoji-frown-fill text-primary"></i> Erro interno, por favor tente mais tarde.
+          </span>
+        </div>
+
         <div *ngIf="dataFound">
           <div class="row">
             <div class="col">
@@ -123,7 +129,7 @@
       </div>
       <div class="modal-footer">
         <button data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary">Fechar</button>
-        <button data-bs-dismiss="modal" aria-label="Close" id="buttonUpdateStatus" class="btn btn-primary" disabled>Atualizar</button>
+        <button data-bs-dismiss="modal" aria-label="Close" id="buttonUpdateStatus" class="btn btn-primary" (click)="updatePendingIssuesStatus()" disabled>Atualizar</button>
       </div>
     </div>
   </div>
