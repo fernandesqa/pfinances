@@ -7,8 +7,8 @@ import { FieldBox } from '../share/field-box';
 import { md5 } from 'js-md5';
 import { FirstAccessService } from '../services/first-access.service';
 import { AuthService } from '../services/auth.service';
-import { checkRole } from '../share/checkRole';
-import { LocalStorage } from '../share/localStorage';
+import { checkRole } from '../share/check-role';
+import { LocalStorage } from '../share/local-storage';
 
 @Component({
   selector: 'app-first-access',

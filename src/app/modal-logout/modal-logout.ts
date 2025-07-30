@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SessionService } from '../services/session.service';
 import { Router } from '@angular/router';
 import { TokenExpiredCheckService } from '../services/token-expired-check.service';
-import { LocalStorage } from '../share/localStorage';
+import { LocalStorage } from '../share/local-storage';
 
 @Component({
   selector: 'app-modal-logout',

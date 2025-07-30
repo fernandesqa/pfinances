@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { checkRole } from '../share/checkRole';
-import { NavigationBar } from '../share/navigationBar';
-import { LocalStorage } from '../share/localStorage';
-import { PendingIssuesService } from '../services/pending-issues.service';
-import { PendingIssues } from '../share/pending-issues';
+import { checkRole } from '../share/check-role';
+import { NavigationBar } from '../share/navigation-bar';
 
 @Component({
   selector: 'app-home',
@@ -14,13 +11,11 @@ import { PendingIssues } from '../share/pending-issues';
 export class Home implements OnInit {
 
   private navigationBar = new NavigationBar;
-  private pendingIssues = new PendingIssues;
 
 
   async ngOnInit() {
     this.navigationBar.hideNavigation();
     checkRole();
-    this.pendingIssues.loadPendingIssues();
   }
 
 }
