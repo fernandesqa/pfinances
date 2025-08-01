@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { LocalStorage } from './share/local-storage';
 import { PendingIssuesService } from './services/pending-issues.service';
 import { ModalPendingIssues } from './modal-pending-issues/modal-pending-issues';
+import { ModalAddPendingIssues } from './modal-add-pending-issues/modal-add-pending-issues';
 @Component({
   selector: 'app-root',
   imports: [
@@ -23,6 +24,7 @@ import { ModalPendingIssues } from './modal-pending-issues/modal-pending-issues'
     ModalAddMember,
     ModalLogout,
     ModalPendingIssues,
+    ModalAddPendingIssues,
     Footer
   ],
   templateUrl: './app.html',
