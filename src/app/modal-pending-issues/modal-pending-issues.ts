@@ -96,7 +96,7 @@ export class ModalPendingIssues implements OnInit {
 
     //Atualiza o status das pendências
     await this.pendingIssuesService.updatePendingIssueStatus(this.pendingIssuesUpdate);
-    this.loadPendingIssues();
+    window.location.reload();
   }
   
 }
