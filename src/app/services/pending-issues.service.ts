@@ -41,4 +41,16 @@ export class PendingIssuesService {
     )
 
   }
+
+  //Cadastra novas pendências
+  public async createPendingIssues(pendingIssues: any): Promise<any> {
+    let result: any;
+    let userId = this.localStorage.getUserId();
+    this.url = this.url + '/create-pending-issues/users/'+userId;
+    await this.http.postData(this.url, 
+      {
+        "pendingIssues": pendingIssues
+      }
+    )
+  }
 }
