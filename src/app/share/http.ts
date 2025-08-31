@@ -1,14 +1,15 @@
 import { Injectable } from "@angular/core";
 import { TokenExpiredCheckService } from "../services/token-expired-check.service";
+import { environment } from "../../environments/environment.prod";
 
 @Injectable()
 export class Http {
     constructor(private sessionToken: TokenExpiredCheckService) {}
 
-    private token = localStorage.getItem('pFinancesAccessToken');
+    private token = localStorage.getItem(environment.apiToken);
 
     public getApiUrl(): string {
-        var url = 'https://pfinances.com.br/app/apis';
+        var url = environment.apiUrl;
         return url;
     }
 
@@ -22,7 +23,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
+                "x-api-key": localStorage.getItem(environment.apiToken)!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer"
@@ -65,7 +66,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
+                "x-api-key": localStorage.getItem(environment.apiToken)!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer",
@@ -85,7 +86,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
+                "x-api-key": localStorage.getItem(environment.apiToken)!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer",
@@ -105,7 +106,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
+                "x-api-key": localStorage.getItem(environment.apiToken)!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer",
@@ -125,7 +126,7 @@ export class Http {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": localStorage.getItem('pFinancesAccessToken')!
+                "x-api-key": localStorage.getItem(environment.apiToken)!
             },
             redirect: "follow",
             referrerPolicy: "no-referrer"

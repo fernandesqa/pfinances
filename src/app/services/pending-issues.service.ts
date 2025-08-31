@@ -12,15 +12,15 @@ export class PendingIssuesService {
   private router = new Router
   private token = new TokenExpiredCheckService(this.router);
   private http = new Http(this.token);
-  private url = this.http.getApiUrl();
   private localStorage = new LocalStorage;
 
   //Consulta as pendências do mês e ano atual
   public async getCurrentMonth(): Promise<any> {
     let result: any;
     let userId = this.localStorage.getUserId();
-    this.url = this.url + '/pending-issues/users/'+userId+'/current-month';
-    await this.http.getData(this.url).then( (data) => {
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues/users/'+userId+'/current-month';
+    await this.http.getData(url).then( (data) => {
       result = data;
     }).catch (error => {
       result = error;
@@ -31,26 +31,35 @@ export class PendingIssuesService {
 
   //Atualiza o status das pendências
   public async updatePendingIssueStatus(pendingIssues: any): Promise<any> {
-    let result: any;
     let userId = this.localStorage.getUserId();
-    this.url = this.url + '/pending-issues/users/'+userId+'/update-status';
-    await this.http.patchData(this.url, 
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues/users/'+userId+'/update-status';
+    await this.http.patchData(url, 
       {
         "pendingIssues": pendingIssues
       }
     )
-
   }
 
   //Cadastra novas pendências
   public async createPendingIssues(pendingIssues: any): Promise<any> {
-    let result: any;
     let userId = this.localStorage.getUserId();
-    this.url = this.url + '/create-pending-issues/users/'+userId;
-    await this.http.postData(this.url, 
+    let url = this.http.getApiUrl();
+    url = url + '/create-pending-issues/users/'+userId;
+    await this.http.postData(url, 
       {
         "pendingIssues": pendingIssues
       }
     )
+  }
+
+  //Atualiza as pendências
+  public async updatePendingIssues(pendingIssues: any): Promise<any> {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues/users/'+userId+'/update-description';
+    result = await this.http.putData(url, pendingIssues)
+    return result;
   }
 }

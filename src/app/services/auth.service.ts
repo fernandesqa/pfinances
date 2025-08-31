@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { LocalStorage } from '../share/local-storage';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-    private authUrl: string = 'https://pfinances.com.br/app/apis/auth';
+    private authUrl: string = environment.apiUrl + '/auth';
     public emailAddress!: string;
     public password!: string;
     private localStorage = new LocalStorage;
