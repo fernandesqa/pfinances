@@ -1,0 +1,133 @@
+<div id="modalEditPendingIssues" tabindex="-1" aria-labelledby="modalEditPendingIssues" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="modalEditPendingIssues" class="modal-title fs-5 fw-bold">Editar Pendências</h1>
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+            </div>
+            <div class="modal-body">
+                @if (isLoadingPendingIssues) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                }
+                
+                @if (dataNotFound) {
+                    <div>
+                        <p class="text-info text-center">Nenhum registro encontrado.</p>
+                        <hr>
+                        <a 
+                            type="button" 
+                            data-bs-dismiss="modal" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalAddPendingIssues" 
+                            aria-label="Close" 
+                            class="btn text-success">
+                            Cadastrar Pendências
+                        </a>
+                    </div>
+                }
+                
+                @if (internalError) {
+                    <div class="d-flex justify-content-center my-5">
+                        <span class="text-info">
+                            <i class="bi bi-emoji-frown-fill text-primary"></i> Erro interno, por favor tente mais tarde.
+                        </span>
+                    </div>
+                }
+
+                @if (dataFound) {
+                    <div>
+                        <h6 class="text-primary fw-bold">Selecione a(s) Pendência(s) que deseja editar</h6>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <div class="d-flex justify-content-center">#</div>
+                                </th>
+                                <th scope="col">Descrição</th>
+                                <th scope="col">
+                                    <div class="d-flex justify-content-center">
+                                        Concluída
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (pendingIssue of data; track pendingIssue.pendingIssueDescription) {
+                                <tr>
+                                    <td>
+                                        <input 
+                                            (click)="enableFields($event)"
+                                            type="checkbox" 
+                                            class="form-check-input"
+                                             id="{{ pendingIssue.pendingIssueId }}"
+                                        >
+                                    </td>
+                                    <td>
+                                        <input 
+                                            type="text"
+                                            class="form-control"
+                                            id="description{{ pendingIssue.pendingIssueId }}"
+                                            value="{{ pendingIssue.pendingIssueDescription }}"
+                                            (blur)="newDescription($event)"
+                                            disabled
+                                        >
+                                    </td>
+
+                                    @if (pendingIssue.done) {
+                                        <td>
+                                            <div class="d-flex justify-content-center">
+                                                <input 
+                                                    type="checkbox" 
+                                                    class="form-check-input"
+                                                    id="checkbox{{ pendingIssue.pendingIssueId }}"
+                                                    (click)="newStatus($event)"
+                                                    checked
+                                                    disabled
+                                                >
+                                            </div>
+                                        </td>
+                                    } @else {
+                                        <td>
+                                            <div class="d-flex justify-content-center">
+                                                <input 
+                                                    type="checkbox" 
+                                                    class="form-check-input"
+                                                    id="checkbox{{ pendingIssue.pendingIssueId }}"
+                                                    (click)="newStatus($event)"
+                                                    disabled
+                                                >
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }    
+                        </tbody>
+                    </table>
+                }
+            </div>    
+            <div class="modal-footer">
+                <button 
+                    type="button" 
+                    data-bs-dismiss="modal" 
+                    aria-label="Close" 
+                    class="btn btn-secondary"
+                >Fechar</button>
+                <button 
+                    type="button" 
+                    id="btnEditPendingIssues"
+                    data-bs-dismiss="modal" 
+                    aria-label="Close" 
+                    class="btn btn-primary" 
+                    (click)="editPendingIssues()"
+                    disabled
+                >Atualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

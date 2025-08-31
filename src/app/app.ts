@@ -15,6 +15,7 @@ import { LocalStorage } from './share/local-storage';
 import { PendingIssuesService } from './services/pending-issues.service';
 import { ModalPendingIssues } from './modal-pending-issues/modal-pending-issues';
 import { ModalAddPendingIssues } from './modal-add-pending-issues/modal-add-pending-issues';
+import { ModalEditPendingIssues } from './modal-edit-pending-issues/modal-edit-pending-issues';
 @Component({
   selector: 'app-root',
   imports: [
@@ -25,6 +26,7 @@ import { ModalAddPendingIssues } from './modal-add-pending-issues/modal-add-pend
     ModalLogout,
     ModalPendingIssues,
     ModalAddPendingIssues,
+    ModalEditPendingIssues,
     Footer
   ],
   templateUrl: './app.html',
