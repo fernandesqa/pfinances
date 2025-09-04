@@ -16,6 +16,7 @@ import { PendingIssuesService } from './services/pending-issues.service';
 import { ModalPendingIssues } from './modal-pending-issues/modal-pending-issues';
 import { ModalAddPendingIssues } from './modal-add-pending-issues/modal-add-pending-issues';
 import { ModalEditPendingIssues } from './modal-edit-pending-issues/modal-edit-pending-issues';
+import { ModalPendingIssuesHistory } from './modal-pending-issues-history/modal-pending-issues-history';
 @Component({
   selector: 'app-root',
   imports: [
@@ -27,6 +28,7 @@ import { ModalEditPendingIssues } from './modal-edit-pending-issues/modal-edit-p
     ModalPendingIssues,
     ModalAddPendingIssues,
     ModalEditPendingIssues,
+    ModalPendingIssuesHistory,
     Footer
   ],
   templateUrl: './app.html',

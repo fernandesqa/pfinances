@@ -62,4 +62,19 @@ export class PendingIssuesService {
     result = await this.http.putData(url, pendingIssues)
     return result;
   }
+
+  //Lista os anos cadastrados na base vinculados ao id do usuário
+  public async getYears(): Promise<any> {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues-history/users/'+userId+'/years';
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
 }
