@@ -16,14 +16,37 @@
                 } @else if (yearsFound) {
                     <div class="row">
                         <div class="col">
-                            <select class="form-control" name="years" id="years">
+                            <select class="form-control" name="years" id="years" (change)="getMonths($event)">
                                 <option value="ano">Ano:</option>
                                 @for (item of years; track item) {
                                     <option value="{{ item }}">{{ item }}</option>
                                 }
                             </select>
                         </div>
-                        <div class="col"></div>
+                        <div class="col">
+                            @if (yearNotSelected) {
+                                <select class="form-control" name="months" id="months" disabled>
+                                    <option value="mes">Mês:</option>
+                                </select>
+                            } @else if (isLoadingMonths) {
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                            } @else if (monthsFound) {
+                                <select class="form-control" name="months" id="months">
+                                    <option value="mes">Mês:</option>
+                                    @for (item of months; track item) {
+                                        <option value="{{ item }}">{{ item }}</option>
+                                    }
+                                </select>
+                            } @else if (monthsNotFound) {
+                                <p>Dados não encontrados!</p>
+                            } @else if (internalError) {
+                                <p>Erro interno!</p>
+                            }
+                        </div>
                         <div class="col">
                             <button id="buttonGetHistory" class="btn btn-primary" disabled>Consultar</button>
                         </div>

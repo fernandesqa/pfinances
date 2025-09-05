@@ -16,8 +16,10 @@ export class ModalPendingIssuesHistory implements OnInit {
   public yearsNotFound: boolean = false;
   public yearsFound: boolean = false;
   public years: any = [];
+  public months: any = [];
   public internalError: boolean = false;
   public isLoadingMonths: boolean = false;
+  public yearNotSelected: boolean = true;
   public monthsNotFound: boolean = false;
   public monthsFound: boolean = false;
 
@@ -40,12 +42,42 @@ export class ModalPendingIssuesHistory implements OnInit {
           this.years.push(result.response.years[i].year);
         }
         break;
-      case 400:
+      case 404:
         this.yearsNotFound = true;
         break;
       default:
         this.internalError = true;
         break;
+    }
+  }
+
+  public async getMonths(e: Event) {
+    const elSelectYears = e.target as HTMLSelectElement;
+    if(elSelectYears.value!='ano') {
+      this.yearNotSelected = false;
+      this.monthsNotFound = false;
+      this.internalError = false;
+      this.isLoadingMonths = true;
+      let result = await this.pendingIssuesService.getMonths(elSelectYears.value);
+      this.isLoadingMonths = false;
+      switch (result.status) {
+        case 200:
+          this.isLoadingMonths = false;
+          this.monthsFound = true;
+          for(var i=0; i<result.response.months.length; i++) {
+            this.months.push(result.response.months[i].month);
+          }
+          break;
+        case 404:
+          this.monthsNotFound = true;
+          break;
+        default:
+          this.internalError = true;
+          break;
+      }
+    } else {
+      this.yearNotSelected = true;
+      this.isLoadingMonths = false;
     }
   }
 
