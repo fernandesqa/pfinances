@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                             } @else if (monthsFound) {
-                                <select class="form-control" name="months" id="months">
+                                <select class="form-control" name="months" id="months" (change)="buttonControl($event)">
                                     <option value="mes">Mês:</option>
                                     @for (item of months; track item) {
                                         <option value="{{ item }}">{{ item }}</option>
@@ -48,7 +48,7 @@
                             }
                         </div>
                         <div class="col">
-                            <button id="buttonGetHistory" class="btn btn-primary" disabled>Consultar</button>
+                            <button id="buttonGetHistory" class="btn btn-primary" (click)="getPendingIssuesHistory()" disabled>Consultar</button>
                         </div>
                     </div>
                 } @else if (yearsNotFound) {
@@ -58,7 +58,48 @@
                         <i class="bi bi-emoji-frown-fill text-primary"></i> Erro interno, por favor tente mais tarde.
                     </span>
                 }
-            </div>    
+
+                @if (isLoadingData) {
+                    <div class="d-flex justify-content-center my-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                } @else if (isDataFound) {
+                    <div>
+                        <hr>
+                        <h4 class="text-primary fw-bold">Resultado</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Descrição</th>
+                                    <th scope="col">
+                                        <div class="d-flex justify-content-center">Concluída</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of data; track item) {
+                                    <tr>
+                                        <td>{{ item.description }}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center">
+                                                <td>{{ item.status }}</td>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                } @else if (dataInternalError) {
+                    <div class="d-flex justify-content-center my-5">
+                        <span class="text-info">
+                            <i class="bi bi-emoji-frown-fill text-primary"></i> Erro interno, por favor tente mais tarde.
+                        </span>
+                    </div>
+                }
+            </div> 
             <div class="modal-footer">
                 <button 
                     type="button" 

@@ -78,12 +78,27 @@ export class PendingIssuesService {
     return result;
   }
 
-  //Lista os anos cadastrados na base vinculados ao id do usuário
+  //Lista os meses cadastrados na base vinculados ao ano informado
   public async getMonths(year: string): Promise<any> {
     let userId = this.localStorage.getUserId();
     let result: any;
     let url = this.http.getApiUrl();
     url = url + '/pending-issues-history/users/'+userId+'/years/'+year+'/months';
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
+
+  //Consulta os dados do histórico de pendências de acordo com o mês e ano informado
+  public async getHistory(monthYear: string): Promise<any> {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues-history/users/'+userId+'/periods/'+monthYear+'/data';
     await this.http.getData(url).then( (data) => {
       result = data;
     }).catch (error => {
