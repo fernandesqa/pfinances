@@ -8,31 +8,31 @@ export class Months {
 
         switch(month) {
             case 'Janeiro':
-                monthNumber = '01';
+                monthNumber = '1';
                 break;
             case 'Fevereiro':
-                monthNumber = '02';
+                monthNumber = '2';
                 break;
             case 'Março':
-                monthNumber = '03';
+                monthNumber = '3';
                 break;
             case 'Abril':
-                monthNumber = '04';
+                monthNumber = '4';
                 break;
             case 'Maio':
-                monthNumber = '05';
+                monthNumber = '5';
                 break;
             case 'Junho':
-                monthNumber = '06';
+                monthNumber = '6';
                 break;
             case 'Julho':
-                monthNumber = '07';
+                monthNumber = '7';
                 break;
             case 'Agosto':
-                monthNumber = '08';
+                monthNumber = '8';
                 break;
             case 'Setembro':
-                monthNumber = '09';
+                monthNumber = '9';
                 break;
             case 'Outubro':
                 monthNumber = '10';
