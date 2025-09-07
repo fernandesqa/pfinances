@@ -65,20 +65,28 @@ export class ModalPendingIssuesHistory implements OnInit {
       this.monthsNotFound = false;
       this.internalError = false;
       this.isLoadingMonths = true;
+      this.months = [];
       let result = await this.pendingIssuesService.getMonths(elSelectYears.value);
-      this.isLoadingMonths = false;
       switch (result.status) {
         case 200:
           this.isLoadingMonths = false;
+          this.internalError = false;
+          this.monthsNotFound = false;
           this.monthsFound = true;
           for(var i=0; i<result.response.months.length; i++) {
             this.months.push(result.response.months[i].month);
           }
           break;
         case 404:
+          this.isLoadingMonths = false;
+          this.monthsFound = false;
+          this.internalError = false;
           this.monthsNotFound = true;
           break;
         default:
+          this.isLoadingMonths = false;
+          this.monthsFound = false;
+          this.monthsNotFound = false;
           this.internalError = true;
           break;
       }
