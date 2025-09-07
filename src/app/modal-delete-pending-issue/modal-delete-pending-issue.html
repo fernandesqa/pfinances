@@ -1,0 +1,84 @@
+<div id="modalDeletePendingIssue" tabindex="-1" aria-labelledby="modalDeletePendingIssue" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="modalDeletePendingIssue" class="modal-title fs-5 fw-bold">Excluir Pendências</h1>
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+            </div>
+            <div class="modal-body">
+
+                @if (isLoadingData) {
+                    <div class="d-flex justify-content-center my-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                } @else if (isDataFound) {
+                    <div>
+                        <h6 class="text-primary fw-bold">Selecione a pendência que deseja excluir</h6>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        <div class="d-flex justify-content-center">#</div>
+                                    </th>
+                                    <th scope="col">Descrição</th>                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of data; track item) {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex justify-content-center">
+                                                <td>
+                                                    <input 
+                                                        type="radio" 
+                                                        name="radioPendingIssueId" 
+                                                        class="form-check-input"
+                                                        id="{{ item.id }}"
+                                                        (click)="buttonControl($event)"
+                                                    >
+                                                </td>
+                                            </div>
+                                        </td>
+                                        <td>{{ item.description }}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                } @else if (isDataNotFound) {
+                    <div class="d-flex justify-content-center my-5">
+                        <span class="text-info">
+                            Nenhum registro encontrado.
+                        </span>
+                    </div>
+                } @else if (dataInternalError) {
+                    <div class="d-flex justify-content-center my-5">
+                        <span class="text-info">
+                            <i class="bi bi-emoji-frown-fill text-primary"></i> Erro interno, por favor tente mais tarde.
+                        </span>
+                    </div>
+                }
+            </div> 
+            <div class="modal-footer">
+                <button 
+                    type="button" 
+                    data-bs-dismiss="modal" 
+                    aria-label="Close" 
+                    class="btn btn-secondary"
+                >Fechar</button>
+                <button
+                    type="button"
+                    id="buttonDeletePendingIssues"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    class="btn btn-primary"
+                    (click)="deletePendingIssue()"
+                    disabled
+                >Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
