@@ -107,4 +107,34 @@ export class PendingIssuesService {
 
     return result;
   }
+
+  //Consulta as pendências cadastradas pelo usuário
+  public async getUserPendingIssues(): Promise<any> {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues/users/'+userId;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
+
+  //Exclui uma pendência
+  public async deletePendingIssue(id: string): Promise<any> {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues/users/'+userId+'/pending-issues-id/'+id+'/delete';
+    await this.http.DeleteData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
 }
