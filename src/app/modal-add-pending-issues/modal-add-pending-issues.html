@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 id="modalAddPendingIssues" class="modal-title fs-5 fw-bold">Cadastro de Pendências</h1>
-                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close" (click)="closeModal()"></button>
             </div>
             <div class="modal-body">
                 <p class="text-info">Informe a(s) sua(s) pendência(s) abaixo para cadastrar</p>
@@ -34,7 +34,7 @@
                 <span *ngIf="emptyField" class="text-danger">O campo de descrição deve ser preenchido.</span>
             </div>
             <div class="modal-footer">
-                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary">Cancelar</button>
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
                 <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-primary" (click)="addPendingIssues()">Cadastrar pendências</button>
             </div>
         </div>

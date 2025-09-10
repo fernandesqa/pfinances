@@ -23,6 +23,9 @@ export class ModalPendingIssues implements OnInit {
   public total: number = 0;
   private updateControl: any = [];
   private pendingIssuesUpdate: any = [];
+  private totalPendingIssues: any;
+  private notifications: any;
+  public reset: boolean = false;
 
   constructor(
     private pendingIssuesService: PendingIssuesService
@@ -36,6 +39,7 @@ export class ModalPendingIssues implements OnInit {
     this.dataFound = false;
     this.dataNotFound = false;
     this.internalError = false;
+    this.reset = false;
     this.isLoadingPendingIssues = true;
     this.pendingIssuesData = await this.pendingIssues.loadPendingIssues();
     switch(this.pendingIssuesData.status) {
@@ -53,6 +57,27 @@ export class ModalPendingIssues implements OnInit {
       case 404:
         this.isLoadingPendingIssues = false;
         this.dataNotFound = true;
+        this.totalPendingIssues = await this.pendingIssuesService.getTotalPendingIssues();
+        if(this.totalPendingIssues.response.total==0) {
+          this.notifications = await this.pendingIssuesService.getPendingIssuesNotification();
+          if(this.notifications.response.data[0].pendingIssuesNotificationCreation) {
+            const modalCreation = document.getElementById('modalPendingIssuesCreationNotification');
+            modalCreation?.setAttribute('class', 'modal fade show');
+            modalCreation?.removeAttribute('aria-hidden');
+            modalCreation?.setAttribute('aria-modal', 'true');
+            modalCreation?.setAttribute('style', 'display: block;');
+          } 
+        } else {
+          this.reset = true;
+          this.notifications = await this.pendingIssuesService.getPendingIssuesNotification();
+          if(this.notifications.response.data[0].pendingIssuesNotificationReset) {
+            const modalReset = document.getElementById('modalPendingIssuesResetNotification');
+            modalReset?.setAttribute('class', 'modal fade show');
+            modalReset?.removeAttribute('aria-hidden');
+            modalReset?.setAttribute('aria-modal', 'true');
+            modalReset?.setAttribute('style', 'display: block;');
+          }
+        }
         break;
       default:
         this.isLoadingPendingIssues = false;
@@ -96,6 +121,12 @@ export class ModalPendingIssues implements OnInit {
 
     //Atualiza o status das pendências
     await this.pendingIssuesService.updatePendingIssueStatus(this.pendingIssuesUpdate);
+    window.location.reload();
+  }
+
+  //Reinicia as pendências
+  public async resetPendingIssues() {
+    await this.pendingIssuesService.resetPendingIssues();
     window.location.reload();
   }
   
