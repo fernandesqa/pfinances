@@ -57,4 +57,12 @@ export class ModalAddPendingIssues implements OnInit {
       window.location.reload();
     }
   }
+
+  public closeModal() {
+    const modal = document.getElementById('modalAddPendingIssues');
+    modal?.setAttribute('class', 'modal fade');
+    modal?.removeAttribute('aria-modal');
+    modal?.setAttribute('aria-hidden', 'true');
+    modal?.removeAttribute('style');
+  }
 }

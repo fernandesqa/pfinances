@@ -18,6 +18,8 @@ import { ModalAddPendingIssues } from './modal-add-pending-issues/modal-add-pend
 import { ModalEditPendingIssues } from './modal-edit-pending-issues/modal-edit-pending-issues';
 import { ModalPendingIssuesHistory } from './modal-pending-issues-history/modal-pending-issues-history';
 import { ModalDeletePendingIssue } from './modal-delete-pending-issue/modal-delete-pending-issue';
+import { ModalPendingIssuesCreationNotification } from './modal-pending-issues-creation-notification/modal-pending-issues-creation-notification';
+import { ModalPendingIssuesResetNotification } from './modal-pending-issues-reset-notification/modal-pending-issues-reset-notification';
 @Component({
   selector: 'app-root',
   imports: [
@@ -31,6 +33,8 @@ import { ModalDeletePendingIssue } from './modal-delete-pending-issue/modal-dele
     ModalEditPendingIssues,
     ModalPendingIssuesHistory,
     ModalDeletePendingIssue,
+    ModalPendingIssuesCreationNotification,
+    ModalPendingIssuesResetNotification,
     Footer
   ],
   templateUrl: './app.html',
