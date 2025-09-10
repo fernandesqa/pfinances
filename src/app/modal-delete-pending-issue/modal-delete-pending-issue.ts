@@ -36,7 +36,6 @@ export class ModalDeletePendingIssue implements OnInit {
         for(var i=0; i<result.response.data.length; i++) {
           this.data.push({"id": result.response.data[i].pendingIssueId, "description": result.response.data[i].pendingIssueDescription});
         }
-        console.log(this.data);
         this.isLoadingData = false;
         this.isDataFound = true;
         break;

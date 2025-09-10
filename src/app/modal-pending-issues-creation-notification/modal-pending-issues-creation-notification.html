@@ -1,0 +1,27 @@
+<div id="modalPendingIssuesCreationNotification" tabindex="-1" aria-labelledby="modalPendingIssuesCreationNotification" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 id="modalPendingIssuesCreationNotification" class="modal-title fs-5 fw-bold">Crie Suas Pendências</h1>
+        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+            Quer ser lembrado das tarefas que você precisa realizar durante o mês, como pagamentos?
+        </p>
+        <p>
+            Então crie agora novas pendências e te ajudamos a lembrar delas.
+        </p>
+        <div class="form-check">
+            <input type="checkbox" id="notificationOfCreationCheckBox" class="form-check-input">
+            <label for="notificationOfCreationCheckBox" class="form-check-label">Não exibir mais essa mensagem.</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary" (click)="closeModalRememberMeLater()">Lembre-me mais tarde</button>
+        <button data-bs-dismiss="modal" aria-label="Close" id="buttonUpdateStatus" class="btn btn-primary" (click)="openModalPendingIssuesCreation()">Criar pendências</button>
+      </div>
+    </div>
+  </div>
+</div>
+

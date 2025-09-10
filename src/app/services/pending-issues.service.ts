@@ -137,4 +137,66 @@ export class PendingIssuesService {
 
     return result;
   }
+
+  //Consulta a quantidade total de pendências do usuário
+  public async getTotalPendingIssues() {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues/users/'+userId+'/total';
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
+
+  //Consulta notifições
+  public async getPendingIssuesNotification() {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/pending-issues-notification/users/'+userId;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
+
+  //Atualiza o status de notificação de criação
+  public async updateCreationNotificationStatus() {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    let data = {"userId": Number(userId), "notificateCreation": false};
+    url = url + '/pending-issues-notification-creation';
+    result = await this.http.patchData(url, data);
+    return result;
+  }
+
+  //Atualiza o status de notificação de reset
+  public async updateResetNotificationStatus() {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    let data = {"userId": Number(userId), "notificateReset": false};
+    url = url + '/pending-issues-notification-reset';
+    result = await this.http.patchData(url, data);
+    return result;
+  }
+
+  //Reinicia as pendências
+  public async resetPendingIssues() {
+    let userId = this.localStorage.getUserId();
+    let result: any;
+    let url = this.http.getApiUrl();
+    url = url + '/reset-pending-issues/'+userId;
+    result = await this.http.put(url);
+    return result;
+  }
 }

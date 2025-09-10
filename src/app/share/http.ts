@@ -96,6 +96,26 @@ export class Http {
         return responseObj;
     }
 
+     //UTILIZAR ESSE MÉTODO EM REQUISIÇÕES PUT sem body
+    async put(url: string) {
+
+        const response = await fetch(url, {
+            method: "PUT",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": localStorage.getItem(environment.apiToken)!
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer"
+        });
+        const responseObj = {status: response.status, response: await response.json()}
+        return responseObj;
+    }
+
+
     //UTILIZAR ESSE MÉTODO EM REQUISIÇÕES PATCH
     async patchData(url: string, data: {}) {
 

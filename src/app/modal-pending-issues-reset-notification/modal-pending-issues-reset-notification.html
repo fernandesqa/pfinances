@@ -1,0 +1,24 @@
+<div id="modalPendingIssuesResetNotification" tabindex="-1" aria-labelledby="modalPendingIssuesResetNotification" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 id="modalPendingIssuesResetNotification" class="modal-title fs-5 fw-bold">Reinicie Suas Pendências</h1>
+        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+            As suas pendências ainda não foram reiniciadas para este mês, deseja reiniciar agora?
+        </p>
+        <div class="form-check">
+            <input type="checkbox" id="notificationOfResetCheckBox" class="form-check-input">
+            <label for="notificationOfResetCheckBox" class="form-check-label">Não exibir mais essa mensagem.</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary" (click)="closeModalAndVerifyCheckbox()">Não</button>
+        <button data-bs-dismiss="modal" aria-label="Close" id="buttonUpdateStatus" class="btn btn-primary" (click)="resetPendingIssues()">Sim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
