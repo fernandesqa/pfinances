@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { checkRole } from '../share/check-role';
 import { NavigationBar } from '../share/navigation-bar';
+import { Summary } from '../summary/summary';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [
+    Summary
+  ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
