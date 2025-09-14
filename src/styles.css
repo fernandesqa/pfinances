@@ -195,3 +195,7 @@ body {
 }
 
 /*CAMPOS DE TEXTO FIM*/
+
+.bg-card {
+    background-color: #f8f9fa;
+}

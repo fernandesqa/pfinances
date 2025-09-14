@@ -20,6 +20,7 @@ import { ModalPendingIssuesHistory } from './modal-pending-issues-history/modal-
 import { ModalDeletePendingIssue } from './modal-delete-pending-issue/modal-delete-pending-issue';
 import { ModalPendingIssuesCreationNotification } from './modal-pending-issues-creation-notification/modal-pending-issues-creation-notification';
 import { ModalPendingIssuesResetNotification } from './modal-pending-issues-reset-notification/modal-pending-issues-reset-notification';
+import { Summary } from './summary/summary';
 @Component({
   selector: 'app-root',
   imports: [
