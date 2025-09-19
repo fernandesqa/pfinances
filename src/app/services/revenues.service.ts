@@ -29,4 +29,20 @@ export class RevenuesService {
 
     return result;
   }
+
+  //Consulta as receitas cadastradas no mês anterior
+  public async getRevenueLastMonth() {
+    let result: any;
+    let userId: string = this.localStorage.getUserId()!;
+    let familyId: string = this.localStorage.getFamilyId()!;
+    let url = this.http.getApiUrl();
+    url = url + '/revenues/users/'+userId+'/families/'+familyId+'/last-month';
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
 }

@@ -94,4 +94,23 @@ export class Months {
 
         return monthName;
     }
+
+    public getMonthsList() {
+        var months: string[] = [];
+        months.push(
+            "Janeiro", 
+            "Fevereiro", 
+            "Março", 
+            "Abril", 
+            "Maio", 
+            "Junho", 
+            "Julho", 
+            "Agosto", 
+            "Setembro", 
+            "Outubro", 
+            "Novembro", 
+            "Dezembro"
+        );
+        return months;
+    }
 }
