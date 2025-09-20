@@ -45,4 +45,18 @@ export class RevenuesService {
 
     return result;
   }
+
+  //Cadastra novas receitas
+  public async createRevenues(monthYear: string, revenues: any) {
+    let userId = this.localStorage.getUserId();
+    let url = this.http.getApiUrl();
+    url = url + '/revenues/users/'+userId+'/periods/'+monthYear+'/create';
+    var result = await this.http.postData(url, 
+      {
+        "revenues": revenues
+      }
+    )
+
+    return result;
+  }
 }

@@ -84,7 +84,7 @@ export class Users {
         this.showSpinner();
         //Cria a tabela
         const eTable = document.createElement('table');
-        eTable.setAttribute('class', 'table table-striped');
+        eTable.setAttribute('class', 'table table-striped table-bordered');
 
         const eThead = document.createElement('thead');
         const eTrHead = document.createElement('tr');

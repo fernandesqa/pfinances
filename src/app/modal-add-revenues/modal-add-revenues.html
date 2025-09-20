@@ -45,7 +45,11 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control w-50" id="revenueDescription{{ $index }}">
+                                        <input 
+                                            type="text" 
+                                            class="form-control w-50" 
+                                            id="revenueDescription{{ $index }}"
+                                            (blur)="updateRevenueList($event)">
                                         <label for="revenueDescription{{ $index }}">Descrição da Receita</label>
                                     </div>
                                 </div>
@@ -54,7 +58,13 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control w-50" id="revenueValue{{ $index }}" style="text-align: left;" currencyMask [options]="currencyMaskOptions">
+                                        <input 
+                                            type="text" 
+                                            class="form-control w-50" 
+                                            id="revenueValue{{ $index }}" 
+                                            style="text-align: left;" 
+                                            currencyMask [options]="currencyMaskOptions"
+                                            (blur)="updateRevenueList($event)">
                                         <label for="revenueValue{{ $index }}">Valor</label>
                                     </div>
                                 </div>
@@ -77,12 +87,17 @@
                             </div>
                         }
                     </div>
+
+                    @if(isDescriptionOrValueEmpty) {
+                        <p class="text-danger mb-2">Preencha todos os campos</p>
+                    }
+                    
                 }
 
                 <div class="row">
                     <div class="col col-6">
                         <div class="form-floating">
-                            <select name="month" id="monthRevenue" class="form-control w-75">
+                            <select name="month" id="monthRevenue" class="form-control w-75" (change)="checkMonthCbo($event)">
                                 <option value="selecione o mês">Selecione o mês</option>
                                 @for(item of monthsList; track $index) {
                                     <option value="{{ item }}">{{ item }}</option>
@@ -90,10 +105,13 @@
                             </select>
                             <label for="monthRevenue">Mês</label>
                         </div>
+                        @if(isMonthNotSelected) {
+                            <p class="text-danger mb-2">Campo obrigatório</p>
+                        }
                     </div>
                     <div class="col col-6">
                         <div class="form-floating">
-                            <select name="year" id="yearRevenue" class="form-control w-75">
+                            <select name="year" id="yearRevenue" class="form-control w-75" (change)="checkYearCbo($event)">
                                 <option value="selecione o ano">Selecione o ano</option>
                                  @for(item of yearsList; track $index) {
                                     <option value="{{ item }}">{{ item }}</option>
@@ -101,6 +119,9 @@
                             </select>
                             <label for="yearRevenue">Ano</label>
                         </div>
+                        @if(isYearNotSelected) {
+                            <p class="text-danger mb-2">Campo obrigatório</p>
+                        }
                     </div>
                 </div>
                 
@@ -114,10 +135,11 @@
                 >Cancelar</button>
                 <button
                     type="button"
-                    id="buttonDeletePendingIssues"
+                    id="buttonAddRevenues"
                     data-bs-dismiss="modal"
                     aria-label="Close"
                     class="btn btn-primary"
+                    (click)="addRevenues()"
                     disabled
                 >Cadastrar</button>
             </div>
