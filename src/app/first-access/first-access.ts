@@ -4,7 +4,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { Router } from '@angular/router';
 import { InvitesService } from '../services/invites.service';
 import { FieldBox } from '../share/field-box';
-import { md5 } from 'js-md5';
+import { Md5 } from 'ts-md5';
 import { FirstAccessService } from '../services/first-access.service';
 import { AuthService } from '../services/auth.service';
 import { checkRole } from '../share/check-role';
@@ -375,7 +375,7 @@ export class FirstAccess implements OnInit {
     var name = firstNameEl.value + ' ' + lastNameEl.value;
     var familyName = familyNameEl.value;
     var emailAddress = emailAddressEl.value;
-    var password = md5(passwordEl.value);
+    var password = Md5.hashStr(passwordEl.value);
 
     var result = await this.firstAccessService.sendHolderData(name, emailAddress, password, familyName);
 
@@ -541,7 +541,7 @@ export class FirstAccess implements OnInit {
 
     var name = firstNameEl.value + ' ' + lastNameEl.value;
     var emailAddress = emailAddressEl.value;
-    var password = md5(passwordEl.value);
+    var password = Md5.hashStr(passwordEl.value);
 
     var result = await this.firstAccessService.sendDependentData(name, emailAddress, password);
 

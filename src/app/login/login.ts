@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Message } from '../share/message';
 import { AuthService } from '../services/auth.service';
-import { md5 } from 'js-md5';
+import { Md5 } from 'ts-md5';
 import { Router } from '@angular/router';
 import { FieldBox } from '../share/field-box';
 import { NavigationBar } from '../share/navigation-bar';
@@ -133,7 +133,7 @@ export class Login implements OnInit {
     const emailField = document.getElementById('username') as HTMLInputElement;
     const passwordField = document.getElementById('password') as HTMLInputElement;
     this.authService.emailAddress = emailField.value;
-    this.authService.password = md5(passwordField.value);
+    this.authService.password = Md5.hashStr(passwordField.value);
 
     var result =  await this.authService.Authenticate();
 
