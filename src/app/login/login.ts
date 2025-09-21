@@ -150,4 +150,10 @@ export class Login implements OnInit {
     }
   }
 
+  public checkKeyUp(e: KeyboardEvent) {
+    if(e.key=='Enter') {
+      document.getElementById('entrar')!.click();
+    }
+  }
+
 }

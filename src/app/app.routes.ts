@@ -4,10 +4,15 @@ import { Home } from './home/home';
 import { authGuard } from './auth.guard';
 import { loginGuard } from './login.guard';
 import { FirstAccess } from './first-access/first-access';
+import { Summary } from './summary/summary';
+import { Revenues } from './revenues/revenues';
 
 export const routes: Routes = [
     {path: 'login', canActivate: [loginGuard], component: Login},
-    {path: 'resumo', canActivate: [authGuard], component: Home},
+    {path: 'minhas-financas', canActivate: [authGuard], component: Home, children: [
+        {path: 'resumo', canActivate: [authGuard], component: Summary},
+        {path: 'receitas', canActivate: [authGuard], component: Revenues}
+    ]},
     {path: 'primeiro-acesso', canActivate: [loginGuard], component: FirstAccess},
     {path: '**', redirectTo: 'login'}
 ];

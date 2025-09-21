@@ -21,6 +21,9 @@ import { ModalDeletePendingIssue } from './modal-delete-pending-issue/modal-dele
 import { ModalPendingIssuesCreationNotification } from './modal-pending-issues-creation-notification/modal-pending-issues-creation-notification';
 import { ModalPendingIssuesResetNotification } from './modal-pending-issues-reset-notification/modal-pending-issues-reset-notification';
 import { Summary } from './summary/summary';
+import { ModalAddRevenues } from './modal-add-revenues/modal-add-revenues';
+import { ModalSuccess } from './modal-success/modal-success';
+import { ModalInternalError } from './modal-internal-error/modal-internal-error';
 @Component({
   selector: 'app-root',
   imports: [
@@ -36,6 +39,9 @@ import { Summary } from './summary/summary';
     ModalDeletePendingIssue,
     ModalPendingIssuesCreationNotification,
     ModalPendingIssuesResetNotification,
+    ModalAddRevenues,
+    ModalSuccess,
+    ModalInternalError,
     Footer
   ],
   templateUrl: './app.html',

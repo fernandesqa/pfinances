@@ -1,0 +1,22 @@
+<div id="modalSuccess" tabindex="-1" aria-labelledby="modalSuccess" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-primary fw-bold" id="modalSuccessTitle"></h1>
+        <button type="button" (click)="closeModal()" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-center">
+            <i class="bi bi-check-square-fill text-success me-2"></i><span class="text-primary" id="modalSuccessMessage"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button 
+            type="button" 
+            (click)="closeModal()"
+            class="btn btn-primary"
+        >OK</button>
+      </div>
+    </div>
+  </div>
+</div>

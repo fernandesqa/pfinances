@@ -61,4 +61,40 @@ export class Monetary {
         return monetaryValue;
     }
 
+    public convertFromMonetaryToNumber(value: string) {
+
+        var newValue = '';
+        
+        if(value.includes('R$')) {
+            newValue = value.split('R$ ')[1];
+            var removeDots = newValue.split('.');
+            newValue = '';
+            for(var i=0; i<removeDots.length; i++) {
+                if(removeDots[i]!='.') {
+                    if(i==0){
+                        newValue = removeDots[i];
+                    } else {
+                        newValue = newValue + removeDots[i];
+                    }
+                }
+            }
+            newValue = newValue.replace(',', '.');
+        } else {
+            var removeDots = newValue.split('.');
+
+            for(var i=0; i<removeDots.length; i++) {
+                if(removeDots[i]!='.') {
+                    if(i==0){
+                        newValue = removeDots[i];
+                    } else {
+                        newValue = newValue + removeDots[i];
+                    }
+                }
+            }
+            newValue = newValue.replace(',', '.');
+        }
+        
+        return newValue;
+    }
+
 }

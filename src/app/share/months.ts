@@ -8,31 +8,31 @@ export class Months {
 
         switch(month) {
             case 'Janeiro':
-                monthNumber = '1';
+                monthNumber = '01';
                 break;
             case 'Fevereiro':
-                monthNumber = '2';
+                monthNumber = '02';
                 break;
             case 'Março':
-                monthNumber = '3';
+                monthNumber = '03';
                 break;
             case 'Abril':
-                monthNumber = '4';
+                monthNumber = '04';
                 break;
             case 'Maio':
-                monthNumber = '5';
+                monthNumber = '05';
                 break;
             case 'Junho':
-                monthNumber = '6';
+                monthNumber = '06';
                 break;
             case 'Julho':
-                monthNumber = '7';
+                monthNumber = '07';
                 break;
             case 'Agosto':
-                monthNumber = '8';
+                monthNumber = '08';
                 break;
             case 'Setembro':
-                monthNumber = '9';
+                monthNumber = '09';
                 break;
             case 'Outubro':
                 monthNumber = '10';
@@ -93,5 +93,24 @@ export class Months {
         }
 
         return monthName;
+    }
+
+    public getMonthsList() {
+        var months: string[] = [];
+        months.push(
+            "Janeiro", 
+            "Fevereiro", 
+            "Março", 
+            "Abril", 
+            "Maio", 
+            "Junho", 
+            "Julho", 
+            "Agosto", 
+            "Setembro", 
+            "Outubro", 
+            "Novembro", 
+            "Dezembro"
+        );
+        return months;
     }
 }
