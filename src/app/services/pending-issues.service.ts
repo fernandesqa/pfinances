@@ -34,11 +34,13 @@ export class PendingIssuesService {
     let userId = this.localStorage.getUserId();
     let url = this.http.getApiUrl();
     url = url + '/pending-issues/users/'+userId+'/update-status';
-    await this.http.patchData(url, 
+    let result = await this.http.patchData(url, 
       {
         "pendingIssues": pendingIssues
       }
     )
+
+    return result;
   }
 
   //Cadastra novas pendências

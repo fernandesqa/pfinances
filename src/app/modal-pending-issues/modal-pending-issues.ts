@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PendingIssues } from '../share/pending-issues';
 import { CommonModule } from '@angular/common';
 import { PendingIssuesService } from '../services/pending-issues.service';
+import { ModalSuccess } from '../modal-success/modal-success';
+import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
 
 @Component({
   selector: 'app-modal-pending-issues',
@@ -26,6 +28,8 @@ export class ModalPendingIssues implements OnInit {
   private totalPendingIssues: any;
   private notifications: any;
   public reset: boolean = false;
+  private modalSuccess = new ModalSuccess;
+  private modalInternalError = new ModalInternalError;
 
   constructor(
     private pendingIssuesService: PendingIssuesService
@@ -120,14 +124,28 @@ export class ModalPendingIssues implements OnInit {
     }
 
     //Atualiza o status das pendências
-    await this.pendingIssuesService.updatePendingIssueStatus(this.pendingIssuesUpdate);
-    window.location.reload();
+    let result = await this.pendingIssuesService.updatePendingIssueStatus(this.pendingIssuesUpdate);
+    switch(result.status) {
+      case 200:
+        this.modalSuccess.openModal('Pendências', 'Situação da(s) pendência(s) atualizada com sucesso!');
+        break;
+      default:
+        this.modalInternalError.openModal('Pendências', 'Erro ao atualizar a situação da(s) pendência(s), por favor tente novamente mais tarde.');
+        break;
+    } 
   }
 
   //Reinicia as pendências
   public async resetPendingIssues() {
-    await this.pendingIssuesService.resetPendingIssues();
-    window.location.reload();
+    let result = await this.pendingIssuesService.resetPendingIssues();
+    switch(result.status) {
+      case 200:
+        this.modalSuccess.openModal('Reiniciar Pendências', 'Pendência(s) reiniciada(s) com sucesso!');
+        break;
+      default:
+        this.modalInternalError.openModal('Reiniciar Pendências', 'Erro ao reiniciar pendência(s), por favor tente novamente mais tarde.');
+        break;
+    }
   }
   
 }
