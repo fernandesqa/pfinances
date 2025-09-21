@@ -22,12 +22,18 @@
                 </fieldset>
                 <div class="mt-4">
                     <hr>
-                    <span *ngIf="holder">
-                        <b>Titular, informe os dados do convite abaixo:</b>
-                    </span>
-                    <span *ngIf="dependent">
-                        <b>Convidado, informe os dados do convite abaixo:</b>
-                    </span>
+                    @if(holder) {
+                        <span>
+                            <b>Titular, informe os dados do convite abaixo:</b>
+                        </span>
+                    }
+                    
+                    @if(dependent) {
+                        <span>
+                            <b>Convidado, informe os dados do convite abaixo:</b>
+                        </span>
+                    }
+                    
                     <br>
                     <div id="inviteCodeFieldBox" class="form-inputs-sm bg-light mt-2" (click)="inputInviteCodeFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                         <div class="field-box">
@@ -41,9 +47,13 @@
                             >
                         </div>
                     </div>
-                    <div *ngIf="form.get('inviteCode')?.errors?.['required'] && form.get('inviteCode')?.touched">
-                        <p class="text-danger mb-2">Informe o código do convite</p>
-                    </div>
+
+                    @if(form.get('inviteCode')?.errors?.['required'] && form.get('inviteCode')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Informe o código do convite</p>
+                        </div>
+                    }
+                    
                     <div id="emailFieldBoxFirstAccess" class="form-inputs-md bg-light mt-2" (click)="inputEmailFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                         <div class="field-box">
                             <label for="email" class="mt-2 text-info">E-mail</label>
@@ -56,9 +66,13 @@
                             >
                         </div>
                     </div>
-                    <div *ngIf="form.get('emailFirstAccess')?.invalid && (form.get('emailFirstAccess')?.dirty || form.get('emailFirstAccess')?.touched)">
-                        <p class="text-danger mb-2">Endereço de e-mail inválido</p>
-                    </div>
+
+                    @if(form.get('emailFirstAccess')?.invalid && (form.get('emailFirstAccess')?.dirty || form.get('emailFirstAccess')?.touched)) {
+                        <div>
+                            <p class="text-danger mb-2">Endereço de e-mail inválido</p>
+                        </div>
+                    }
+                    
                     <button 
                         type="button" 
                         class="btn btn-primary btn-lg w-25 fw-bold mt-2" 
@@ -69,231 +83,295 @@
             </form>
         </div>
     </div>
-    <div *ngIf="isLoading" class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only"></span>
+
+    @if(isLoading) {
+        <div class="text-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only"></span>
+            </div>
         </div>
-    </div>
-    <div *ngIf="invalidData" class="text-center my-5">
-        <i class="bi bi-exclamation-circle-fill text-danger"></i>
-        <span class="text-primary fw-bold"> Dados inválidos!</span>
-    </div>
-    <div *ngIf="internalError" class="text-center my-5">
-        <i class="bi bi-emoji-frown-fill text-primary"></i>
-        <span class="text-info">
-             Erro interno, por favor tente mais tarde.
-        </span>
-    </div>
-    <div *ngIf="isFormHolder" class="card mt-4">
-        <div class="card-body">
-            <legend>Preencha os campos abaixo para realizar o primeiro acesso</legend>
-            <form [formGroup]="formHolder" class="ng-untouched ng-pristine ng-invalid">
-                <div id="holderFirstNameFieldBox" class="form-inputs-sm bg-light" (click)="inputHolderFirstNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="holderFirstName" class="mt-2 text-info">Primeiro Nome</label>
-                        <input 
-                            type="text" 
-                            formControlName="holderFirstName" 
-                            id="holderFirstName" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateHolderFirstName()"
-                        >
-                    </div>
-                </div>
-                <div *ngIf="formHolder.get('holderFirstName')?.errors?.['required'] && formHolder.get('holderFirstName')?.touched">
-                    <p class="text-danger mb-2">Campo obrigatório!</p>
-                </div>
-                <div id="holderLastNameFieldBox" class="form-inputs-md bg-light" (click)="inputHolderLastNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="holderLastName" class="mt-2 text-info">Sobrenome</label>
-                        <input 
-                            type="text" 
-                            formControlName="holderLastName" 
-                            id="holderLastName" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateHolderLastName()"
-                        >
-                    </div>
-                </div>
-                <div *ngIf="formHolder.get('holderLastName')?.errors?.['required'] && formHolder.get('holderLastName')?.touched">
-                    <p class="text-danger mb-2">Campo obrigatório!</p>
-                </div>
-                <div id="familyNameFieldBox" class="form-inputs-md bg-light" (click)="inputFamilyNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="familyName" class="mt-2 text-info">Nome da Família</label>
-                        <input 
-                            type="text" 
-                            formControlName="familyName" 
-                            id="familyName" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateFamilyName()"
-                        >
-                    </div>
-                </div>
-                <div *ngIf="formHolder.get('familyName')?.errors?.['required'] && formHolder.get('familyName')?.touched">
-                    <p class="text-danger mb-2">Campo obrigatório!</p>
-                </div>
-                <div id="holderEmailFieldBox" class="form-inputs-md bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="holderEmail" class="mt-2 text-info">E-mail</label>
-                        <input 
-                            type="text"
-                            id="holderEmail" 
-                            class="form-fields" 
-                            [value]="emailAddress"
-                            [disabled]="true"
-                        >
-                    </div>
-                </div>
-                <div id="holderPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputPasswordFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="holderPassword" class="mt-2 text-info">Senha</label>
-                        <input 
-                            [type]="holderPwdInputType" 
-                            formControlName="holderPwd" 
-                            id="password" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validatePassword()"
-                        >
-                    </div>
-                    <a style="cursor: pointer;" (click)="changeHolderPwdInputType()">
-                        <i [ngClass]="holderPwdEyeIconClass"></i>
-                    </a>
-                </div>
-                <div *ngIf="formHolder.get('holderPwd')?.errors?.['required'] && formHolder.get('holderPwd')?.touched">
-                    <p class="text-danger mb-2">Campo obrigatório!</p>
-                </div>
-                <div id="confirmHolderPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputConfirmPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="confirmHolderPassword" class="mt-2 text-info">Confirmação de Senha</label>
-                        <input 
-                            [type]="holderConfirmPwdInputType"
-                            formControlName="confirmHolderPwd" 
-                            id="confirmHolderPassword" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateConfirmPwd()"
-                        >
-                    </div>
-                    <a style="cursor: pointer;" (click)="changeHolderConfirmPwdInputType()">
-                        <i [ngClass]="holderConfirmPwdEyeIconClass"></i>
-                    </a>
-                </div>
-                <div *ngIf="formHolder.get('confirmHolderPwd')?.errors?.['required'] && formHolder.get('confirmHolderPwd')?.touched || formHolder?.errors?.['passwordMismatch']">
-                    <p class="text-danger mb-2">As senhas digitadas não coincidem</p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="formHolder.invalid" (click)="sendHolderFirstAccess()">Finalizar</button>
-                </div>
-            </form>
+    }
+    
+    @if(invalidData) {
+        <div class="text-center my-5">
+            <i class="bi bi-exclamation-circle-fill text-danger"></i>
+            <span class="text-primary fw-bold"> Dados inválidos!</span>
         </div>
-    </div>
-    <div *ngIf="isFormDependent" class="card mt-4">
-        <div class="card-body">
-            <legend>Preencha os campos abaixo para realizar o primeiro acesso</legend>
-            <form [formGroup]="formDependent" class="ng-untouched ng-pristine ng-invalid">
-                <div id="dependentFirstNameFieldBox" class="form-inputs-sm bg-light" (click)="inputDependentFirstNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="dependentFirstName" class="mt-2 text-info">Primeiro Nome</label>
-                        <input 
-                            type="text" 
-                            formControlName="dependentFirstName" 
-                            id="dependentFirstName" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateDependentFirstName()"
-                        >
-                    </div>
-                </div>
-                <div *ngIf="formDependent.get('dependentFirstName')?.errors?.['required'] && formDependent.get('dependentFirstName')?.touched">
-                    <p class="text-danger mb-2">Campo obrigatório!</p>
-                </div>
-                <div id="dependentLastNameFieldBox" class="form-inputs-md bg-light" (click)="inputDependentLastNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="dependentLastName" class="mt-2 text-info">Sobrenome</label>
-                        <input 
-                            type="text" 
-                            formControlName="dependentLastName" 
-                            id="dependentLastName" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateDependentLastName()"
-                        >
-                    </div>
-                </div>
-                <div *ngIf="formDependent.get('dependentLastName')?.errors?.['required'] && formDependent.get('dependentLastName')?.touched">
-                    <p class="text-danger mb-2">Campo obrigatório!</p>
-                </div>
-                <div id="dependentEmailFieldBox" class="form-inputs-md bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="dependentEmail" class="mt-2 text-info">E-mail</label>
-                        <input 
-                            type="text"
-                            id="dependentEmail" 
-                            class="form-fields"
-                            [value]="emailAddress" 
-                            [disabled]="true"
-                        >
-                    </div>
-                </div>
-                <div id="dependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputDependentPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="dependentPassword" class="mt-2 text-info">Senha</label>
-                        <input 
-                            [type]="dependentPwdInputType"
-                            formControlName="dependentPwd" 
-                            id="dependentPassword" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateDependentPwd()"
-                        >
-                    </div>
-                    <a style="cursor: pointer;" (click)="changeDependentPwdInputType()">
-                        <i [ngClass]="dependentPwdEyeIconClass"></i>
-                    </a>
-                </div>
-                <div *ngIf="formDependent.get('dependentPwd')?.errors?.['required'] && formDependent.get('dependentPwd')?.touched">
-                    <p class="text-danger mb-2">Campo obrigatório!</p>
-                </div>
-                <div id="confirmDependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputConfirmDependentPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
-                    <div class="field-box">
-                        <label for="confirmDependentPassword" class="mt-2 text-info">Confirmação de Senha</label>
-                        <input 
-                            [type]="dependentConfirmPwdInputType"
-                            formControlName="confirmDependentPwd" 
-                            id="confirmDependentPassword" 
-                            class="form-fields ng-untouched ng-pristine ng-invalid"
-                            (blur)="validateConfirmDependentPwd()"
-                        >
-                    </div>
-                    <a style="cursor: pointer;" (click)="changeDependentConfirmPwdInputType()">
-                        <i [ngClass]="dependentConfirmPwdEyeIconClass"></i>
-                    </a>
-                </div>
-                <div *ngIf="formDependent.get('confirmDependentPwd')?.errors?.['required'] && formDependent.get('confirmDependentPwd')?.touched || formDependent?.errors?.['passwordMismatch']">
-                    <p class="text-danger mb-2">As senhas digitadas não coincidem</p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="formDependent.invalid" (click)="sendDependentFirstAccess()">Finalizar</button>
-                </div>
-            </form>
+    }
+    
+    @if(internalError) {
+        <div class="text-center my-5">
+            <i class="bi bi-emoji-frown-fill text-primary"></i>
+            <span class="text-info">
+                Erro interno, por favor tente mais tarde.
+            </span>
         </div>
-    </div>
-    <div *ngIf="isSendingData" class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only"></span>
+    }
+    
+    @if(isFormHolder) {
+        <div class="card mt-4">
+            <div class="card-body">
+                <legend>Preencha os campos abaixo para realizar o primeiro acesso</legend>
+                <form [formGroup]="formHolder" class="ng-untouched ng-pristine ng-invalid">
+                    <div id="holderFirstNameFieldBox" class="form-inputs-sm bg-light" (click)="inputHolderFirstNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="holderFirstName" class="mt-2 text-info">Primeiro Nome</label>
+                            <input 
+                                type="text" 
+                                formControlName="holderFirstName" 
+                                id="holderFirstName" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateHolderFirstName()"
+                            >
+                        </div>
+                    </div>
+
+                    @if(formHolder.get('holderFirstName')?.errors?.['required'] && formHolder.get('holderFirstName')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório!</p>
+                        </div>
+                    }
+                    
+                    <div id="holderLastNameFieldBox" class="form-inputs-md bg-light" (click)="inputHolderLastNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="holderLastName" class="mt-2 text-info">Sobrenome</label>
+                            <input 
+                                type="text" 
+                                formControlName="holderLastName" 
+                                id="holderLastName" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateHolderLastName()"
+                            >
+                        </div>
+                    </div>
+
+                    @if(formHolder.get('holderLastName')?.errors?.['required'] && formHolder.get('holderLastName')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório!</p>
+                        </div>
+                    }
+                    
+                    <div id="familyNameFieldBox" class="form-inputs-md bg-light" (click)="inputFamilyNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="familyName" class="mt-2 text-info">Nome da Família</label>
+                            <input 
+                                type="text" 
+                                formControlName="familyName" 
+                                id="familyName" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateFamilyName()"
+                            >
+                        </div>
+                    </div>
+
+                    @if(formHolder.get('familyName')?.errors?.['required'] && formHolder.get('familyName')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório!</p>
+                        </div>
+                    }
+                    
+                    <div id="holderEmailFieldBox" class="form-inputs-md bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="holderEmail" class="mt-2 text-info">E-mail</label>
+                            <input 
+                                type="text"
+                                id="holderEmail" 
+                                class="form-fields" 
+                                [value]="emailAddress"
+                                [disabled]="true"
+                            >
+                        </div>
+                    </div>
+                    <div id="holderPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputPasswordFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="holderPassword" class="mt-2 text-info">Senha</label>
+                            <input 
+                                [type]="holderPwdInputType" 
+                                formControlName="holderPwd" 
+                                id="password" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validatePassword()"
+                            >
+                        </div>
+                        <a style="cursor: pointer;" (click)="changeHolderPwdInputType()">
+                            <i [ngClass]="holderPwdEyeIconClass"></i>
+                        </a>
+                    </div>
+
+                    @if(formHolder.get('holderPwd')?.errors?.['required'] && formHolder.get('holderPwd')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório!</p>
+                        </div>
+                    }
+                    
+                    <div id="confirmHolderPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputConfirmPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="confirmHolderPassword" class="mt-2 text-info">Confirmação de Senha</label>
+                            <input 
+                                [type]="holderConfirmPwdInputType"
+                                formControlName="confirmHolderPwd" 
+                                id="confirmHolderPassword" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateConfirmPwd()"
+                            >
+                        </div>
+                        <a style="cursor: pointer;" (click)="changeHolderConfirmPwdInputType()">
+                            <i [ngClass]="holderConfirmPwdEyeIconClass"></i>
+                        </a>
+                    </div>
+
+                    @if(formHolder.get('confirmHolderPwd')?.errors?.['required'] && formHolder.get('confirmHolderPwd')?.touched || formHolder.errors?.['passwordMismatch']) {
+                        <div>
+                            <p class="text-danger mb-2">As senhas digitadas não coincidem</p>
+                        </div>
+                    }
+                    
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="formHolder.invalid" (click)="sendHolderFirstAccess()">Finalizar</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-    <div *ngIf="sendingDataInternalError" class="text-center my-5">
-        <i class="bi bi-emoji-frown-fill text-primary"></i>
-        <span class="text-info">
-             Erro interno, por favor tente mais tarde.
-        </span>
-    </div>
-    <div *ngIf="conflict" class="text-center my-5">
-        <span class="text-info">
-            Primeiro acesso já realizado.
-        </span>
-    </div>
-    <div *ngIf="loginError" class="text-center my-5">
-        <span class="text-info">
-            Primeiro acesso realizado com sucesso, porém não foi possível realizar login no momento.
-        </span>
-    </div>
+    }
+    
+    @if(isFormDependent) {
+        <div class="card mt-4">
+            <div class="card-body">
+                <legend>Preencha os campos abaixo para realizar o primeiro acesso</legend>
+                <form [formGroup]="formDependent" class="ng-untouched ng-pristine ng-invalid">
+                    <div id="dependentFirstNameFieldBox" class="form-inputs-sm bg-light" (click)="inputDependentFirstNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="dependentFirstName" class="mt-2 text-info">Primeiro Nome</label>
+                            <input 
+                                type="text" 
+                                formControlName="dependentFirstName" 
+                                id="dependentFirstName" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateDependentFirstName()"
+                            >
+                        </div>
+                    </div>
+
+                    @if(formDependent.get('dependentFirstName')?.errors?.['required'] && formDependent.get('dependentFirstName')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório!</p>
+                        </div>
+                    }
+                    
+                    <div id="dependentLastNameFieldBox" class="form-inputs-md bg-light" (click)="inputDependentLastNameFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="dependentLastName" class="mt-2 text-info">Sobrenome</label>
+                            <input 
+                                type="text" 
+                                formControlName="dependentLastName" 
+                                id="dependentLastName" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateDependentLastName()"
+                            >
+                        </div>
+                    </div>
+
+                    @if(formDependent.get('dependentLastName')?.errors?.['required'] && formDependent.get('dependentLastName')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório!</p>
+                        </div>
+                    }
+                    
+                    <div id="dependentEmailFieldBox" class="form-inputs-md bg-light" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="dependentEmail" class="mt-2 text-info">E-mail</label>
+                            <input 
+                                type="text"
+                                id="dependentEmail" 
+                                class="form-fields"
+                                [value]="emailAddress" 
+                                [disabled]="true"
+                            >
+                        </div>
+                    </div>
+                    <div id="dependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputDependentPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="dependentPassword" class="mt-2 text-info">Senha</label>
+                            <input 
+                                [type]="dependentPwdInputType"
+                                formControlName="dependentPwd" 
+                                id="dependentPassword" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateDependentPwd()"
+                            >
+                        </div>
+                        <a style="cursor: pointer;" (click)="changeDependentPwdInputType()">
+                            <i [ngClass]="dependentPwdEyeIconClass"></i>
+                        </a>
+                    </div>
+
+                    @if(formDependent.get('dependentPwd')?.errors?.['required'] && formDependent.get('dependentPwd')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório!</p>
+                        </div>
+                    }
+                    
+                    <div id="confirmDependentPasswordFieldBox" class="form-inputs-sm mt-2 bg-light" (click)="inputConfirmDependentPwdFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
+                        <div class="field-box">
+                            <label for="confirmDependentPassword" class="mt-2 text-info">Confirmação de Senha</label>
+                            <input 
+                                [type]="dependentConfirmPwdInputType"
+                                formControlName="confirmDependentPwd" 
+                                id="confirmDependentPassword" 
+                                class="form-fields ng-untouched ng-pristine ng-invalid"
+                                (blur)="validateConfirmDependentPwd()"
+                            >
+                        </div>
+                        <a style="cursor: pointer;" (click)="changeDependentConfirmPwdInputType()">
+                            <i [ngClass]="dependentConfirmPwdEyeIconClass"></i>
+                        </a>
+                    </div>
+
+                    @if(formDependent.get('confirmDependentPwd')?.errors?.['required'] && formDependent.get('confirmDependentPwd')?.touched || formDependent.errors?.['passwordMismatch']) {
+                        <div>
+                            <p class="text-danger mb-2">As senhas digitadas não coincidem</p>
+                        </div>
+                    }
+                    
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary btn-lg w-25 fw-bold mt-2" [disabled]="formDependent.invalid" (click)="sendDependentFirstAccess()">Finalizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    
+    @if(isSendingData) {
+        <div class="text-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    }
+    
+    @if(sendingDataInternalError) {
+        <div class="text-center my-5">
+            <i class="bi bi-emoji-frown-fill text-primary"></i>
+            <span class="text-info">
+                Erro interno, por favor tente mais tarde.
+            </span>
+        </div>
+    }
+    
+    @if(conflict) {
+        <div class="text-center my-5">
+            <span class="text-info">
+                Primeiro acesso já realizado.
+            </span>
+        </div>
+    }
+    
+    @if(loginError) {
+        <div class="text-center my-5">
+            <span class="text-info">
+                Primeiro acesso realizado com sucesso, porém não foi possível realizar login no momento.
+            </span>
+        </div>
+    }
+    
 </div>
