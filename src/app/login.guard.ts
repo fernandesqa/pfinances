@@ -4,7 +4,7 @@ import { CanActivateFn, Router } from "@angular/router";
 export const loginGuard: CanActivateFn = (route, state) => {
     const router = inject(Router);
   if(localStorage.getItem('pFinancesAccessToken')) {
-    router.navigate(['resumo']);
+    router.navigate(['minhas-financas/resumo']);
     return false;
   } else {
     return true;

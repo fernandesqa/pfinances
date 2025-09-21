@@ -46,11 +46,13 @@ export class PendingIssuesService {
     let userId = this.localStorage.getUserId();
     let url = this.http.getApiUrl();
     url = url + '/create-pending-issues/users/'+userId;
-    await this.http.postData(url, 
+    let result = await this.http.postData(url, 
       {
         "pendingIssues": pendingIssues
       }
     )
+
+    return result;
   }
 
   //Atualiza as pendências

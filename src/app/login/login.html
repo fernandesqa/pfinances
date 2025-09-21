@@ -16,13 +16,15 @@
                                     id="username" 
                                     type="email"
                                     formControlName="emailAddress" 
-                                    (blur)="validateEmailField()">
+                                    (blur)="validateEmailField()"
+                                    (keyup)="checkKeyUp($event)">
                             </div>
                         </div>
-                    
-                    <div *ngIf="form.get('emailAddress')?.invalid && (form.get('emailAddress')?.dirty || form.get('emailAddress')?.touched)">
-                        <p class="text-danger mb-2">Endereço de e-mail inválido</p>
-                    </div>
+                    @if (form.get('emailAddress')?.invalid && (form.get('emailAddress')?.dirty || form.get('emailAddress')?.touched)) {
+                        <div>
+                            <p class="text-danger mb-2">Endereço de e-mail inválido</p>
+                        </div>
+                    }
                     <div class="form-inputs bg-light" id="passwordFieldBox" (click)="inputPasswordFocus()" style="box-shadow: 0 0 0 1px #dce0e8;">
                         <div class="field-box">
                             <label for="password" class="text-info">Senha</label>
@@ -31,22 +33,27 @@
                                 id="password" 
                                 [type]="inputType" 
                                 formControlName="pwd"
-                                (blur)="validatePasswordField()">
+                                (blur)="validatePasswordField()"
+                                (keyup)="checkKeyUp($event)">
                         </div>
                         <a style="cursor: pointer;" (click)="changeInputType()"><i [ngClass]="eyeIconClass"></i></a>
                     </div>
-                    <div *ngIf="form.get('pwd')?.errors?.['required'] && form.get('pwd')?.touched">
-                        <p class="text-danger mb-2">Campo obrigatório</p>
-                    </div>
+
+                    @if (form.get('pwd')?.errors?.['required'] && form.get('pwd')?.touched) {
+                        <div>
+                            <p class="text-danger mb-2">Campo obrigatório</p>
+                        </div>
+                    }
+    
                         <a class="text-primary" style="cursor: pointer;">Esqueci a senha</a>
                     </div>
                     <div class="card-footer">
                         <div class="row">
                             <div class="col">
-                                <button class="btn btn-secondary w-100 me-2 fw-bold" (click)="goToFirstAccess()">Primeiro Acesso</button>
+                                <button class="btn btn-secondary w-100 me-2 fw-bold" type="button" (click)="goToFirstAccess()">Primeiro Acesso</button>
                             </div>
                             <div class="col">
-                                <button class="btn btn-primary w-100 fw-bold me-2" [disabled]="!form.valid" type="submit">Entrar</button>
+                                <button class="btn btn-primary w-100 fw-bold me-2" id="entrar" [disabled]="!form.valid" type="submit">Entrar</button>
                             </div>
                         </div>      
                     </div>

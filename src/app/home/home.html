@@ -2,10 +2,10 @@
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link active tabs tab-active text-primary fw-bold" href="#">Resumo</a>
+                <a (click)="tabSummary()" class="nav-link active tabs tab-active text-primary fw-bold" id="summary" style="cursor: pointer;">Resumo</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled text-tertiary" href="#" aria-disabled="true">Receitas</a>
+                <a (click)="tabRevenues()" class="nav-link text-tertiary" id="revenues" style="cursor: pointer;">Receitas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled text-tertiary" href="#" aria-disabled="true">Orçamentos</a>
@@ -16,6 +16,6 @@
         </ul>
     </div>
     <div class="card-body">
-        <app-summary></app-summary>
+        <router-outlet></router-outlet>
     </div>
 </div>

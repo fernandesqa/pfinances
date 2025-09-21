@@ -2,36 +2,51 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 id="modalAddPendingIssues" class="modal-title fs-5 fw-bold">Cadastro de Pendências</h1>
+                <h1 id="modalAddPendingIssues" class="modal-title fs-5 text-primary fw-bold">Cadastro de Pendências</h1>
                 <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close" (click)="closeModal()"></button>
             </div>
             <div class="modal-body">
                 <p class="text-info">Informe a(s) sua(s) pendência(s) abaixo para cadastrar</p>
-                <div *ngFor="let item of fields">
-                    <div class="row">
-                        <div class="col col-2">
-                            <div class="d-flex justify-content-center">
-                                <a *ngIf="item.id > 0 && item.id == fieldId" type="button" class="mt-2" (click)="removeField()">
-                                    <i class="bi bi-x-circle-fill text-danger fs-4"></i>
-                                </a>
+
+                @for(item of fields; track $index) {
+                    <div>
+                        <div class="row">
+                            <div class="col col-2">
+                                <div class="d-flex justify-content-center">
+
+                                    @if(item.id > 0 && item.id == fieldId) {
+                                        <a type="button" class="mt-2" (click)="removeField()">
+                                            <i class="bi bi-x-circle-fill text-danger fs-4"></i>
+                                        </a>
+                                    }
+                                    
+                                </div>
                             </div>
-                        </div>
-                        <div class="col col-8">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="description{{item.id}}">
-                                <label for="description{{item.id}}">Descrição</label>
+                            <div class="col col-8">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="description{{item.id}}">
+                                    <label for="description{{item.id}}">Descrição</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col col-2">
-                            <div class="d-flex justify-content-center">
-                                <a *ngIf="item.id == fieldId" type="button" class="mt-2" (click)="addField()">
-                                    <i class="bi bi-plus-circle text-success fs-4"></i>
-                                </a>
+                            <div class="col col-2">
+                                <div class="d-flex justify-content-center">
+
+                                    @if(item.id == fieldId) {
+                                        <a type="button" class="mt-2" (click)="addField()">
+                                            <i class="bi bi-plus-circle text-success fs-4"></i>
+                                        </a>
+                                    }
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <span *ngIf="emptyField" class="text-danger">O campo de descrição deve ser preenchido.</span>
+                }
+
+                @if(emptyField) {
+                    <span class="text-danger">O campo de descrição deve ser preenchido.</span>
+                }
+                
             </div>
             <div class="modal-footer">
                 <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>

@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 id="modalPendingIssues" class="modal-title fs-5 fw-bold">Pendências</h1>
+        <h1 id="modalPendingIssues" class="modal-title fs-5 text-primary fw-bold">Pendências</h1>
         <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
       </div>
       <div class="modal-body">
@@ -120,30 +120,40 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let pendingIssue of data">
-                  <td>{{ pendingIssue.pendingIssueDescription }}</td>
-                  <td *ngIf="pendingIssue.done">
-                    <div class="d-flex justify-content-center">
-                      <input 
-                        type="checkbox" 
-                        class="form-check-input"
-                        id="{{ pendingIssue.pendingIssueId }}"
-                        checked
-                        disabled
-                        >
-                    </div>
-                  </td>
-                  <td *ngIf="!pendingIssue.done">
-                    <div class="d-flex justify-content-center">
-                      <input 
-                        type="checkbox" 
-                        class="form-check-input"
-                        id="{{ pendingIssue.pendingIssueId }}"
-                        (click)="updateControlList($event)"
-                        >
-                    </div>
-                  </td>
-                </tr>
+                @for(pendingIssue of data; track $index) {
+                  <tr>
+                    <td>{{ pendingIssue.pendingIssueDescription }}</td>
+
+                    @if(pendingIssue.done) {
+                      <td>
+                        <div class="d-flex justify-content-center">
+                          <input 
+                            type="checkbox" 
+                            class="form-check-input"
+                            id="{{ pendingIssue.pendingIssueId }}"
+                            checked
+                            disabled
+                            >
+                        </div>
+                      </td>
+                    }
+                    
+                    @if(!pendingIssue.done) {
+                      <td>
+                        <div class="d-flex justify-content-center">
+                          <input 
+                            type="checkbox" 
+                            class="form-check-input"
+                            id="{{ pendingIssue.pendingIssueId }}"
+                            (click)="updateControlList($event)"
+                            >
+                        </div>
+                      </td>
+                    }
+                    
+                  </tr>
+                }
+                
               </tbody>
             </table>
             <div class="d-flex justify-content-start ms-2">

@@ -1,0 +1,24 @@
+/* Estilização do conteúdo */
+.content {
+    padding: 20px;
+    /* O conteúdo não deve ter altura mínima de 100%, pois o footer fixo já garante a posição */
+}
+
+/* Estilização do footer */
+footer {
+    position: fixed; /* Fixa o elemento na tela */
+    bottom: 0;       /* Posiciona na parte inferior */
+    left: 0;         /* Alinha à esquerda */
+    width: 100%;     /* Ocupa a largura total */
+    background-color: #333; /* Cor de fundo para o footer */
+    color: #fff;     /* Cor do texto do footer */
+    text-align: center;
+    padding: 15px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra opcional */
+}
+
+.footer-content {
+    max-width: 100%; /* Define a largura máxima do conteúdo do footer */
+    margin: 0 auto;   /* Centraliza o conteúdo do footer */
+    padding: 0 20px;
+}
