@@ -7,6 +7,15 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="form" class="ng-pristine ng-invalid ng-toouched">
+            <label for="nameMember" class="text-info">Nome: </label>
+            <input type="text" id="nameMember" formControlName="nameDependent" class="form-control ng-pristine ng-invalid ng-touched mb-2">
+            
+            @if(form.get('nameDependent')?.invalid && (form.get('nameDependent')?.dirty || form.get('nameDependent')?.touched)) {
+              <div>
+                  <p class="text-danger mb-2">Campo obrigatório</p>
+              </div>
+            }
+            
             <label for="emailMember" class="text-info">E-mail: </label>
             <input type="email" id="emailMember" formControlName="emailDependent" class="form-control ng-pristine ng-invalid ng-touched">
 
@@ -31,7 +40,7 @@
           <div id="inviteData">
             <br>
             <p>Convite gerado!</p>
-            <p>Informe os seguintes dados ao dependente:</p>
+            <p>Enviamos um e-mail ao dependente com os seguintes dados e instruções de acesso:</p>
             <p><b>E-mail: </b>{{ memberEmailAddress }}</p>
             <p><b>Convite: </b>{{ inviteCode }}</p>
             <p><b>Os dados acima devem ser utilizados no primeiro acesso!</b></p>

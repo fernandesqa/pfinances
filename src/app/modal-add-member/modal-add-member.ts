@@ -22,6 +22,7 @@ export class ModalAddMember implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
+      nameDependent: [null, [Validators.required]],
       emailDependent: [null, [Validators.required, this.emailValidator]]
     });
   }
@@ -45,7 +46,8 @@ export class ModalAddMember implements OnInit {
   async generateInvite() {
     this.loading = true;
     const emailAddress = document.getElementById('emailMember') as HTMLInputElement;
-    var result = await this.invitesServices.generateInvite(emailAddress.value);
+    const name = document.getElementById('nameMember') as HTMLInputElement;
+    var result = await this.invitesServices.generateInvite(name.value, emailAddress.value);
     this.memberEmailAddress = result.emailAddress;
     this.inviteCode = result.inviteCode;
     this.loading = false;
