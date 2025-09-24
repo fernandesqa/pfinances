@@ -16,13 +16,14 @@ export class InvitesService {
   private localStorage = new LocalStorage;
 
   //Gera os dados do convite do dependente
-  async generateInvite(emailAddress: string): Promise<any> {
+  async generateInvite(name: string, emailAddress: string): Promise<any> {
     let result = 0;
     this.url = this.url + '/generate-invite';
     await this.http.postData(this.url, 
       {
         "userId": this.localStorage.getUserId(),
         "familyId": this.localStorage.getFamilyId(),
+        "name": name,
         "emailAddress": emailAddress
       }
     ).then ( (data) => {
