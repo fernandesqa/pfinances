@@ -9,6 +9,8 @@ import { FieldBox } from '../share/field-box';
 import { NavigationBar } from '../share/navigation-bar';
 import { checkRole } from '../share/check-role';
 import { LocalStorage } from '../share/local-storage';
+import { UsersService } from '../services/users.service';
+import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +33,8 @@ export class Login implements OnInit {
   private route: Router = new Router();
   private navigationBar = new NavigationBar;
   private localStorage = new LocalStorage;
+  private emailValid: boolean = false;
+  private modalInternalError = new ModalInternalError;
 
   ngOnInit(): void {
 
@@ -48,13 +52,14 @@ export class Login implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private renderer: Renderer2,
-    private authService: AuthService
+    private authService: AuthService,
+    private usersService: UsersService
   ) {
     this.navigationBar.hideNavigation();
   }
 
   //Valida o e-mail informado pelo usuário e exibe mensagem abaixo do campo caso o padrão esteja incorreto
-  emailValidator(control: { value: string; }) {
+  public emailValidator(control: { value: string; }) {
     if (control.value) {
       const matches = control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
       const matches2 = control.value.match(/[A-Z]/);
@@ -65,7 +70,7 @@ export class Login implements OnInit {
   }
 
   //Altera o tipo do input do campo de senha, conforme o usuário clica no ícone de olho
-  changeInputType() {
+  public changeInputType() {
     if(this.isInputTypeText == false) {
       this.isInputTypeText = true;
       this.eyeIconClass = 'bi bi-eye-slash text-info me-3 fs-5';
@@ -81,17 +86,17 @@ export class Login implements OnInit {
   }
 
   //Foca no campo para digitação quando o usuário clica na caixa do campo
-  inputUserNameFocus() {
+  public inputUserNameFocus() {
     this.renderer.selectRootElement('#username').focus();
   }
 
   //Foca no campo para digitação quando o usuário clica na caixa do campo
-  inputPasswordFocus() {
+  public inputPasswordFocus() {
     this.renderer.selectRootElement('#password').focus();
   }
 
   //Valida se o e-mail informado está no padrão correto, quando não, então altera a cor da caixa do campo
-  validateEmailField() { 
+  public validateEmailField() { 
 
     const emailBoxEl = document.getElementById('emailFieldBox') as HTMLElement;
     const emailField = document.getElementById('username') as HTMLInputElement;
@@ -103,15 +108,17 @@ export class Login implements OnInit {
     if(matches === null || matches2 != null) {
       //Altera a cor da borda do campo para vermelho
       this.fieldBox.changeBoxShadowColor(emailBoxEl, false);
+      this.emailValid = false;
     } else {
       //Altera a cor da borda do campo para #dce0e8
       this.fieldBox.changeBoxShadowColor(emailBoxEl, true);
+      this.emailValid = true;
     }
     
   }
 
   //Valida se a senha foi informada, quando não, então altera a cor da caixa do campo
-  validatePasswordField () {
+  public validatePasswordField () {
     const passwordBoxEl = document.getElementById('passwordFieldBox');
     const passwordField = document.getElementById('password') as HTMLInputElement;
     if(passwordField.value === '') {
@@ -124,8 +131,40 @@ export class Login implements OnInit {
   }
 
   //Redireciona para a página de primeiro acesso
-  goToFirstAccess() {
+  public goToFirstAccess() {
     this.route.navigate(['primeiro-acesso']);
+  }
+
+  public async forgotPassword() {
+    const emailBoxEl = document.getElementById('emailFieldBox') as HTMLElement;
+    const emailField = document.getElementById('username') as HTMLInputElement;
+
+    if(!this.emailValid) {
+      //Altera a cor da borda do campo para vermelho
+      this.fieldBox.changeBoxShadowColor(emailBoxEl, false);
+      this.inputUserNameFocus();
+    } else {
+      //Solicita a redefinição de senha
+      var result = await this.usersService.requestReset(emailField.value);
+      
+      switch(result.status) {
+        case 200:
+          this.openModalResetPasswordRequest();
+          break;
+        default:
+          this.modalInternalError.openModal('Redefinição de Senha', 'Erro ao tentar solicitar a redefinição de senha, por favor tente novamente mais tarde.');
+          break;
+      }
+    }
+  }
+
+  //Abre o modal de redefinição de senha
+  public openModalResetPasswordRequest() {
+    const modalAddPendingIssues = document.getElementById('modalResetPasswordRequest');
+    modalAddPendingIssues?.setAttribute('class', 'modal fade show');
+    modalAddPendingIssues?.removeAttribute('aria-hidden');
+    modalAddPendingIssues?.setAttribute('aria-modal', 'true');
+    modalAddPendingIssues?.setAttribute('style', 'display: block;');
   }
 
   //Chama o serviço de autenticação de usuário

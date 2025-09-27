@@ -76,6 +76,26 @@ export class Http {
         return responseObj;
     }
 
+    //UTILIZAR ESSE MÉTODO COM REQUISIÇÕES POST QUE NÃO NECESSITAM DE AUTENTICAÇÃO DE USUÁRIO
+    async noAuthPostData(url: string, data: {}) {
+
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": environment.secretKey
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify(data)
+        });
+        const responseObj = {status: response.status, response: await response.json()}
+        return responseObj;
+    }
+
     //UTILIZAR ESSE MÉTODO EM REQUISIÇÕES PUT
     async putData(url: string, data: {}) {
 
