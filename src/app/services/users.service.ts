@@ -14,7 +14,7 @@ export class UsersService {
   private url = this.http.getApiUrl() + '/users/';
 
   //Obtém os dados dos usuários
-  async getUsersData(userId: string, familyId: string, accessToken: string): Promise<any> {
+  public async getUsersData(userId: string, familyId: string, accessToken: string): Promise<any> {
     this.url = this.url +userId+'/families/'+familyId;
     const data = await fetch(this.url, {
             headers: {
@@ -28,5 +28,15 @@ export class UsersService {
         return await data.json() ?? [];
   }
 
+  public async requestReset(emailAddress: string): Promise<any> {
+    let url = this.http.getApiUrl();
+    url = url + '/request-reset';
+    var result = await this.http.noAuthPostData(url, 
+      {
+        "emailAddress": emailAddress
+      }
+    )
 
+    return result;
+  }
 }
