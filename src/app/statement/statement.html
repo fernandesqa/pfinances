@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="mb-2">
+        <span class="text-primary">Selecione os campos abaixo para realizar a busca:</span>
+    </div>
+    <div class="row">
+        <div class="col col-3">
+            <div class="form-floating">
+                <select name="month" id="monthStatement" class="form-control w-75" (change)="checkMonthCbo($event)">
+                    <option value="selecione o mês">Selecione o mês</option>
+                    @for(item of monthsList; track $index) {
+                        <option value="{{ item }}">{{ item }}</option>
+                    }
+                </select>
+                <label for="monthStatement">Mês</label>
+            </div>
+            @if(isMonthNotSelected) {
+                <p class="text-danger mb-2">Campo obrigatório</p>
+            }
+        </div>
+        <div class="col col-3">
+            <div class="form-floating">
+                <select name="year" id="yearStatement" class="form-control w-75" (change)="checkYearCbo($event)">
+                    <option value="selecione o ano">Selecione o ano</option>
+                        @for(item of yearsList; track $index) {
+                        <option value="{{ item }}">{{ item }}</option>
+                    }
+                </select>
+                <label for="yearStatement">Ano</label>
+            </div>
+            @if(isYearNotSelected) {
+                <p class="text-danger mb-2">Campo obrigatório</p>
+            }
+        </div>
+        <div class="col col-3">
+            <button class="btn btn-primary btn-lg mt-1">Consultar</button>
+        </div>
+    </div>
+    <hr>
+</div>
