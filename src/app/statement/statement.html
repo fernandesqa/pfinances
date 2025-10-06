@@ -32,8 +32,77 @@
             }
         </div>
         <div class="col col-3">
-            <button class="btn btn-primary btn-lg mt-1">Consultar</button>
+            <button (click)="getStatement()" class="btn btn-primary btn-lg mt-1" id="buttonGetStatement" disabled>Consultar</button>
         </div>
     </div>
     <hr>
+
+    @if (isLoadingData) {
+        <div class="d-flex justify-content-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    }
+
+    @if(isDataFound) {
+        <h3 class="text-primary">Extrato do Período Selecionado</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col" class="bg-primary text-white">Autor</th>
+                    <th scope="col" class="bg-primary text-white">Descrição</th>
+                    <th scope="col" class="bg-primary text-white">Valor</th>
+                    <th scope="col" class="bg-primary text-white">Data</th>
+                    <th scope="col" class="bg-primary text-white">Origem</th>
+                    <th scope="col" class="bg-primary text-white">Destino</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(item of data; track item) {
+                    <tr>
+                        <td>{{ item.author }}</td>
+                        <td>{{ item.description }}</td>
+                        @if(item.value.includes('+')) {
+                            <td class="text-success">{{ item.value }}</td>
+                        } @else {
+                            <td class="text-danger">{{ item.value }}</td>
+                        }
+                        
+                        <td>{{ item.date }}</td>
+
+                        @if(item.origin==null) {
+                            <td><div class="d-flex justify-content-center"><span>-</span></div></td>
+                        } @else {
+                            <td>{{ item.origin }}</td>
+                        }
+                        
+                        @if(item.destination==null) {
+                            <td><div class="d-flex justify-content-center"><span>-</span></div></td>
+                        } @else {
+                            <td> <a type="button" id="{{ item.budgetId }}" class="text-primary" (click)="openModalStatementDetails($event, item.destination)" >{{ item.destination }}</a></td>
+                        }
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if(isDataNotFound) {
+        <div class="d-flex justify-content-center my-5">
+            <span class="text-info">
+                Nenhum registro encontrado.
+            </span>
+        </div>
+    }
+
+    @if (dataInternalError) {
+        <div class="d-flex justify-content-center my-5">
+            <span class="text-info">
+                <i class="bi bi-emoji-frown-fill text-primary"></i> Erro interno, por favor tente mais tarde.
+            </span>
+        </div>
+    }
+
 </div>
