@@ -19,7 +19,7 @@ export class ModalSuccess {
     const elSpanNode = document.createTextNode(message);
     elSpan.appendChild(elSpanNode);
 
-    //Abre o modal de criação de pendências
+    //Abre o modal de mensagens de sucesso
     const modalSuccess = document.getElementById('modalSuccess');
     modalSuccess?.setAttribute('class', 'modal fade show');
     modalSuccess?.removeAttribute('aria-hidden');

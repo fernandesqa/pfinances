@@ -35,17 +35,31 @@ export class Home implements OnInit {
   public tabSummary() {
      const tabSummary = document.getElementById('summary') as HTMLElement;
     const tabRevenues = document.getElementById('revenues') as HTMLElement;
+    const tabStatement = document.getElementById('statement') as HTMLElement;
     tabSummary.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
     tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
+    tabStatement?.setAttribute('class', 'nav-link text-tertiary');
     this.router.navigate(['/minhas-financas/resumo']);
   }
 
   public tabRevenues() {
     const tabRevenues = document.getElementById('revenues') as HTMLElement;
     const tabSummary = document.getElementById('summary') as HTMLElement;
+    const tabStatement = document.getElementById('statement') as HTMLElement;
     tabRevenues.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
     tabSummary?.setAttribute('class', 'nav-link text-tertiary');
+    tabStatement?.setAttribute('class', 'nav-link text-tertiary');
     this.router.navigate(['/minhas-financas/receitas']);
+  }
+
+  public tabStatement() {
+    const tabRevenues = document.getElementById('revenues') as HTMLElement;
+    const tabSummary = document.getElementById('summary') as HTMLElement;
+    const tabStatement = document.getElementById('statement') as HTMLElement;
+    tabStatement.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
+    tabSummary?.setAttribute('class', 'nav-link text-tertiary');
+    tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
+    this.router.navigate(['/minhas-financas/extrato']);
   }
 
 }
