@@ -27,6 +27,7 @@ import { ModalResetPasswordRequest } from './modal-reset-password-request/modal-
 import { StatementService } from './services/statement.service';
 import { StatementDetailsService } from './services/statement-details.service';
 import { ModalStatementDetails } from './modal-statement-details/modal-statement-details';
+import { ModalSetBudgets } from './modal-set-budgets/modal-set-budgets';
 @Component({
   selector: 'app-root',
   imports: [
@@ -46,6 +47,7 @@ import { ModalStatementDetails } from './modal-statement-details/modal-statement
     ModalSuccess,
     ModalInternalError,
     ModalResetPasswordRequest,
+    ModalSetBudgets,
     ModalStatementDetails,
     Footer
   ],
