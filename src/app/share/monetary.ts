@@ -11,9 +11,21 @@ export class Monetary {
             monetaryValue = 'R$ 0,00';
         } else {
             switch(value.length) {
+                case 1:
+                    monetaryValue = 'R$ '+value+',00';
+                    break;
+                case 2:
+                    monetaryValue = 'R$ '+value+',00';
+                    break;
+                case 3:
+                    if(value.includes('.')) {
+                        monetaryValue = 'R$ '+value.replace('.', ',')+'0';
+                    } else {
+                        monetaryValue = 'R$ '+value+',00';    
+                    }
+                    break;
                 case 4:
                     monetaryValue = 'R$ '+value.replace('.', ',')+'0';
-                    console.log(monetaryValue);
                     break;
                 case 5:
                     monetaryValue = 'R$ '+value.replace('.', ',');
@@ -24,7 +36,7 @@ export class Monetary {
                 case 6:
                     monetaryValue = 'R$ '+value.replace('.', ',');
                     if(monetaryValue.substring(7, 8)==',') {
-                        monetaryValue = monetaryValue.substring(0, 3)+monetaryValue.substring(4, 5)+'.'+monetaryValue.substring(4, 9)+'0';
+                        monetaryValue = monetaryValue.substring(0, 4)+'.'+monetaryValue.substring(4, 9)+'0';
                     }
                     break;
                 case 7:

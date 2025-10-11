@@ -28,6 +28,8 @@ import { StatementService } from './services/statement.service';
 import { StatementDetailsService } from './services/statement-details.service';
 import { ModalStatementDetails } from './modal-statement-details/modal-statement-details';
 import { ModalSetBudgets } from './modal-set-budgets/modal-set-budgets';
+import { SavingsService } from './services/savings.service';
+import { BudgetsService } from './services/budgets.service';
 @Component({
   selector: 'app-root',
   imports: [
@@ -61,7 +63,9 @@ import { ModalSetBudgets } from './modal-set-budgets/modal-set-budgets';
     FirstAccessService,
     PendingIssuesService,
     StatementService,
-    StatementDetailsService
+    StatementDetailsService,
+    SavingsService,
+    BudgetsService
   ]
 })
 export class App  {

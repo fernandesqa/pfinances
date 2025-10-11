@@ -10,13 +10,13 @@
         <div class="row">
             <div class="col">
                 <div class="form-floating">
-                    <select name="month" id="monthStatement" class="form-control w-75" (change)="checkMonthCbo($event)">
+                    <select name="month" id="monthBudget" class="form-control w-75" (change)="checkMonthCbo($event)">
                         <option value="selecione o mês">Selecione o mês</option>
                         @for(item of monthsList; track $index) {
                             <option value="{{ item }}">{{ item }}</option>
                         }
                     </select>
-                    <label for="monthStatement">Mês</label>
+                    <label for="monthBudget">Mês</label>
                 </div>
                 @if(isMonthNotSelected) {
                     <p class="text-danger mb-2">Campo obrigatório</p>
@@ -24,13 +24,13 @@
             </div>
             <div class="col">
                 <div class="form-floating">
-                    <select name="year" id="yearStatement" class="form-control w-75" (change)="checkYearCbo($event)">
+                    <select name="year" id="yearBudget" class="form-control w-75" (change)="checkYearCbo($event)">
                         <option value="selecione o ano">Selecione o ano</option>
                             @for(item of yearsList; track $index) {
                             <option value="{{ item }}">{{ item }}</option>
                         }
                     </select>
-                    <label for="yearStatement">Ano</label>
+                    <label for="yearBudget">Ano</label>
                 </div>
                 @if(isYearNotSelected) {
                     <p class="text-danger mb-2">Campo obrigatório</p>
@@ -45,13 +45,24 @@
             <div class="my-2">
                 <span class="text-primary">Defina o(s) seu(s) orçamento(s):</span>
             </div>
-            <div class="col col-3">
-                <a (click)="addBudget()" type="button" class="mt-2 ms-1">
-                    <i class="bi bi-plus-circle text-success fs-4"></i>
-                </a>
-            </div>
 
             @for(budget of budgets; track $index) {
+                 @if(budgets.length == 1) {
+                    <div class="col col-3">
+                        <a (click)="addBudget()" type="button" class="mt-2 ms-1">
+                            <i class="bi bi-plus-circle text-success fs-4"></i>
+                        </a>
+                    </div>
+                } @else if($index>=1 && $index==budgets.length-1) {
+                    <div class="col col-3">
+                        <a (click)="addBudget()" type="button" class="mt-2 ms-1">
+                            <i class="bi bi-plus-circle text-success fs-4"></i>
+                        </a>
+                        <a (click)="removeLastBudget()" type="button" class="mt-2 ms-1">
+                            <i class="bi bi-x-circle-fill text-danger fs-4"></i>
+                        </a>
+                    </div>
+                }
                 <div class="card mt-2">
                     <div class="card-body">
                         <span class="text-primary my-2">Selecione uma ou mais fontes de receita para compor o seu orçamento.</span>
@@ -60,36 +71,33 @@
                                 <div class="col">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" name="{{ budget.id }}" id="budget{{budget.id}}-{{ item.id }}" (change)="checkSource($event)">
-                                        <label for="{{ item.id }}" class="form-check-label">{{ item.description }}</label>
+                                        <label for="budget{{budget.id}}-{{ item.id }}" class="form-check-label">{{ item.description }}</label>
                                     </div>
                                 </div>
                             </div>
 
                             @if(item.selected) {
-                                @if(budget.id==item.fieldId) {
-                                    <p>único</p>    
-                                }
                                 <div class="row my-2 ms-2">
                                     <div class="col col-6">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" value="{{ item.currentValue }}" disabled>
-                                            <label for="revenueValue">Valor disponível</label>
+                                            <label for="{{ item.currentValue }}">Valor disponível</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row my-2 ms-2">
-                                    <div class="col col-6">
+                                    <div class="col">
                                         <div class="form-floating">
                                             <input 
                                                 type="text" 
                                                 name="budget{{budget.id}}-{{ item.id }}"
-                                                id="{{ item.id }}"
+                                                id="input-budget{{budget.id}}-{{ item.id }}"
                                                 class="form-control" 
                                                 style="text-align: left;" 
                                                 currencyMask [options]="currencyMaskOptions"
                                                 (blur)="addValue($event)"
                                             >
-                                            <label for="revenueValue">Valor para o orçamento</label>
+                                            <label for="input-budget{{budget.id}}-{{ item.id }}">Valor para o orçamento</label>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +115,7 @@
                                         class="form-control"
                                         (blur)="addDescription($event)"
                                     >
-                                    <label for="budgetName">Nome do Orçamento</label>
+                                    <label for="budget{{budget.id}}">Nome do Orçamento</label>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +123,28 @@
                 </div>
             }
         }
+
+        @if(isInvalidForm) {
+            <p class="text-danger"> A(s) descrição(ões) deve(m) ser preenchida(s), assim como os valores das receitas selecionadas. E o valor a ser retirado da receita não deve ultrapassar o valor disponível.</p>
+        }
         
+      </div>
+      <div class="modal-footer">
+        <button 
+            type="button" 
+            data-bs-dismiss="modal" 
+            aria-label="Close" 
+            class="btn btn-secondary"
+        >Cancelar</button>
+        <button
+            type="button"
+            id="buttonSetBudgets"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary"
+            (click)="setBudgets()"
+            disabled
+        >Definir</button>
       </div>
     </div>
   </div>

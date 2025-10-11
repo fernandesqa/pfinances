@@ -4,6 +4,7 @@ import { Years } from '../share/years';
 import { StatementService } from '../services/statement.service';
 import { ModalStatementDetails } from '../modal-statement-details/modal-statement-details';
 import { StatementDetailsService } from '../services/statement-details.service';
+import { DomHtml } from '../share/dom-html';
 
 @Component({
   selector: 'app-statement',
@@ -29,12 +30,14 @@ export class Statement implements OnInit {
   public data: any = [];
   private statementDetailsService = new StatementDetailsService;
   private modalStatementDetails = new ModalStatementDetails(this.statementDetailsService);
+  private domHTML = new DomHtml;
 
   constructor(
     private statementService: StatementService
   ) {}
 
   ngOnInit(): void {
+    this.domHTML.activateTab('statement');
     this.monthsList = this.months.getMonthsList();
     this.yearsList = this.years.getLastYears(5);
   }
