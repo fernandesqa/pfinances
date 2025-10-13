@@ -25,18 +25,27 @@ export class Monetary {
                     }
                     break;
                 case 4:
-                    monetaryValue = 'R$ '+value.replace('.', ',')+'0';
+                    if(value.includes('.')) {
+                        monetaryValue = 'R$ '+value.replace('.', ',')+'0';
+                    } else {
+                        monetaryValue = 'R$ '+value.substring(0, 1)+'.'+value.substring(1, 4)+',00';
+                    }
+                    
                     break;
                 case 5:
-                    monetaryValue = 'R$ '+value.replace('.', ',');
-                    if(monetaryValue.substring(6, 7)==',') {
-                        monetaryValue = monetaryValue+'0';
+                    if(value.includes('.')) {
+                        value = value.replace('.', ',');
+                        monetaryValue = 'R$ '+value+',0';
+                    }else {
+                        monetaryValue = 'R$ '+value.substring(0, 2)+'.'+value.substring(2, 5)+',00';
                     }
                     break;
                 case 6:
-                    monetaryValue = 'R$ '+value.replace('.', ',');
-                    if(monetaryValue.substring(7, 8)==',') {
-                        monetaryValue = monetaryValue.substring(0, 4)+'.'+monetaryValue.substring(4, 9)+'0';
+                    if(value.includes('.')) {
+                        value = value.replace('.', ',');
+                        monetaryValue = 'R$ '+value.substring(0, 1)+'.'+value.substring(2, 6)+'0';
+                    } else {
+                        monetaryValue = 'R$ '+value.substring(0, 3)+'.'+value.substring(3, 6)+',00';
                     }
                     break;
                 case 7:

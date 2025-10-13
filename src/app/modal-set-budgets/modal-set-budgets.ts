@@ -47,6 +47,8 @@ export class ModalSetBudgets implements OnInit {
   private isRevenueSelected: boolean = false;
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  public loadPreviousBudgets: boolean = false;
+  public previousBudgets: any = [];
 
   constructor(
     private revenuesService: RevenuesService,
@@ -57,6 +59,22 @@ export class ModalSetBudgets implements OnInit {
   ngOnInit(): void {
     this.monthsList = this.months.getMonthsList();
     this.yearsList = this.years.getLastYears(5);
+    this.previousBudgets.push({
+                                "description": "Moradia",
+                                "value": 2560
+                             },
+                             {
+                               "description": "Mercado",
+                                "value": 1800
+                             },
+                             {
+                               "description": "Saúde",
+                                "value": 1000
+                             },
+                             {
+                               "description": "Entretenimento",
+                                "value": 400
+                             });
   }
 
   public checkMonthCbo(e: Event) {
@@ -169,6 +187,60 @@ export class ModalSetBudgets implements OnInit {
     }
   }
 
+  public showPreviousBudgets(e: Event) {
+    this.showForm = false;
+    this.budgets = [];
+    this.totalBudgets = 0;
+
+    const elflexSwitch = e.target as HTMLInputElement;
+    if(elflexSwitch.checked) {
+      for(var i=0; i<this.previousBudgets.length; i++) {
+        this.totalBudgets = this.totalBudgets + 1;
+        var sources = [];
+        for(var j=0; j<this.revenuesControl.length; j++) {
+          sources.push({
+                        "type": this.revenuesControl[j].type,
+                        "id": this.revenuesControl[j].id,
+                        "description": this.revenuesControl[j].description,
+                        "currentValue": this.monetary.convertToMonetary(this.revenuesControl[j].currentValue.toString()),
+                        "selected": false
+                      });
+        }
+
+        if(i==0) {
+          this.budgets.push({
+                            "id": this.totalBudgets,
+                            "revenuesSource": this.revenuesSource,
+                            "budgetDescription": this.previousBudgets[i].description,
+                            "budgetPreviousValue": this.monetary.convertToMonetary(this.previousBudgets[i].value.toString())
+                          });
+        } else {
+          this.budgets.push({
+                            "id": this.totalBudgets,
+                            "revenuesSource": sources,
+                            "budgetDescription": this.previousBudgets[i].description,
+                            "budgetPreviousValue": this.monetary.convertToMonetary(this.previousBudgets[i].value.toString())
+                          });
+        }
+        
+      }
+
+      this.loadPreviousBudgets = true;
+      this.isDescriptionEmpty = false;
+    } else {
+        this.totalBudgets = 1;
+        this.budgets.push({
+            "id": this.totalBudgets,
+            "revenuesSource": this.revenuesSource
+          });
+        this.loadPreviousBudgets = false;
+        this.isDescriptionEmpty = true;
+        this.showForm = true;
+    }
+
+    
+  }
+
   public currencyMaskOptions = {
     prefix: 'R$ ',
     thousands: '.',
@@ -182,6 +254,7 @@ export class ModalSetBudgets implements OnInit {
     const inputDescriptionId = checkbox.id.split('-')[0];
     let inputDescription = document.getElementById(inputDescriptionId) as HTMLInputElement;
     if(checkbox.checked) {
+      this.isValueEmpty = true;
       for(var i=0; i<this.budgets.length; i++) {
         if(checkbox.name==this.budgets[i].id) {
           var id = checkbox.id.split('-')[1];
@@ -232,9 +305,9 @@ export class ModalSetBudgets implements OnInit {
               
               this.budgets[i].revenuesSource[j].selected = false;
 
-              for(var i=0; i<this.budgetsList.length; i++) {
+              for(var k=0; i<this.budgetsList.length; k++) {
 
-                if(this.budgetsList[i].checkboxId==checkbox.id) {
+                if(this.budgetsList[k].checkboxId==checkbox.id) {
                   const indexToRemove: number = i;
 
                   if(indexToRemove > -1) {
@@ -342,6 +415,7 @@ export class ModalSetBudgets implements OnInit {
   }
 
   public addBudget() {
+    this.isDescriptionEmpty = true;
     this.totalBudgets = this.totalBudgets + 1;
     
     var sources = [];
@@ -353,7 +427,8 @@ export class ModalSetBudgets implements OnInit {
                       "currentValue": this.monetary.convertToMonetary(this.revenuesControl[i].currentValue.toString()),
                       "selected": false
                     });
-      }
+    }
+
     this.budgets.push({
                         "id": this.totalBudgets,
                         "revenuesSource": sources
@@ -440,7 +515,6 @@ export class ModalSetBudgets implements OnInit {
 
   private manageButton() {
     const button = document.getElementById('buttonSetBudgets') as HTMLButtonElement;
-
     if(!this.isDescriptionEmpty && !this.isValueEmpty && !this.isInvalidAmount && this.isRevenueSelected) {
       button.removeAttribute('disabled');
       this.isInvalidForm = false;
