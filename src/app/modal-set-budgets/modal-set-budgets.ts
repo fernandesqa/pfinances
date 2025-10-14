@@ -9,6 +9,7 @@ import { SavingsService } from '../services/savings.service';
 import { BudgetsService } from '../services/budgets.service';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
+import { ModalInfo } from '../modal-info/modal-info';
 
 @Component({
   selector: 'app-modal-set-budgets',
@@ -47,8 +48,10 @@ export class ModalSetBudgets implements OnInit {
   private isRevenueSelected: boolean = false;
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalInfo = new ModalInfo;
   public loadPreviousBudgets: boolean = false;
   public previousBudgets: any = [];
+  private budgetsAlreadySetList: any = [];
 
   constructor(
     private revenuesService: RevenuesService,
@@ -56,25 +59,20 @@ export class ModalSetBudgets implements OnInit {
     private budgetsService: BudgetsService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.monthsList = this.months.getMonthsList();
     this.yearsList = this.years.getLastYears(5);
-    this.previousBudgets.push({
-                                "description": "Moradia",
-                                "value": 2560
-                             },
-                             {
-                               "description": "Mercado",
-                                "value": 1800
-                             },
-                             {
-                               "description": "Saúde",
-                                "value": 1000
-                             },
-                             {
-                               "description": "Entretenimento",
-                                "value": 400
-                             });
+    var result = await this.budgetsService.getPreviousBudgets();
+    switch(result.status) {
+      case 200:
+        for(var i=0; i<result.response.data.length; i++) {
+          this.previousBudgets.push({
+                                      "description": result.response.data[i].budgetDescription,
+                                      "value": result.response.data[i].budgetValue
+                                   });
+        }
+        break;
+    }
   }
 
   public checkMonthCbo(e: Event) {
@@ -114,6 +112,12 @@ export class ModalSetBudgets implements OnInit {
 
       var month = this.months.convertMonthNameToMonthNumber(monthCbo.value);
       this.monthYear = month + yearCbo.value;
+      var budgetsAlreadySet = await this.budgetsService.getBudgetsAlreadySetOnPeriod(this.monthYear);
+      if(budgetsAlreadySet.status==200) {
+        for(var i=0; i<budgetsAlreadySet.response.data.length; i++) {
+          this.budgetsAlreadySetList.push(budgetsAlreadySet.response.data[i].budgetDescription);
+        }
+      }
 
       var result = await this.revenuesService.getRevenuesByPeriod(this.monthYear);
 
@@ -360,6 +364,7 @@ export class ModalSetBudgets implements OnInit {
     this.validateDescription();
 
     this.manageButton();
+
   }
 
   public addDescription(e: Event) {
@@ -525,7 +530,7 @@ export class ModalSetBudgets implements OnInit {
   }
 
   public async setBudgets() {
-    var fail: boolean = false;
+    var budgetAlreadySet: boolean = false;
     for(var i=0; i<this.budgetsList.length; i++) {
       this.finalBudgetsList.push({
                                     "description": this.budgetsList[i].description,
@@ -535,17 +540,39 @@ export class ModalSetBudgets implements OnInit {
                                     "revenueId": parseInt(this.budgetsList[i].revenueId),
                                     "savingsId": parseInt(this.budgetsList[i].savingsId)
                                 });
+
+      for(var j=0; j<this.budgetsAlreadySetList.length; j++) {
+        if(this.budgetsList[i].description==this.budgetsAlreadySetList[j]) {
+          budgetAlreadySet = true;
+        }
+      }
     }
     
-    var result = await this.budgetsService.createBudgets(this.monthYear, this.finalBudgetsList);
+    if(!budgetAlreadySet) {
+      var result = await this.budgetsService.createBudgets(this.monthYear, this.finalBudgetsList);
       
-    switch(result.status) {
-      case 200:
-        this.modalSuccess.openModal("Definição de orçamentos", "Oçamento(s) definido(s) com sucesso!");
-        break;
-      default:
-        this.modalInternalError.openModal("Definição de orçamentos", "Erro ao tentar definir o(s) orçamento(s), por favor tente novamente mais tarde!");
-        break;
+      switch(result.status) {
+        case 200:
+          this.modalSuccess.openModal("Definição de orçamentos", "Oçamento(s) definido(s) com sucesso!");
+          break;
+        default:
+          this.modalInternalError.openModal("Definição de orçamentos", "Erro ao tentar definir o(s) orçamento(s), por favor tente novamente mais tarde!");
+          break;
+      }
+    } else {
+      // Exibe o modal informando que o orçamento informado já foi definido para o período selecionado.
+      var budgetsName = '';
+      for(var i=0; i<this.budgetsAlreadySetList.length; i++) {
+        if(i==0) {
+          budgetsName = ' "'+this.budgetsAlreadySetList[i]+'",';
+        } else if(i+1 == this.budgetsAlreadySetList.length) {
+          budgetsName += ' e "'+this.budgetsAlreadySetList[i]+'". Utilize a funcionalidade "Aumentar orçamento" ou "Reduzir orçamento" para alterar o orçamento desejado.';
+        } else {
+          budgetsName += ' "'+this.budgetsAlreadySetList[i]+'",';
+        }
+      }
+      this.modalInfo.openModal("Definição de orçamentos", "O(s) seguinte(s) orçamento(s) já foi(foram) definidido(s) no período selecionado:"+budgetsName);
     }
+    
   }
 }

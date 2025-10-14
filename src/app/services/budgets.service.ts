@@ -28,4 +28,36 @@ export class BudgetsService {
 
     return result;
   }
+
+  //Consulta os orçamentos definidos em um determinado período
+  public async getBudgetsAlreadySetOnPeriod(monthYear: string): Promise<any> {
+    let result: any;
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/list-budgets-already-set-on-period/users/'+userId+'/families/'+familyId+'/periods/'+monthYear;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
+
+  //Consulta os orçamentos definidos no mês anterior ao atual
+  public async getPreviousBudgets(): Promise<any> {
+    let result: any;
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/list-previous-budgets/users/'+userId+'/families/'+familyId;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
 }

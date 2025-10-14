@@ -30,6 +30,7 @@ import { ModalStatementDetails } from './modal-statement-details/modal-statement
 import { ModalSetBudgets } from './modal-set-budgets/modal-set-budgets';
 import { SavingsService } from './services/savings.service';
 import { BudgetsService } from './services/budgets.service';
+import { ModalInfo } from './modal-info/modal-info';
 @Component({
   selector: 'app-root',
   imports: [
@@ -51,6 +52,7 @@ import { BudgetsService } from './services/budgets.service';
     ModalResetPasswordRequest,
     ModalSetBudgets,
     ModalStatementDetails,
+    ModalInfo,
     Footer
   ],
   templateUrl: './app.html',
