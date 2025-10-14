@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RevenuesService } from '../services/revenues.service';
 import { Months } from '../share/months';
 import { Monetary } from '../share/monetary';
+import { DomHtml } from '../share/dom-html';
 
 @Component({
   selector: 'app-summary',
@@ -18,12 +19,14 @@ export class Summary implements OnInit {
   public revenue: string = '';
   public month: string = '';
   public year: string = '';
+  private domHTML = new DomHtml;
 
   constructor(
     private revenuesService: RevenuesService
   ) {}
 
   async ngOnInit() {
+    this.domHTML.activateTab('summary');
     this.isRevenueLoaded = false;
     this.isLoadingRevenue = true;
     let result = await this.revenuesService.getRevenueCurrentMonth();

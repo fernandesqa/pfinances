@@ -7,12 +7,14 @@ import { FirstAccess } from './first-access/first-access';
 import { Summary } from './summary/summary';
 import { Revenues } from './revenues/revenues';
 import { Statement } from './statement/statement';
+import { Budget } from './budget/budget';
 
 export const routes: Routes = [
     {path: 'login', canActivate: [loginGuard], component: Login},
     {path: 'minhas-financas', canActivate: [authGuard], component: Home, children: [
         {path: 'resumo', canActivate: [authGuard], component: Summary},
         {path: 'receitas', canActivate: [authGuard], component: Revenues},
+        {path: 'orcamentos', canActivate: [authGuard], component: Budget},
         {path: 'extrato', canActivate: [authGuard], component: Statement}
     ]},
     {path: 'primeiro-acesso', canActivate: [loginGuard], component: FirstAccess},

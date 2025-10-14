@@ -27,6 +27,10 @@ import { ModalResetPasswordRequest } from './modal-reset-password-request/modal-
 import { StatementService } from './services/statement.service';
 import { StatementDetailsService } from './services/statement-details.service';
 import { ModalStatementDetails } from './modal-statement-details/modal-statement-details';
+import { ModalSetBudgets } from './modal-set-budgets/modal-set-budgets';
+import { SavingsService } from './services/savings.service';
+import { BudgetsService } from './services/budgets.service';
+import { ModalInfo } from './modal-info/modal-info';
 @Component({
   selector: 'app-root',
   imports: [
@@ -46,7 +50,9 @@ import { ModalStatementDetails } from './modal-statement-details/modal-statement
     ModalSuccess,
     ModalInternalError,
     ModalResetPasswordRequest,
+    ModalSetBudgets,
     ModalStatementDetails,
+    ModalInfo,
     Footer
   ],
   templateUrl: './app.html',
@@ -59,7 +65,9 @@ import { ModalStatementDetails } from './modal-statement-details/modal-statement
     FirstAccessService,
     PendingIssuesService,
     StatementService,
-    StatementDetailsService
+    StatementDetailsService,
+    SavingsService,
+    BudgetsService
   ]
 })
 export class App  {
