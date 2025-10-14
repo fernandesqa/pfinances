@@ -111,4 +111,44 @@ export class DomHtml {
         eDivMessage.appendChild(eSpan);
         parentElement.appendChild(eDivMessage);
     }
+
+    public activateTab(tab: string) {
+        if(tab=='summary') {
+            const tabSummary = document.getElementById('summary') as HTMLElement;
+            const tabRevenues = document.getElementById('revenues') as HTMLElement;
+            const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabStatement = document.getElementById('statement') as HTMLElement;
+            tabSummary.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
+            tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
+            tabBudgets?.setAttribute('class', 'nav-link text-tertiary');
+            tabStatement?.setAttribute('class', 'nav-link text-tertiary');
+        } else if(tab=='revenues') {
+            const tabRevenues = document.getElementById('revenues') as HTMLElement;
+            const tabSummary = document.getElementById('summary') as HTMLElement;
+            const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabStatement = document.getElementById('statement') as HTMLElement;
+            tabRevenues.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
+            tabSummary?.setAttribute('class', 'nav-link text-tertiary');
+            tabBudgets?.setAttribute('class', 'nav-link text-tertiary');
+            tabStatement?.setAttribute('class', 'nav-link text-tertiary');
+        } else if(tab=='budgets') {
+            const tabRevenues = document.getElementById('revenues') as HTMLElement;
+            const tabSummary = document.getElementById('summary') as HTMLElement;
+            const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabStatement = document.getElementById('statement') as HTMLElement;
+            tabBudgets.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
+            tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
+            tabSummary?.setAttribute('class', 'nav-link text-tertiary');
+            tabStatement?.setAttribute('class', 'nav-link text-tertiary');
+        } else if(tab=='statement') {
+            const tabRevenues = document.getElementById('revenues') as HTMLElement;
+            const tabSummary = document.getElementById('summary') as HTMLElement;
+            const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabStatement = document.getElementById('statement') as HTMLElement;
+            tabStatement.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
+            tabSummary?.setAttribute('class', 'nav-link text-tertiary');
+            tabBudgets?.setAttribute('class', 'nav-link text-tertiary');
+            tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
+        }
+    }
 }
