@@ -34,8 +34,7 @@ export class Monetary {
                     break;
                 case 5:
                     if(value.includes('.')) {
-                        value = value.replace('.', ',');
-                        monetaryValue = 'R$ '+value+',0';
+                        monetaryValue = 'R$ '+value.replace('.', ',')+'0';
                     }else {
                         monetaryValue = 'R$ '+value.substring(0, 2)+'.'+value.substring(2, 5)+',00';
                     }

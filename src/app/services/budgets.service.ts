@@ -60,4 +60,20 @@ export class BudgetsService {
 
     return result;
   }
+
+  //Consulta os orçamentos de determinado período
+  public async getBudgets(monthYear: string): Promise<any> {
+    let result: any;
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/list-budgets/users/'+userId+'/families/'+familyId+'/periods/'+monthYear;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
 }

@@ -8,6 +8,7 @@ import { Summary } from './summary/summary';
 import { Revenues } from './revenues/revenues';
 import { Statement } from './statement/statement';
 import { Budget } from './budget/budget';
+import { Savings } from './savings/savings';
 
 export const routes: Routes = [
     {path: 'login', canActivate: [loginGuard], component: Login},
@@ -15,6 +16,7 @@ export const routes: Routes = [
         {path: 'resumo', canActivate: [authGuard], component: Summary},
         {path: 'receitas', canActivate: [authGuard], component: Revenues},
         {path: 'orcamentos', canActivate: [authGuard], component: Budget},
+        {path: 'economias', canActivate: [authGuard], component: Savings},
         {path: 'extrato', canActivate: [authGuard], component: Statement}
     ]},
     {path: 'primeiro-acesso', canActivate: [loginGuard], component: FirstAccess},

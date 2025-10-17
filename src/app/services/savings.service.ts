@@ -29,4 +29,19 @@ export class SavingsService {
 
     return result;
   }
+
+  //Cadastra economias
+  public async createSavings(monthYear: string, savings: any) {
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/savings/users/'+userId+'/families/'+familyId+'/periods/'+monthYear+'/create';
+    var result = await this.http.postData(url, 
+      {
+        "savings": savings
+      }
+    )
+
+    return result;
+  }
 }
