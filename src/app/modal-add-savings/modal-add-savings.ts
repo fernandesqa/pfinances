@@ -102,10 +102,13 @@ export class ModalAddSavings implements OnInit {
           this.budgetSource = [];
           this.budgetControl = [];
           for(var i=0; i<result.response.data.length; i++) {
+            var value: number = result.response.data[i].budgetCurrentValue;
+            var fixedString: String = value.toFixed(2);
+            var budgetCurrentValue: number = Number(fixedString);
             this.budgetControl.push({
                                       "budgetId": result.response.data[i].budgetId,
                                       "budgetDescription": result.response.data[i].budgetDescription,
-                                      "budgetCurrentValue": result.response.data[i].budgetCurrentValue 
+                                      "budgetCurrentValue":  budgetCurrentValue
                                    });
           }
 
