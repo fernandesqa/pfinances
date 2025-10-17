@@ -24,12 +24,6 @@ export class Home implements OnInit {
   async ngOnInit() {
     this.navigationBar.hideNavigation();
     checkRole();
-    this.currentLocation = this.router.url;
-    if (this.currentLocation=='/minhas-financas/resumo') {
-      this.tabSummary();
-    } else if (this.currentLocation=='/minhas-financas/receitas') {
-      this.tabRevenues();
-    }
   }
 
   public tabSummary() {
@@ -42,6 +36,10 @@ export class Home implements OnInit {
 
   public tabBudgets() {
     this.router.navigate(['/minhas-financas/orcamentos']);
+  }
+
+  public tabSavings() {
+    this.router.navigate(['/minhas-financas/economias']);
   }
 
   public tabStatement() {
