@@ -127,11 +127,14 @@ export class ModalSetBudgets implements OnInit {
           this.revenuesSource = [];
           this.revenuesControl = [];
           for(var i=0; i<result.response.data.length; i++) {
+            var value: number = result.response.data[i].currentValue;
+            var fixedString: String = value.toFixed(2);
+            var RevenueCurrentValue: number = Number(fixedString);
             this.revenuesControl.push({
                                         "type": "revenue",
                                         "id": result.response.data[i].revenueId,
                                         "description": result.response.data[i].revenueDescription,
-                                        "currentValue": result.response.data[i].currentValue
+                                        "currentValue": RevenueCurrentValue
                                       });
           }
 

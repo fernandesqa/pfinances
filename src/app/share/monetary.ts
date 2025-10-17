@@ -34,15 +34,24 @@ export class Monetary {
                     break;
                 case 5:
                     if(value.includes('.')) {
-                        monetaryValue = 'R$ '+value.replace('.', ',')+'0';
+                        if(value.substring(3, 4)=='.') {
+                            monetaryValue = 'R$ '+value.replace('.', ',')+'0';
+                        } else {
+                            monetaryValue = 'R$ '+value.replace('.', ',');
+                        }
+                        
                     }else {
                         monetaryValue = 'R$ '+value.substring(0, 2)+'.'+value.substring(2, 5)+',00';
                     }
                     break;
                 case 6:
                     if(value.includes('.')) {
-                        value = value.replace('.', ',');
-                        monetaryValue = 'R$ '+value.substring(0, 1)+'.'+value.substring(2, 6)+'0';
+                        if(value.substring(4, 5)=='.') {
+                            value = value.replace('.', ',');
+                            monetaryValue = 'R$ '+value.substring(0, 1)+'.'+value.substring(1, 6)+'0';
+                        } else {
+                            monetaryValue = 'R$ '+value.replace('.', ',');
+                        }
                     } else {
                         monetaryValue = 'R$ '+value.substring(0, 3)+'.'+value.substring(3, 6)+',00';
                     }
