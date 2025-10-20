@@ -32,6 +32,7 @@ import { SavingsService } from './services/savings.service';
 import { BudgetsService } from './services/budgets.service';
 import { ModalInfo } from './modal-info/modal-info';
 import { ModalAddSavings } from './modal-add-savings/modal-add-savings';
+import { ModalAddExpenses } from './modal-add-expenses/modal-add-expenses';
 @Component({
   selector: 'app-root',
   imports: [
@@ -55,6 +56,7 @@ import { ModalAddSavings } from './modal-add-savings/modal-add-savings';
     ModalStatementDetails,
     ModalInfo,
     ModalAddSavings,
+    ModalAddExpenses,
     Footer
   ],
   templateUrl: './app.html',

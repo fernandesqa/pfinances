@@ -38,6 +38,10 @@ export class Home implements OnInit {
     this.router.navigate(['/minhas-financas/orcamentos']);
   }
 
+  public tabExpenses() {
+    this.router.navigate(['/minhas-financas/despesas']);
+  }
+
   public tabSavings() {
     this.router.navigate(['/minhas-financas/economias']);
   }
