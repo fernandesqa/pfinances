@@ -81,10 +81,10 @@
                         <hr>
                         <div class="row mt-2">
                             <div class="form-floating">
-                                <select name="category" id="categories-expense{{ expenseItem.id }}" class="form-control">
-                                    <option value="selecione o ano">Selecione a categoria</option>
+                                <select name="category" id="categories-expense{{ expenseItem.id }}" class="form-control" (change)="addCategory($event)" disabled>
+                                    <option value="selecione a categoria">Selecione a categoria</option>
                                     @for(category of expenseItem.categories; track $index) {
-                                        <option value="{{ category }}">{{ category }}</option>
+                                        <option value="{{ category.description }}">{{ category.description }}</option>
                                     }
                                 </select>
                             </div>
@@ -92,7 +92,7 @@
                         <div class="row mt-2">
                             <div class="col">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" name="fixed-expense" id="fixed-expense{{expenseItem.id}}" (change)="checkFixedExpense($event)">
+                                    <input type="checkbox" class="form-check-input" name="fixed-expense" id="fixed-expense{{expenseItem.id}}" (change)="checkFixedExpense($event)" disabled>
                                     <label for="fixed-expense{{expenseItem.id}}" class="form-check-label">Despesa fixa ou parcelada</label>
                                 </div>
                             </div>
@@ -121,6 +121,9 @@
                                             </select>
                                             <label for="billing-month{{expenseItem.id}}">Mês</label>
                                         </div>
+                                        @if(isBillingMonthNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
                                     </div>
 
                                     <div class="col">
@@ -133,6 +136,9 @@
                                             </select>
                                             <label for="billing-year{{expenseItem.id}}">Ano</label>
                                         </div>
+                                        @if(isBillingYearNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
                                     </div>
                                 </div>
                                 <hr>
@@ -148,6 +154,9 @@
                                             </select>
                                             <label for="last-billing-month{{expenseItem.id}}">Mês</label>
                                         </div>
+                                        @if(isLastBillingMonthNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
                                     </div>
 
                                     <div class="col">
@@ -160,6 +169,9 @@
                                             </select>
                                             <label for="last-billing-year{{expenseItem.id}}">Ano</label>
                                         </div>
+                                        @if(isLastBillingYearNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
                                     </div>
                                 </div>
                             }
