@@ -40,6 +40,7 @@ export class ModalAddExpenses implements OnInit {
   private isValueEmpty: boolean = false;
   private expensesList: any =[];
   private isBudgetSelected: boolean = false;
+  public isCategoryNotSelected: boolean = false;
   private isDescriptionEmpty: boolean = false;
   public isBillingMonthNotSelected: boolean = false;
   public isBillingYearNotSelected: boolean = false;
@@ -49,6 +50,8 @@ export class ModalAddExpenses implements OnInit {
   public cboBillingYearChanged: boolean = false;
   public cboLastBillingMonthChanged: boolean = false;
   public cboLastBillingYearChanged: boolean = false;
+  private billingMonthYear: string = '';
+  private lastBillingMonthYear: string = '';
   
 
   constructor(
@@ -152,9 +155,83 @@ export class ModalAddExpenses implements OnInit {
     allowNegative: false
   };
 
-  public addExpense() {}
+  public addExpense() {
+    this.isDescriptionEmpty = true;
+    this.totalExpenses = this.totalExpenses + 1;
+    
+    var sources = [];
+    for(var i=0; i<this.budgetControl.length; i++) {
+        sources.push({
+                      "id": this.budgetControl[i].budgetId,
+                      "description": this.budgetControl[i].budgetDescription,
+                      "currentValue": this.monetary.convertToMonetary(this.budgetControl[i].budgetCurrentValue.toString()),
+                      "selected": false
+                    });
+    }
 
-  public removeLastExpense() {}
+    var categories = [];
+    for(var i=0; i<this.categories.length; i++) {
+      categories.push({
+                        "id": this.categories[i].id,
+                        "description": this.categories[i].description
+                     });
+    }
+
+    var billingMonthsList = this.months.getMonthsList();
+    var billingYearsList = this.years.getBillingYears();
+    var lastBillingMonthsList = this.months.getMonthsList();
+    var lastBillingYearsList = this.years.getFutureBillingYears();
+
+    this.expenses.push({
+                              "id": this.totalExpenses,
+                              "budgetSource": sources,
+                              "categories": categories,
+                              "fixedExpense": false,
+                              "installmentsExpense": false,
+                              "billingMonths": billingMonthsList,
+                              "billingYears": billingYearsList,
+                              "lastBillingMonths": lastBillingMonthsList,
+                              "lastBillingYears": lastBillingYearsList
+                           });
+  }
+
+  public removeLastExpense() {
+    this.expenses.pop();
+    this.expensesList.pop();
+    var counter = 0;
+    for(var i=0; i<this.expensesList.length; i++) {
+      if(this.expensesList[i].date=='') {
+        counter = counter + 1;
+      } else if(this.expensesList[i].description=='') {
+        counter = counter + 1;
+      } else if(this.expensesList[i].value=0.0) {
+        counter = counter + 1;
+      } else if(this.expensesList[i].categoryId==0) {
+        counter = counter + 1;
+      } else if(this.expensesList[i].budgetId==0) {
+        counter = counter + 1;
+      } else if(this.expensesList[i].installmentsExpense==true) {
+        if(this.expensesList[i].billingMonthYear=='' || this.expensesList[i].lastBillingMonthYear=='') {
+          counter = counter + 1;
+        }
+      }
+    }
+
+    if(counter==0) {
+      this.isDescriptionEmpty = false; 
+      this.isValueEmpty = false; 
+      this.isFutureDate = false; 
+      this.isBudgetSelected = true; 
+      this.isCategoryNotSelected = false;
+      this.dateInformed = true; 
+      this.isBillingMonthNotSelected = false;
+      this.isBillingYearNotSelected = false;
+      this.isLastBillingMonthNotSelected = false;
+      this.isLastBillingYearNotSelected = false;
+    }
+
+    this.manageButton();
+  }
 
   public checkBudget(e: Event) {
     const checkbox = e.target as HTMLInputElement;
@@ -164,14 +241,14 @@ export class ModalAddExpenses implements OnInit {
     inputDateId = 'date-'+inputDateId.split('expense')[1];
     let inputDate = document.getElementById(inputDateId) as HTMLInputElement;
     var date = '';
-    var monthYear = '';
+    
     if(inputDate.value != '') {
       this.dateInformed = true;
       var time = this.dateTime.getLocalDateTime();
       time = time.split(',')[1];
       var splitDate = inputDate.value.split('-');
       date = splitDate[2]+'/'+splitDate[1]+'/'+splitDate[0]+' '+time;
-      monthYear = splitDate[1]+splitDate[0];
+      this.monthYear = splitDate[1]+splitDate[0];
     } else {
       this.dateInformed = false;
     }
@@ -204,7 +281,7 @@ export class ModalAddExpenses implements OnInit {
                       categoryId = this.expensesList[k].categoryId;
                     }
                     if(!this.expensesList[k].installmentsExpense) {
-                      monthYear = this.expensesList[k].billingMonthYear;
+                      this.monthYear = this.expensesList[k].billingMonthYear;
                     }
                   }
                 }
@@ -218,7 +295,7 @@ export class ModalAddExpenses implements OnInit {
                                     "budgetId": id,
                                     "fixedExpense": false,
                                     "installmentsExpense": false,
-                                    "billingMonthYear": monthYear,
+                                    "billingMonthYear": this.monthYear,
                                     "lastBillingMonthYear": ""
                                   });
               } else {
@@ -231,7 +308,7 @@ export class ModalAddExpenses implements OnInit {
                                     "budgetId": id,
                                     "fixedExpense": false,
                                     "installmentsExpense": false,
-                                    "billingMonthYear": monthYear,
+                                    "billingMonthYear": this.monthYear,
                                     "lastBillingMonthYear": ""
                                   });
               }
@@ -265,7 +342,6 @@ export class ModalAddExpenses implements OnInit {
                     this.expensesList.splice(indexToRemove, 1);
                   }
                 }
-
               }
             }
           }
@@ -350,18 +426,25 @@ export class ModalAddExpenses implements OnInit {
 
   public addCategory(e: Event) {
     const selectCategory = e.target as HTMLSelectElement;
-    var id;
-    for(var i=0; i<this.categories.length; i++) {
-      if(this.categories[i].description==selectCategory.value) {
-        id = this.categories[i].id;
+    
+    if(selectCategory.value!='selecione a categoria') {
+      this.isCategoryNotSelected = false;
+      var id;
+      for(var i=0; i<this.categories.length; i++) {
+        if(this.categories[i].description==selectCategory.value) {
+          id = this.categories[i].id;
+        }
       }
-    }
-    var expenseId = selectCategory.id.split('-')[1];
-    for(var i=0; i<this.expensesList.length; i++) {
-      if(this.expensesList[i].checkboxId.split('-')[0]==expenseId) {
-        this.expensesList[i].categoryId = id;
+      var expenseId = selectCategory.id.split('-')[1];
+      for(var i=0; i<this.expensesList.length; i++) {
+        if(this.expensesList[i].checkboxId.split('-')[0]==expenseId) {
+          this.expensesList[i].categoryId = id;
+        }
       }
+    } else {
+      this.isCategoryNotSelected = true;
     }
+    this.manageButton();
   }
 
   public addDate(e: Event) {
@@ -369,22 +452,46 @@ export class ModalAddExpenses implements OnInit {
     var date = '';
     if(inputDate.value != '') {
       this.dateInformed = true;
-      var time = this.dateTime.getLocalDateTime();
-      time = time.split(',')[1];
       var splitDate = inputDate.value.split('-');
-      date = splitDate[2]+'/'+splitDate[1]+'/'+splitDate[0]+' '+time;
-      var monthYear = splitDate[1]+splitDate[0];
-      for(var i=0; i<this.expensesList.length; i++) {
-        if(this.expensesList[i].checkboxId.split('-')[0]==inputDate.name) {
-          this.expensesList[i].date = date;
-          if(!this.expensesList[i].installmentsExpense) {
-            this.expensesList[i].billingMonthYear = monthYear;
+      date = splitDate[2]+'/'+splitDate[1]+'/'+splitDate[0];
+
+      //Verifica se a data informada não é futura
+      const currentDate: Date = new Date();
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const day = currentDate.getDate();
+
+      if(splitDate[0]<=year.toString()) {
+        if(splitDate[1]<=month.toString()) {
+          if(splitDate[2]<=day.toString()) {
+            this.isFutureDate = false;
+            var time = this.dateTime.getLocalDateTime();
+            time = time.split(',')[1];
+            var splitDate = inputDate.value.split('-');
+            date = splitDate[2]+'/'+splitDate[1]+'/'+splitDate[0]+' '+time;
+            var monthYear = splitDate[1]+splitDate[0];
+            for(var i=0; i<this.expensesList.length; i++) {
+              if(this.expensesList[i].checkboxId.split('-')[0]==inputDate.name) {
+                this.expensesList[i].date = date;
+                if(!this.expensesList[i].installmentsExpense) {
+                  this.expensesList[i].billingMonthYear = monthYear;
+                }
+              }
+            }
+          } else {
+            this.isFutureDate = true;
           }
+        } else {
+          this.isFutureDate = true;
         }
+      } else {
+        this.isFutureDate = true;
       }
     } else {
       this.dateInformed = false;
     }
+
+    this.manageButton();
   }
 
   public checkFixedExpense(e: Event) {
@@ -429,6 +536,10 @@ export class ModalAddExpenses implements OnInit {
     const checkboxInstallmentsExpense = e.target as HTMLInputElement;
 
     if(checkboxInstallmentsExpense.checked) {
+      this.isBillingMonthNotSelected = true;
+      this.isBillingYearNotSelected = true;
+      this.isLastBillingMonthNotSelected = true;
+      this.isLastBillingYearNotSelected = true;
       var checkboxId = checkboxInstallmentsExpense.id.split('-')[1];
       var id = checkboxId.split('se')[1];
       for(var i=0; i<this.expenses.length; i++) {
@@ -461,18 +572,20 @@ export class ModalAddExpenses implements OnInit {
         }
       }
     }
+
+    this.manageButton();
   }
 
   public checkBillingMonthCbo(e: Event) {
     const monthCbo = e.target as HTMLSelectElement;
     this.cboBillingMonthChanged = true;
-
+    
     if(monthCbo.value=='selecione o mês') {
       this.isBillingMonthNotSelected = true;
-      this.checkBillingCbos();
+      this.checkBillingCbos(monthCbo);
     } else {
       this.isBillingMonthNotSelected = false;
-      this.checkBillingCbos();
+      this.checkBillingCbos(monthCbo);
     }
   }
 
@@ -482,14 +595,49 @@ export class ModalAddExpenses implements OnInit {
     
     if(yearCbo.value=='selecione o ano') {
       this.isBillingYearNotSelected = true;
-      this.checkBillingCbos();
+      this.checkBillingCbos(yearCbo);
     } else {
       this.isBillingYearNotSelected = false;
-      this.checkBillingCbos();
+      this.checkBillingCbos(yearCbo);
     }
   }
 
-  private checkBillingCbos() {}
+  private checkBillingCbos(element: HTMLElement) {
+    if(!this.isBillingMonthNotSelected && !this.isBillingYearNotSelected && this.cboBillingMonthChanged && this.cboBillingYearChanged) {
+      var id = element.id;
+      var monthId = '';
+      var yearId = '';
+      var monthCbo;
+      var yearCbo; 
+      if(id.includes('billing-month')) {
+        monthCbo = document.getElementById(id) as HTMLSelectElement;
+        yearId = 'billing-year'+id.split('billing-month')[1];
+        yearCbo = document.getElementById(yearId) as HTMLSelectElement; 
+      } else {
+        yearCbo = document.getElementById(id) as HTMLSelectElement;
+        monthId = 'billing-month'+id.split('billing-year')[1];
+        monthCbo = document.getElementById(monthId) as HTMLSelectElement;
+      }
+      
+      var month = this.months.convertMonthNameToMonthNumber(monthCbo.value);
+      this.billingMonthYear = month + yearCbo.value;
+      var checkboxId = '';
+      if(monthId!='') {
+        checkboxId = 'expense'+monthId;
+        checkboxId = checkboxId.split('billing-month')[0] + checkboxId.split('billing-month')[1];
+      } else {
+        checkboxId = 'expense'+yearId;
+        checkboxId.split('billing-year')[0] + checkboxId.split('billing-year')[1];
+      }
+
+      for(var i=0; i<this.expensesList.length; i++) {
+        if(this.expensesList[i].checkboxId.split('-')[0]==checkboxId) {
+          this.expensesList[i].billingMonthYear = this.billingMonthYear;
+        }
+      }
+    }
+    this.manageButton();
+  }
 
   public checkLastBillingMonthCbo(e: Event) {
     const monthCbo = e.target as HTMLSelectElement;
@@ -497,10 +645,10 @@ export class ModalAddExpenses implements OnInit {
 
     if(monthCbo.value=='selecione o mês') {
       this.isLastBillingMonthNotSelected = true;
-      this.checkLastBillingCbos();
+      this.checkLastBillingCbos(monthCbo);
     } else {
       this.isLastBillingMonthNotSelected = false;
-      this.checkLastBillingCbos();
+      this.checkLastBillingCbos(monthCbo);
     }
   }
 
@@ -510,14 +658,50 @@ export class ModalAddExpenses implements OnInit {
     
     if(yearCbo.value=='selecione o ano') {
       this.isLastBillingYearNotSelected = true;
-      this.checkLastBillingCbos();
+      this.checkLastBillingCbos(yearCbo);
     } else {
       this.isLastBillingYearNotSelected = false;
-      this.checkLastBillingCbos();
+      this.checkLastBillingCbos(yearCbo);
     }
   }
 
-  private checkLastBillingCbos() {}
+  private checkLastBillingCbos(element: HTMLElement) {
+    if(!this.isLastBillingMonthNotSelected && !this.isLastBillingYearNotSelected && this.cboLastBillingMonthChanged && this.cboLastBillingYearChanged) {
+      var id = element.id;
+      var monthId = '';
+      var yearId = '';
+      var monthCbo;
+      var yearCbo; 
+      if(id.includes('last-billing-month')) {
+        monthCbo = document.getElementById(id) as HTMLSelectElement;
+        yearId = 'last-billing-year'+id.split('last-billing-month')[1];
+        yearCbo = document.getElementById(yearId) as HTMLSelectElement; 
+      } else {
+        yearCbo = document.getElementById(id) as HTMLSelectElement;
+        monthId = 'last-billing-month'+id.split('last-billing-year')[1];
+        monthCbo = document.getElementById(monthId) as HTMLSelectElement;
+      }
+      
+      var month = this.months.convertMonthNameToMonthNumber(monthCbo.value);
+      this.lastBillingMonthYear = month + yearCbo.value;
+      var checkboxId = '';
+      if(monthId!='') {
+        checkboxId = 'expense'+monthId;
+        checkboxId = checkboxId.split('last-billing-month')[0] + checkboxId.split('last-billing-month')[1];
+      } else {
+        checkboxId = 'expense'+yearId;
+        checkboxId.split('last-billing-year')[0] + checkboxId.split('last-billing-year')[1];
+      }
+
+      for(var i=0; i<this.expensesList.length; i++) {
+        if(this.expensesList[i].checkboxId.split('-')[0]==checkboxId) {
+          this.expensesList[i].lastBillingMonthYear = this.lastBillingMonthYear;
+        }
+      }
+    }
+
+    this.manageButton();
+  }
 
   public addDescription(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -571,7 +755,27 @@ export class ModalAddExpenses implements OnInit {
     }
   }
 
-  private manageButton() {}
+  private manageButton() {
+    const button = document.getElementById('buttonAddExpense') as HTMLButtonElement;
+    if(
+        !this.isDescriptionEmpty && 
+        !this.isValueEmpty && 
+        !this.isFutureDate && 
+        this.isBudgetSelected && 
+        !this.isCategoryNotSelected &&
+        this.dateInformed && 
+        !this.isBillingMonthNotSelected &&
+        !this.isBillingYearNotSelected &&
+        !this.isLastBillingMonthNotSelected &&
+        !this.isLastBillingYearNotSelected
+      ) {
+        button.removeAttribute('disabled');
+        this.isInvalidForm = false;
+      } else {
+        button.setAttribute('disabled', 'true');
+        this.isInvalidForm = true;
+      }
+  }
 
   public createExpenses() {}
 
