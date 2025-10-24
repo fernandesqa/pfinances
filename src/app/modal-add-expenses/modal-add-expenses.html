@@ -179,7 +179,49 @@
                                 </div>
                             }
                         }
-                        
+                        <div class="row mt-2">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="credit-card-expense" id="credit-card-expense{{expenseItem.id}}" (change)="checkCreditCardExpense($event)" disabled>
+                                    <label for="credit-card-expense{{expenseItem.id}}" class="form-check-label">Compra à vista no cartão de crédito</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if(expenseItem.creditCardExpense) {
+                            <div class="row mt-2 ms-2">
+                                <span class="text-primary my-2 fw-bold">Selecione o mês e o ano que a compra deve ser paga</span>
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <select name="billing-month" id="billing-month{{expenseItem.id}}" class="form-control w-75" (change)="checkBillingMonthCbo($event)">
+                                            <option value="selecione o mês">Selecione o mês</option>
+                                            @for(billingMonth of expenseItem.billingMonths; track $index) {
+                                                <option value="{{ billingMonth }}">{{ billingMonth }}</option>
+                                            }
+                                        </select>
+                                        <label for="billing-month{{expenseItem.id}}">Mês</label>
+                                    </div>
+                                    @if(isBillingMonthNotSelected) {
+                                        <p class="text-danger mb-2">Campo obrigatório</p>
+                                    }
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <select name="billing-year" id="billing-year{{expenseItem.id}}" class="form-control w-75" (change)="checkBillingYearCbo($event)">
+                                            <option value="selecione o ano">Selecione o ano</option>
+                                            @for(billingYear of expenseItem.billingYears; track $index) {
+                                                <option value="{{ billingYear }}">{{ billingYear }}</option>
+                                            }
+                                        </select>
+                                        <label for="billing-year{{expenseItem.id}}">Ano</label>
+                                    </div>
+                                    @if(isBillingYearNotSelected) {
+                                        <p class="text-danger mb-2">Campo obrigatório</p>
+                                    }
+                                </div>
+                            </div>
+                        }
                         <div class="row mt-2">
                             <div class="col">
                                 <div class="form-floating">

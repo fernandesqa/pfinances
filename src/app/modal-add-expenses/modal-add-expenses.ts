@@ -127,6 +127,7 @@ export class ModalAddExpenses implements OnInit {
                               "categories": this.categories,
                               "fixedExpense": false,
                               "installmentsExpense": false,
+                              "creditCardExpense": false,
                               "billingMonths": this.billingMonthsList,
                               "billingYears": this.billingYearsList,
                               "lastBillingMonths": this.lastBillingMonthsList,
@@ -188,6 +189,7 @@ export class ModalAddExpenses implements OnInit {
                               "categories": categories,
                               "fixedExpense": false,
                               "installmentsExpense": false,
+                              "creditCardExpense": false,
                               "billingMonths": billingMonthsList,
                               "billingYears": billingYearsList,
                               "lastBillingMonths": lastBillingMonthsList,
@@ -256,10 +258,13 @@ export class ModalAddExpenses implements OnInit {
     if(checkbox.checked) {
       var categoriesElementId = 'categories-'+checkbox.id.split('-')[0]; 
       var fixedExpenseElementId = 'fixed-'+checkbox.id.split('-')[0];
+      var creditCardExpenseElementId = 'credit-card-'+checkbox.id.split('-')[0];
       const elCategories = document.getElementById(categoriesElementId) as HTMLSelectElement;
       const elFixedExpense = document.getElementById(fixedExpenseElementId) as HTMLInputElement;
+      const elCreditCardExpense = document.getElementById(creditCardExpenseElementId) as HTMLInputElement;
       elCategories.removeAttribute('disabled');
       elFixedExpense.removeAttribute('disabled');
+      elCreditCardExpense.removeAttribute('disabled');
       this.isValueEmpty = true;
       for(var i=0; i<this.expenses.length; i++) {
         if(checkbox.name==this.expenses[i].id) {
@@ -351,8 +356,10 @@ export class ModalAddExpenses implements OnInit {
       //Se todos os orçamentos forem desmarcados, então o campo de seleção da categoria é desabilitado
       var categoriesElementId = 'categories-'+checkbox.id.split('-')[0]; 
       var fixedExpenseElementId = 'fixed-'+checkbox.id.split('-')[0];
+      var creditCardExpenseElementId = 'credit-card-'+checkbox.id.split('-')[0];
       const elCategories = document.getElementById(categoriesElementId) as HTMLSelectElement;
       const elFixedExpense = document.getElementById(fixedExpenseElementId) as HTMLInputElement;
+      const elCreditCardExpense = document.getElementById(creditCardExpenseElementId) as HTMLElement;
       var counter = 0; 
       var expense;
 
@@ -379,6 +386,7 @@ export class ModalAddExpenses implements OnInit {
           if(counter==0) {
             elCategories.setAttribute('disabled', 'true');
             elFixedExpense.setAttribute('disabled', 'true');
+            elCreditCardExpense.setAttribute('disabled', 'true');
             elCategories.value = 'selecione a categoria';
             elFixedExpense.checked = false;
             for(var i=0; i<this.expenses.length; i++) {
@@ -499,6 +507,9 @@ export class ModalAddExpenses implements OnInit {
 
     if(checkboxFixedExpense.checked) {
       var checkboxId = checkboxFixedExpense.id.split('-')[1];
+      var creditCardExpenseElementId = 'credit-card-'+checkboxId;
+      var elCreditCardExpense = document.getElementById(creditCardExpenseElementId) as HTMLInputElement;
+      elCreditCardExpense.setAttribute('disabled', 'true');
       var id = checkboxId.split('se')[1];
       for(var i=0; i<this.expenses.length; i++) {
         if(this.expenses[i].id==id) {
@@ -517,6 +528,9 @@ export class ModalAddExpenses implements OnInit {
       this.isLastBillingMonthNotSelected = false;
       this.isLastBillingYearNotSelected = false;
       var checkboxId = checkboxFixedExpense.id.split('-')[1];
+      var creditCardExpenseElementId = 'credit-card-'+checkboxId;
+      var elCreditCardExpense = document.getElementById(creditCardExpenseElementId) as HTMLInputElement;
+      elCreditCardExpense.removeAttribute('disabled');
       var id = checkboxId.split('se')[1];
       for(var i=0; i<this.expenses.length; i++) {
         if(this.expenses[i].id==id) {
@@ -574,6 +588,38 @@ export class ModalAddExpenses implements OnInit {
     }
 
     this.manageButton();
+  }
+
+  public checkCreditCardExpense(e: Event) {
+    const checkboxCreditCardExpense = e.target as HTMLInputElement;
+    this.isBillingMonthNotSelected = false;
+    this.isBillingYearNotSelected = false;
+
+    if(checkboxCreditCardExpense.checked) {
+      var checkboxId = checkboxCreditCardExpense.id.split('-')[2];
+      var fixedExpenseElementId = 'fixed-'+checkboxId;
+      var elFixedExpense = document.getElementById(fixedExpenseElementId) as HTMLInputElement;
+      elFixedExpense.setAttribute('disabled', 'true');
+      var id = checkboxId.split('se')[1];
+      for(var i=0; i<this.expenses.length; i++) {
+        if(this.expenses[i].id==id) {
+          this.expenses[i].creditCardExpense = true;
+        }
+      }
+    } else {
+      this.isBillingMonthNotSelected = false;
+      this.isBillingYearNotSelected = false;
+      var checkboxId = checkboxCreditCardExpense.id.split('-')[2];
+      var expenseExpenseElementId = 'fixed-'+checkboxId;
+      var elFixedExpense = document.getElementById(expenseExpenseElementId) as HTMLInputElement;
+      elFixedExpense.removeAttribute('disabled');
+      var id = checkboxId.split('se')[1];
+      for(var i=0; i<this.expenses.length; i++) {
+        if(this.expenses[i].id==id) {
+          this.expenses[i].creditCardExpense = false;
+        }
+      }
+    }
   }
 
   public checkBillingMonthCbo(e: Event) {
