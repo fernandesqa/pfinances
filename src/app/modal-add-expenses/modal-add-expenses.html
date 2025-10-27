@@ -1,0 +1,279 @@
+<div id="modalAddExpenses" tabindex="-1" aria-labelledby="modalAddExpenses" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-primary fw-bold">Registrar Despesas</h1>
+        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div id="spinnerParentExpense"></div>
+
+        @if(noBudgets) {
+            <div class="d-flex justify-content-center my-2">
+                <p class="text-info">Não há orçamentos definidos para o mês atual.</p>
+            </div>
+        }
+
+        @if(showForm) {
+            <div class="my-2">
+                <span class="text-primary">Registre a(s) sua(s) despesa(s):</span>
+            </div>
+
+            @for(expenseItem of expenses; track $index) {
+                 @if(expenses.length == 1) {
+                    <div class="col col-3">
+                        <a (click)="addExpense()" type="button" class="mt-2 ms-1">
+                            <i class="bi bi-plus-circle text-success fs-4"></i>
+                        </a>
+                    </div>
+                } @else if($index>=1 && $index==expenses.length-1) {
+                    <div class="col col-3">
+                        <a (click)="addExpense()" type="button" class="mt-2 ms-1">
+                            <i class="bi bi-plus-circle text-success fs-4"></i>
+                        </a>
+                        <a (click)="removeLastExpense()" type="button" class="mt-2 ms-1">
+                            <i class="bi bi-x-circle-fill text-danger fs-4"></i>
+                        </a>
+                    </div>
+                }
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <span class="text-primary my-2">Selecione um ou mais orçamentos.</span>
+                        @for(item of expenseItem.budgetSource; track item) {
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="{{ expenseItem.id }}" id="expense{{expenseItem.id}}-{{ item.id }}" (change)="checkBudget($event)">
+                                        <label for="expense{{expenseItem.id}}-{{ item.id }}" class="form-check-label">{{ item.description }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if(item.selected) {
+                                <div class="row my-2 ms-2">
+                                    <div class="col col-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="value-available-{{ expenseItem.id }}" value="{{ item.currentValue }}" disabled>
+                                            <label for="value-available-{{ expenseItem.id }}">Valor disponível</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-2 ms-2">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input 
+                                                type="text" 
+                                                name="expense{{expenseItem.id}}-{{ item.id }}"
+                                                id="input-expense{{expenseItem.id}}-{{ item.id }}"
+                                                class="form-control" 
+                                                style="text-align: left;" 
+                                                currencyMask [options]="currencyMaskOptions"
+                                                (blur)="addValue($event)"
+                                            >
+                                            <label for="input-expense{{expenseItem.id}}-{{ item.id }}">Valor da despesa</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        
+                        <hr>
+                        <div class="row mt-2">
+                            <div class="form-floating">
+                                <select name="category" id="categories-expense{{ expenseItem.id }}" class="form-control" (change)="addCategory($event)" disabled>
+                                    <option value="selecione a categoria">Selecione a categoria</option>
+                                    @for(category of expenseItem.categories; track $index) {
+                                        <option value="{{ category.description }}">{{ category.description }}</option>
+                                    }
+                                </select>
+                            </div>
+                            @if(isCategoryNotSelected) {
+                                <p class="text-danger mb-2">Campo obrigatório</p>
+                            }
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="fixed-expense" id="fixed-expense{{expenseItem.id}}" (change)="checkFixedExpense($event)" disabled>
+                                    <label for="fixed-expense{{expenseItem.id}}" class="form-check-label">Despesa fixa ou parcelada</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @if(expenseItem.fixedExpense) {
+                            <div class="row mt-2 ms-2">
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="installments-expense" id="installments-expense{{expenseItem.id}}" (change)="checkInstallmentsExpense($event)">
+                                        <label for="installments-expense{{expenseItem.id}}" class="form-check-label">Despesa parcelada</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if(expenseItem.installmentsExpense) {
+                                <div class="row mt-2 ms-2">
+                                    <span class="text-primary my-2 fw-bold">Selecione o mês e o ano que a parcela atual deve ser paga</span>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select name="billing-month" id="billing-month{{expenseItem.id}}" class="form-control w-75" (change)="checkBillingMonthCbo($event)">
+                                                <option value="selecione o mês">Selecione o mês</option>
+                                                @for(billingMonth of expenseItem.billingMonths; track $index) {
+                                                    <option value="{{ billingMonth }}">{{ billingMonth }}</option>
+                                                }
+                                            </select>
+                                            <label for="billing-month{{expenseItem.id}}">Mês</label>
+                                        </div>
+                                        @if(isBillingMonthNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select name="billing-year" id="billing-year{{expenseItem.id}}" class="form-control w-75" (change)="checkBillingYearCbo($event)">
+                                                <option value="selecione o ano">Selecione o ano</option>
+                                                @for(billingYear of expenseItem.billingYears; track $index) {
+                                                    <option value="{{ billingYear }}">{{ billingYear }}</option>
+                                                }
+                                            </select>
+                                            <label for="billing-year{{expenseItem.id}}">Ano</label>
+                                        </div>
+                                        @if(isBillingYearNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mt-2 ms-2">
+                                    <span class="text-primary my-2 fw-bold">Selecione o mês e o ano da última parcela a ser paga</span>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select name="last-billing-month" id="last-billing-month{{expenseItem.id}}" class="form-control w-75" (change)="checkLastBillingMonthCbo($event)">
+                                                <option value="selecione o mês">Selecione o mês</option>
+                                                @for(lastBillingMonth of expenseItem.lastBillingMonths; track $index) {
+                                                    <option value="{{ lastBillingMonth }}">{{ lastBillingMonth }}</option>
+                                                }
+                                            </select>
+                                            <label for="last-billing-month{{expenseItem.id}}">Mês</label>
+                                        </div>
+                                        @if(isLastBillingMonthNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select name="last-billing-year" id="last-billing-year{{expenseItem.id}}" class="form-control w-75" (change)="checkLastBillingYearCbo($event)">
+                                                <option value="selecione o ano">Selecione o ano</option>
+                                                @for(lastBillingYear of expenseItem.lastBillingYears; track $index) {
+                                                    <option value="{{ lastBillingYear }}">{{ lastBillingYear }}</option>
+                                                }
+                                            </select>
+                                            <label for="last-billing-year{{expenseItem.id}}">Ano</label>
+                                        </div>
+                                        @if(isLastBillingYearNotSelected) {
+                                            <p class="text-danger mb-2">Campo obrigatório</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div class="row mt-2">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="credit-card-expense" id="credit-card-expense{{expenseItem.id}}" (change)="checkCreditCardExpense($event)" disabled>
+                                    <label for="credit-card-expense{{expenseItem.id}}" class="form-check-label">Compra à vista no cartão de crédito</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if(expenseItem.creditCardExpense) {
+                            <div class="row mt-2 ms-2">
+                                <span class="text-primary my-2 fw-bold">Selecione o mês e o ano que a compra deve ser paga</span>
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <select name="billing-month" id="billing-month{{expenseItem.id}}" class="form-control w-75" (change)="checkBillingMonthCbo($event)">
+                                            <option value="selecione o mês">Selecione o mês</option>
+                                            @for(billingMonth of expenseItem.billingMonths; track $index) {
+                                                <option value="{{ billingMonth }}">{{ billingMonth }}</option>
+                                            }
+                                        </select>
+                                        <label for="billing-month{{expenseItem.id}}">Mês</label>
+                                    </div>
+                                    @if(isBillingMonthNotSelected) {
+                                        <p class="text-danger mb-2">Campo obrigatório</p>
+                                    }
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <select name="billing-year" id="billing-year{{expenseItem.id}}" class="form-control w-75" (change)="checkBillingYearCbo($event)">
+                                            <option value="selecione o ano">Selecione o ano</option>
+                                            @for(billingYear of expenseItem.billingYears; track $index) {
+                                                <option value="{{ billingYear }}">{{ billingYear }}</option>
+                                            }
+                                        </select>
+                                        <label for="billing-year{{expenseItem.id}}">Ano</label>
+                                    </div>
+                                    @if(isBillingYearNotSelected) {
+                                        <p class="text-danger mb-2">Campo obrigatório</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="row mt-2">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" name="expense{{expenseItem.id}}" id="date-{{ expenseItem.id }}" (blur)="addDate($event)">
+                                    <label for="date-{{ expenseItem.id }}">Data</label>
+                                </div>
+                                @if(isFutureDate) {
+                                    <p class="my-2 text-danger">Informe uma data anterior ou igual a data atual</p>
+                                }
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input 
+                                        type="text" 
+                                        name="expense{{expenseItem.id}}"
+                                        id="expense{{expenseItem.id}}"
+                                        class="form-control"
+                                        (blur)="addDescription($event)"
+                                    >
+                                    <label for="expense{{expenseItem.id}}">Descrição da despesa</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        @if(isInvalidForm) {
+            <p class="text-danger my-2"> É obrigatório selecionar um ou mais orçamentos, informar a data, valor e a descrição para cada despesa que for registrada.</p>
+        }
+        
+      </div>
+      <div class="modal-footer">
+        <button 
+            type="button" 
+            data-bs-dismiss="modal" 
+            aria-label="Close" 
+            class="btn btn-secondary"
+        >Cancelar</button>
+        <button
+            type="button"
+            id="buttonAddExpense"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary"
+            (click)="createExpenses()"
+            disabled
+        >Registrar</button>
+      </div>
+    </div>
+  </div>
+</div>

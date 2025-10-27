@@ -9,6 +9,7 @@ import { Revenues } from './revenues/revenues';
 import { Statement } from './statement/statement';
 import { Budget } from './budget/budget';
 import { Savings } from './savings/savings';
+import { Expense } from './expense/expense';
 
 export const routes: Routes = [
     {path: 'login', canActivate: [loginGuard], component: Login},
@@ -16,6 +17,7 @@ export const routes: Routes = [
         {path: 'resumo', canActivate: [authGuard], component: Summary},
         {path: 'receitas', canActivate: [authGuard], component: Revenues},
         {path: 'orcamentos', canActivate: [authGuard], component: Budget},
+        {path: 'despesas', canActivate: [authGuard], component: Expense},
         {path: 'economias', canActivate: [authGuard], component: Savings},
         {path: 'extrato', canActivate: [authGuard], component: Statement}
     ]},

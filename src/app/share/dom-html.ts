@@ -117,31 +117,50 @@ export class DomHtml {
             const tabSummary = document.getElementById('summary') as HTMLElement;
             const tabRevenues = document.getElementById('revenues') as HTMLElement;
             const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabExpenses = document.getElementById('expenses') as HTMLElement;
             const tabSavings = document.getElementById('savings') as HTMLElement;
             const tabStatement = document.getElementById('statement') as HTMLElement;
             tabSummary.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
             tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
             tabBudgets?.setAttribute('class', 'nav-link text-tertiary');
+            tabExpenses.setAttribute('class', 'nav-link text-tertiary');
             tabSavings.setAttribute('class', 'nav-link text-tertiary');
             tabStatement?.setAttribute('class', 'nav-link text-tertiary');
         } else if(tab=='revenues') {
             const tabRevenues = document.getElementById('revenues') as HTMLElement;
             const tabSummary = document.getElementById('summary') as HTMLElement;
             const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabExpenses = document.getElementById('expenses') as HTMLElement;
             const tabSavings = document.getElementById('savings') as HTMLElement;
             const tabStatement = document.getElementById('statement') as HTMLElement;
             tabRevenues.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
             tabSummary?.setAttribute('class', 'nav-link text-tertiary');
             tabBudgets?.setAttribute('class', 'nav-link text-tertiary');
+            tabExpenses.setAttribute('class', 'nav-link text-tertiary');
             tabSavings.setAttribute('class', 'nav-link text-tertiary');
             tabStatement?.setAttribute('class', 'nav-link text-tertiary');
         } else if(tab=='budgets') {
             const tabRevenues = document.getElementById('revenues') as HTMLElement;
             const tabSummary = document.getElementById('summary') as HTMLElement;
             const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabExpenses = document.getElementById('expenses') as HTMLElement;
             const tabSavings = document.getElementById('savings') as HTMLElement;
             const tabStatement = document.getElementById('statement') as HTMLElement;
             tabBudgets.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
+            tabExpenses.setAttribute('class', 'nav-link text-tertiary');
+            tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
+            tabSummary?.setAttribute('class', 'nav-link text-tertiary');
+            tabSavings.setAttribute('class', 'nav-link text-tertiary');
+            tabStatement?.setAttribute('class', 'nav-link text-tertiary');
+        } else if(tab=='expenses') {
+            const tabRevenues = document.getElementById('revenues') as HTMLElement;
+            const tabSummary = document.getElementById('summary') as HTMLElement;
+            const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabExpenses = document.getElementById('expenses') as HTMLElement;
+            const tabSavings = document.getElementById('savings') as HTMLElement;
+            const tabStatement = document.getElementById('statement') as HTMLElement;
+            tabExpenses.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
+            tabBudgets.setAttribute('class', 'nav-link text-tertiary');
             tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
             tabSummary?.setAttribute('class', 'nav-link text-tertiary');
             tabSavings.setAttribute('class', 'nav-link text-tertiary');
@@ -150,10 +169,12 @@ export class DomHtml {
             const tabRevenues = document.getElementById('revenues') as HTMLElement;
             const tabSummary = document.getElementById('summary') as HTMLElement;
             const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabExpenses = document.getElementById('expenses') as HTMLElement;
             const tabSavings = document.getElementById('savings') as HTMLElement;
             const tabStatement = document.getElementById('statement') as HTMLElement;
             tabSavings.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
             tabBudgets.setAttribute('class', 'nav-link text-tertiary');
+            tabExpenses.setAttribute('class', 'nav-link text-tertiary');
             tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
             tabSummary?.setAttribute('class', 'nav-link text-tertiary');
             tabStatement?.setAttribute('class', 'nav-link text-tertiary');
@@ -161,11 +182,13 @@ export class DomHtml {
             const tabRevenues = document.getElementById('revenues') as HTMLElement;
             const tabSummary = document.getElementById('summary') as HTMLElement;
             const tabBudgets = document.getElementById('budgets') as HTMLElement;
+            const tabExpenses = document.getElementById('expenses') as HTMLElement;
             const tabSavings = document.getElementById('savings') as HTMLElement;
             const tabStatement = document.getElementById('statement') as HTMLElement;
             tabStatement.setAttribute('class', 'nav-link active tabs tab-active text-primary fw-bold');
             tabSummary?.setAttribute('class', 'nav-link text-tertiary');
             tabBudgets?.setAttribute('class', 'nav-link text-tertiary');
+            tabExpenses.setAttribute('class', 'nav-link text-tertiary');
             tabSavings.setAttribute('class', 'nav-link text-tertiary');
             tabRevenues?.setAttribute('class', 'nav-link text-tertiary');
         }

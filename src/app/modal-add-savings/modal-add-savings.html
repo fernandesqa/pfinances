@@ -27,8 +27,8 @@
                     <select name="year" id="yearSavings" class="form-control w-75" (change)="checkYearCbo($event)">
                         <option value="selecione o ano">Selecione o ano</option>
                             @for(item of yearsList; track $index) {
-                            <option value="{{ item }}">{{ item }}</option>
-                        }
+                                <option value="{{ item }}">{{ item }}</option>
+                            }
                     </select>
                     <label for="yearSavings">Ano</label>
                 </div>
@@ -43,7 +43,7 @@
         @if(showForm) {
 
             <div class="my-2">
-                <span class="text-primary">Cadastre a(s) suas(s) economia(s):</span>
+                <span class="text-primary">Cadastre a(s) sua(s) economia(s):</span>
             </div>
 
             @for(savingsItem of savings; track $index) {
