@@ -36,6 +36,7 @@ export class Summary implements OnInit {
     this.domHTML.activateTab('summary');
     this.isRevenueLoaded = false;
     this.isLoadingRevenue = true;
+    this.isLoadingExpenses = true;
     let result = await this.revenuesService.getRevenueCurrentMonth();
     let resultExpenses = await this.expensesService.getExpensesCurrentMonth();
     this.revenue = this.monetary.convertToMonetary(result.response.data[0].value)!;
