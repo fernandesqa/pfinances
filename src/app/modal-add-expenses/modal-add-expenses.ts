@@ -6,6 +6,9 @@ import { DateTime } from '../share/date-time';
 import { Monetary } from '../share/monetary';
 import { Months } from '../share/months';
 import { Years } from '../share/years';
+import { ExpensesService } from '../services/expenses.service';
+import { ModalSuccess } from '../modal-success/modal-success';
+import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
 
 @Component({
   selector: 'app-modal-add-expenses',
@@ -52,10 +55,14 @@ export class ModalAddExpenses implements OnInit {
   public cboLastBillingYearChanged: boolean = false;
   private billingMonthYear: string = '';
   private lastBillingMonthYear: string = '';
+  private finalExpensesList: any = [];
+  private modalSuccess = new ModalSuccess;
+  private modalInternalError = new ModalInternalError;
   
 
   constructor(
     private budgetsService: BudgetsService,
+    private expensesService: ExpensesService
   ) {}
 
   async ngOnInit() {
@@ -105,21 +112,18 @@ export class ModalAddExpenses implements OnInit {
                                 });
         }
 
-        this.categories.push({
-                              "id": 1, 
-                              "description": "Moradia"
-                             },
-                             {"id": 2,
-                              "description": "Alimentação"
-                             }, 
-                             {
-                              "id": 3,
-                              "description": "Saúde" 
-                             }, 
-                             {
-                              "id": 4,
-                              "description": "Educação"
-                             });
+        var result = await this.expensesService.getExpensesCategories();
+
+        switch(result.status) {
+          case 200:
+            for(var i=0; i<result.response.data.length; i++) {
+              this.categories.push({
+                                      "id": result.response.data[i].id,
+                                      "description": result.response.data[i].description
+                                   });
+            }
+            break;
+        }
 
         this.expenses.push({
                               "id": this.totalExpenses,
@@ -823,6 +827,31 @@ export class ModalAddExpenses implements OnInit {
       }
   }
 
-  public createExpenses() {}
+  public async createExpenses() {
+    for(var i=0; i<this.expensesList.length; i++) {
+      this.finalExpensesList.push({
+                                    "date": this.expensesList[i].date,
+                                    "description": this.expensesList[i].description,
+                                    "value": parseFloat(this.expensesList[i].value),
+                                    "categoryId": parseInt(this.expensesList[i].categoryId),
+                                    "budgetId": parseInt(this.expensesList[i].budgetId),
+                                    "fixedExpense": this.expensesList[i].fixedExpense,
+                                    "installmentsExpense": this.expensesList[i].installmentsExpense,
+                                    "billingMonthYear": this.expensesList[i].billingMonthYear,
+                                    "lastBillingMonthYear": this.expensesList[i].lastBillingMonthYear
+                                 });
+    }
+
+    var result = await this.expensesService.createExpenses(this.finalExpensesList);
+
+    switch(result.status) {
+      case 200:
+        this.modalSuccess.openModal("Registro de Despesas", "Despesa(s) registrada(s) com sucesso!");
+        break;
+      default:
+        this.modalInternalError.openModal("Registro de Despesas", "Erro ao tentar registrar a(s) despesa(s), por favor tente novamente mais tarde!");
+        break;
+    }
+  }
 
 }

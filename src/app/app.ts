@@ -33,6 +33,7 @@ import { BudgetsService } from './services/budgets.service';
 import { ModalInfo } from './modal-info/modal-info';
 import { ModalAddSavings } from './modal-add-savings/modal-add-savings';
 import { ModalAddExpenses } from './modal-add-expenses/modal-add-expenses';
+import { ExpensesService } from './services/expenses.service';
 @Component({
   selector: 'app-root',
   imports: [
@@ -71,7 +72,8 @@ import { ModalAddExpenses } from './modal-add-expenses/modal-add-expenses';
     StatementService,
     StatementDetailsService,
     SavingsService,
-    BudgetsService
+    BudgetsService,
+    ExpensesService
   ]
 })
 export class App  {

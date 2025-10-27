@@ -46,6 +46,7 @@ export class ModalStatementDetails {
   }
 
   private async getDetails(monthYear: string, budgetId: string) {
+    this.data = [];
     this.domHtml.createSpinner('statementDetailsContent');
     var result = await this.statementDetailsService.getStatementDetails(monthYear, budgetId);
     switch(result.status) {

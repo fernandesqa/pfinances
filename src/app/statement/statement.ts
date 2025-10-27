@@ -79,6 +79,7 @@ export class Statement implements OnInit {
   }
 
   public async getStatement() {
+    this.data = [];
     this.isDataFound = false;
     this.isDataNotFound = false;
     this.dataInternalError = false;
