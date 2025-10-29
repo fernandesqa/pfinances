@@ -75,4 +75,20 @@ export class RevenuesService {
 
     return result;
   }
+
+  //Consulta o total de receitas de um determinado período
+  public async getTotalRevenuesByPeriod(monthYear: string) {
+    let result: any;
+    let userId: string = this.localStorage.getUserId()!;
+    let familyId: string = this.localStorage.getFamilyId()!;
+    let url = this.http.getApiUrl();
+    url = url + '/total-revenues/users/'+userId+'/families/'+familyId+'/periods/'+monthYear;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
 }

@@ -1,163 +1,219 @@
-<h3>Resumo de Despesas</h3>
-<div class="card bg-card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col col-6">
-                <div class="card">
-                    <div class="card-body">
-                        @if (isLoadingRevenue) {
-                             <div class="d-flex justify-content-center">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        } @else if (isRevenueLoaded) {
-                            <div>
-                                <span class="fw-bold" style="color: green;">|</span>
-                                <span class="fw-bold" style="color: gray;"> Receitas</span>
-                                <p class="fw-bold ms-2">{{ revenue }}</p>
-                                <hr>
-                                <p style="font-size: small;">Receita referente à {{ month }} de {{ year }}</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="col col-6">
-                <div class="card">
-                    <div class="card-body">
-                        @if(isLoadingExpenses) {
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        } @else if(isExpensesLoaded) {
-                            <div>
-                                <span class="fw-bold text-danger">|</span>
-                                <span class="fw-bold" style="color: gray;"> Despesas</span>
-                                <p class="fw-bold ms-2">{{ expenses }}</p>
-                                <hr>
-                                <p style="font-size: small;">Despesa referente à {{ expensesMonth }} de {{ expensesYear }}</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
+<span class="text-primary">Selecione o período:</span>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-floating">
+            <select name="month" id="monthSummary" class="form-control w-75" (change)="checkMonthCbo($event)">
+                <option value="selecione o mês">Selecione o mês</option>
+                @for(item of monthsList; track $index) {
+                    <option value="{{ item }}">{{ item }}</option>
+                }
+            </select>
+            <label for="monthSummary">Mês</label>
         </div>
-        <div class="row my-4">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="fw-bold" style="color: gray;">
-                            <i class="bi bi-credit-card"></i>
-                             Orçamento: Cartão de Crédito
-                        </p>
-                        <i class="bi bi-arrow-right ms-2" style="color: blue;"></i>
-                        <span class="fw-bold"> Total Orçado: R$ 3.450,00</span>
-                        <br>
-                        <i class="bi bi-arrow-right ms-2" style="color: blueviolet;"></i>
-                        <span class="fw-bold"> Total Consumido: R$2.450,00</span>
-                        <br>
-                        <i class="bi bi-arrow-right ms-2" style="color: green;"></i>
-                        <span class="fw-bold"> Total Disponível: R$1.000,00</span>
-                        <p class="fw-bold my-2" style="color: gray;">Despesas por Categoria</p>
-                        <div class="row ms-2">
-                            <div class="col-2">
-                                <span class="fw-bold">Entretenimento</span>
-                            </div>
-                            <div class="col">
-                                <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="0" y1="10" x2="250" y2="10" stroke-linecap="round" style="stroke: red; stroke-width: 12;"></line>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="row ms-2">
-                            <div class="col-2">
-                                <span class="fw-bold">Saúde</span>
-                            </div>
-                            <div class="col">
-                                <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="0" y1="10" x2="100" y2="10" stroke-linecap="round" style="stroke: blue; stroke-width: 12;"></line>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="row ms-2">
-                            <div class="col-2">
-                                <span class="fw-bold">Alimentação</span>
-                            </div>
-                            <div class="col">
-                                <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="0" y1="10" x2="280" y2="10" stroke-linecap="round" style="stroke: purple; stroke-width: 12;"></line>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="row ms-2">
-                            <div class="col-2">
-                                <span class="fw-bold">Transporte</span>
-                            </div>
-                            <div class="col">
-                                <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="0" y1="10" x2="220" y2="10" stroke-linecap="round" style="stroke: gray; stroke-width: 12;"></line>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="row ms-2">
-                            <div class="col-2">
-                                <span class="fw-bold">Educação</span>
-                            </div>
-                            <div class="col">
-                                <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="0" y1="10" x2="280" y2="10" stroke-linecap="round" style="stroke: gold; stroke-width: 12;"></line>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                    <circle r="5" cx="5" cy="5" fill="red"></circle>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                                <span class="fw-bold"> R$ 800,00</span>
-                            </div>
-                            <div class="col">
-                                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                    <circle r="5" cx="5" cy="5" fill="blue"></circle>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                                <span class="fw-bold"> R$ 200,00</span>
-                            </div>
-                            <div class="col">
-                                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                    <circle r="5" cx="5" cy="5" fill="purple"></circle>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                                <span class="fw-bold"> R$ 835,00</span>
-                            </div>
-                            <div class="col">
-                                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                    <circle r="5" cx="5" cy="5" fill="gray"></circle>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                                <span class="fw-bold"> R$ 700,00</span>
-                            </div>
-                            <div class="col">
-                                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                    <circle r="5" cx="5" cy="5" fill="gold"></circle>
-                                     Sorry, your browser does not support inline SVG. 
-                                </svg>
-                                <span class="fw-bold"> R$ 835,00</span>
-                            </div>
+        @if(isMonthNotSelected) {
+            <p class="text-danger mb-2">Campo obrigatório</p>
+        }
+    </div>
+    <div class="col">
+        <div class="form-floating">
+            <select name="year" id="yearSummary" class="form-control w-75" (change)="checkYearCbo($event)">
+                <option value="selecione o ano">Selecione o ano</option>
+                    @for(item of yearsList; track $index) {
+                        <option value="{{ item }}">{{ item }}</option>
+                    }
+            </select>
+            <label for="yearSummary">Ano</label>
+        </div>
+        @if(isYearNotSelected) {
+            <p class="text-danger mb-2">Campo obrigatório</p>
+        }
+    </div>
+</div>
+
+<h3 class="text-primary">Resumo de Despesas</h3>
+
+@if(isDataFound) {
+    <div class="card bg-card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            @if (isLoadingRevenue) {
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                            } @else if (isRevenueLoaded) {
+                                <div>
+                                    <span class="fw-bold" style="color: green;">|</span>
+                                    <span class="fw-bold" style="color: gray;"> Receitas</span>
+                                    <p class="fw-bold ms-2">{{ revenue }}</p>
+                                    <hr>
+                                    <p style="font-size: small;">Receita referente à {{ month }} de {{ year }}</p>
+                                </div>
+                            }
                         </div>
                     </div>
+                </div>
+                <div class="col col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            @if(isLoadingExpenses) {
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                            } @else if(isExpensesLoaded) {
+                                <div>
+                                    <span class="fw-bold text-danger">|</span>
+                                    <span class="fw-bold" style="color: gray;"> Despesas</span>
+                                    <p class="fw-bold ms-2">{{ expenses }}</p>
+                                    <hr>
+                                    <p style="font-size: small;">Despesa referente à {{ expensesMonth }} de {{ expensesYear }}</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-4">
+                <div class="col">
+                    @if(isLoadingBudgetsUsageData) {
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only"></span>
+                            </div>
+                        </div>
+                    } @else if(isBudgetUsageDataLoaded) {
+                        @for(budgetUsage of budgetsUsageDataList; track $index){
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <p class="fw-bold" style="color: gray;">
+                                        <i class="{{ budgetUsage.icon }}"></i>
+                                        Orçamento: {{ budgetUsage.description }}
+                                    </p>
+                                    <i class="bi bi-arrow-right ms-2" style="color: blue;"></i>
+                                    <span class="fw-bold"> Total Orçado: {{ budgetUsage.totalSet }}</span>
+                                    <br>
+                                    <i class="bi bi-arrow-right ms-2" style="color: blueviolet;"></i>
+                                    <span class="fw-bold"> Total Consumido: {{ budgetUsage.totalUsed }}</span>
+                                    <br>
+                                    <i class="bi bi-arrow-right ms-2" style="color: green;"></i>
+                                    <span class="fw-bold"> Total Disponível: {{ budgetUsage.totalAvailable }}</span>
+                                    <p class="fw-bold my-2" style="color: gray;">Despesas por Categoria</p>
+                                    <div class="row ms-2">
+                                        <div class="col-2">
+                                            <span class="fw-bold">Entretenimento</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="0" y1="10" x2="250" y2="10" stroke-linecap="round" style="stroke: red; stroke-width: 12;"></line>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="row ms-2">
+                                        <div class="col-2">
+                                            <span class="fw-bold">Saúde</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="0" y1="10" x2="100" y2="10" stroke-linecap="round" style="stroke: blue; stroke-width: 12;"></line>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="row ms-2">
+                                        <div class="col-2">
+                                            <span class="fw-bold">Alimentação</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="0" y1="10" x2="280" y2="10" stroke-linecap="round" style="stroke: purple; stroke-width: 12;"></line>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="row ms-2">
+                                        <div class="col-2">
+                                            <span class="fw-bold">Transporte</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="0" y1="10" x2="220" y2="10" stroke-linecap="round" style="stroke: gray; stroke-width: 12;"></line>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="row ms-2">
+                                        <div class="col-2">
+                                            <span class="fw-bold">Educação</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="0" y1="10" x2="280" y2="10" stroke-linecap="round" style="stroke: gold; stroke-width: 12;"></line>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col">
+                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <circle r="5" cx="5" cy="5" fill="red"></circle>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                            <span class="fw-bold"> R$ 800,00</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <circle r="5" cx="5" cy="5" fill="blue"></circle>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                            <span class="fw-bold"> R$ 200,00</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <circle r="5" cx="5" cy="5" fill="purple"></circle>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                            <span class="fw-bold"> R$ 835,00</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <circle r="5" cx="5" cy="5" fill="gray"></circle>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                            <span class="fw-bold"> R$ 700,00</span>
+                                        </div>
+                                        <div class="col">
+                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <circle r="5" cx="5" cy="5" fill="gold"></circle>
+                                                Sorry, your browser does not support inline SVG. 
+                                            </svg>
+                                            <span class="fw-bold"> R$ 835,00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    
                 </div>
             </div>
         </div>
     </div>
-</div>
+} 
+
+@if(isLoadingData) {
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+} 
+
+<div id="summaryDataNotFound"></div>
