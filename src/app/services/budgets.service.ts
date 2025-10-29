@@ -76,4 +76,20 @@ export class BudgetsService {
 
     return result;
   }
+
+  //Consulta os dados de utilização dos orçamentos
+  public async getBudgetsUsageData(monthYear: string) {
+    let result: any;
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/budgets/users/'+userId+'/families/'+familyId+'/periods/'+monthYear;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
 }
