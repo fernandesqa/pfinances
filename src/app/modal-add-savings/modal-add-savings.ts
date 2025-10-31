@@ -53,7 +53,7 @@ export class ModalAddSavings implements OnInit {
 
   ngOnInit(): void {
     this.monthsList = this.months.getMonthsList();
-    this.yearsList = this.years.getLastYears(5);
+    this.yearsList = this.years.getBillingYears();
   }
 
   public checkMonthCbo(e: Event) {

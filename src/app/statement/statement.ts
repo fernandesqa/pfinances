@@ -39,7 +39,7 @@ export class Statement implements OnInit {
   ngOnInit(): void {
     this.domHTML.activateTab('statement');
     this.monthsList = this.months.getMonthsList();
-    this.yearsList = this.years.getLastYears(5);
+    this.yearsList = this.years.getBillingYears();
   }
 
   public checkMonthCbo(e: Event) {

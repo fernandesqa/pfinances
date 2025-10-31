@@ -304,6 +304,7 @@ export class ModalAddExpenses implements OnInit {
                                     "budgetId": id,
                                     "fixedExpense": false,
                                     "installmentsExpense": false,
+                                    "creditCardInFull": false,
                                     "billingMonthYear": this.monthYear,
                                     "lastBillingMonthYear": ""
                                   });
@@ -317,6 +318,7 @@ export class ModalAddExpenses implements OnInit {
                                     "budgetId": id,
                                     "fixedExpense": false,
                                     "installmentsExpense": false,
+                                    "creditCardInFull": false,
                                     "billingMonthYear": this.monthYear,
                                     "lastBillingMonthYear": ""
                                   });
@@ -485,7 +487,17 @@ export class ModalAddExpenses implements OnInit {
             for(var i=0; i<this.expensesList.length; i++) {
               if(this.expensesList[i].checkboxId.split('-')[0]==inputDate.name) {
                 this.expensesList[i].date = date;
-                if(!this.expensesList[i].installmentsExpense) {
+                if(this.expensesList[i].creditCardInFull) {
+                  var billingMonthYear = this.expensesList[i].billingMonthYear;
+                  var billingMonth = billingMonthYear.substring(0, 2);
+                  var billingYear = billingMonthYear.substring(2, 6);
+              
+                  if(billingMonthYear.length>2) {
+                    if(billingMonth>splitDate[1] || billingYear>splitDate[0]) {
+                      this.expensesList[i].date = '01/'+billingMonth+'/'+billingYear;
+                    }
+                  }
+                } else {
                   this.expensesList[i].billingMonthYear = monthYear;
                 }
               }
@@ -524,6 +536,7 @@ export class ModalAddExpenses implements OnInit {
       for(var i=0; i<this.expensesList.length; i++) {
         if(this.expensesList[i].checkboxId.split('-')[0]==checkboxId) {
           this.expensesList[i].fixedExpense = true;
+          this.expensesList[i].creditCardInFull = false;
         }
       }
     } else {
@@ -569,6 +582,7 @@ export class ModalAddExpenses implements OnInit {
       for(var i=0; i<this.expensesList.length; i++) {
         if(this.expensesList[i].checkboxId.split('-')[0]==checkboxId) {
           this.expensesList[i].installmentsExpense = true;
+          this.expenses[i].creditCardInFull = false;
         }
       }
     } else {
@@ -610,6 +624,15 @@ export class ModalAddExpenses implements OnInit {
           this.expenses[i].creditCardExpense = true;
         }
       }
+
+      for(var i=0; i<this.expensesList.length; i++) {
+        if(this.expensesList[i].checkboxId.split('-')[0]==checkboxId) {
+          this.expensesList[i].fixedExpense = false;
+          this.expensesList[i].installmentsExpense = false;
+          this.expensesList[i].creditCardInFull = true;
+        }
+      }
+
     } else {
       this.isBillingMonthNotSelected = false;
       this.isBillingYearNotSelected = false;
@@ -621,6 +644,12 @@ export class ModalAddExpenses implements OnInit {
       for(var i=0; i<this.expenses.length; i++) {
         if(this.expenses[i].id==id) {
           this.expenses[i].creditCardExpense = false;
+        }
+      }
+
+      for(var i=0; i<this.expensesList.length; i++) {
+        if(this.expensesList[i].checkboxId.split('-')[0]==checkboxId) {
+          this.expensesList[i].creditCardInFull = false;
         }
       }
     }
