@@ -61,7 +61,7 @@ export class ModalSetBudgets implements OnInit {
 
   async ngOnInit() {
     this.monthsList = this.months.getMonthsList();
-    this.yearsList = this.years.getLastYears(5);
+    this.yearsList = this.years.getBillingYears();
     var result = await this.budgetsService.getPreviousBudgets();
     switch(result.status) {
       case 200:

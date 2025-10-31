@@ -40,7 +40,7 @@ export class ModalAddRevenues implements OnInit {
   ) {}
   async ngOnInit() {
     this.monthsList = this.months.getMonthsList();
-    this.yearsList = this.years.getLastYears(5);
+    this.yearsList = this.years.getBillingYears();
     this.resetRevenuesObjectList();
     this.revenuesLastMonth = await this.revenuesService.getRevenueLastMonth();
     switch(this.revenuesLastMonth.status) {
