@@ -44,8 +44,8 @@
                             <div class="row mt-2">
                                 <div class="col">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="{{ expenseItem.id }}" id="expense{{expenseItem.id}}-{{ item.id }}" (change)="checkBudget($event)">
-                                        <label for="expense{{expenseItem.id}}-{{ item.id }}" class="form-check-label">{{ item.description }}</label>
+                                        <input type="checkbox" class="form-check-input" name="{{ expenseItem.id }}" id="expense{{expenseItem.id}}-{{ item.id }}-{{ item.revenueId }}" (change)="checkBudget($event)">
+                                        <label for="expense{{expenseItem.id}}-{{ item.id }}-{{ item.revenueId }}" class="form-check-label">{{ item.description }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -64,14 +64,14 @@
                                         <div class="form-floating">
                                             <input 
                                                 type="text" 
-                                                name="expense{{expenseItem.id}}-{{ item.id }}"
-                                                id="input-expense{{expenseItem.id}}-{{ item.id }}"
+                                                name="expense{{expenseItem.id}}-{{ item.id }}-{{ item.revenueId }}"
+                                                id="input-expense{{expenseItem.id}}-{{ item.id }}-{{ item.revenueId }}"
                                                 class="form-control" 
                                                 style="text-align: left;" 
                                                 currencyMask [options]="currencyMaskOptions"
                                                 (blur)="addValue($event)"
                                             >
-                                            <label for="input-expense{{expenseItem.id}}-{{ item.id }}">Valor da despesa</label>
+                                            <label for="input-expense{{expenseItem.id}}-{{ item.id }}-{{ item.revenueId }}">Valor da despesa</label>
                                         </div>
                                     </div>
                                 </div>
