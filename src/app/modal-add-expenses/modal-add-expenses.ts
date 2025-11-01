@@ -97,6 +97,7 @@ export class ModalAddExpenses implements OnInit {
             var budgetCurrentValue: number = Number(fixedString);
             this.budgetControl.push({
                                       "budgetId": result.response.data[i].budgetId,
+                                      "revenueId": result.response.data[i].revenueId,
                                       "budgetDescription": result.response.data[i].budgetDescription,
                                       "budgetCurrentValue":  budgetCurrentValue
                                    });
@@ -106,6 +107,7 @@ export class ModalAddExpenses implements OnInit {
           var currentValue = this.monetary.convertToMonetary(this.budgetControl[i].budgetCurrentValue.toString());
           this.budgetSource.push({
                                     "id": this.budgetControl[i].budgetId,
+                                    "revenueId": this.budgetControl[i].revenueId,
                                     "description": this.budgetControl[i].budgetDescription,
                                     "currentValue": currentValue,
                                     "selected": false
@@ -168,6 +170,7 @@ export class ModalAddExpenses implements OnInit {
     for(var i=0; i<this.budgetControl.length; i++) {
         sources.push({
                       "id": this.budgetControl[i].budgetId,
+                      "revenueId": this.budgetControl[i].revenueId,
                       "description": this.budgetControl[i].budgetDescription,
                       "currentValue": this.monetary.convertToMonetary(this.budgetControl[i].budgetCurrentValue.toString()),
                       "selected": false
@@ -275,9 +278,10 @@ export class ModalAddExpenses implements OnInit {
           var id = checkbox.id.split('-')[1];
           var expenseId = checkbox.id.split('-')[0];
           var categoryId = 0;
+          var revenueId = checkbox.id.split('-')[2];
           for(var j=0; j<this.expenses[i].budgetSource.length; j++) {
             
-            if(id==this.expenses[i].budgetSource[j].id) {
+            if(id==this.expenses[i].budgetSource[j].id && revenueId==this.expenses[i].budgetSource[j].revenueId) {
               
               this.expenses[i].budgetSource[j].selected = true;
               if(this.expensesList.length>0) {
@@ -302,6 +306,7 @@ export class ModalAddExpenses implements OnInit {
                                     "value": 0.0,
                                     "categoryId": categoryId,
                                     "budgetId": id,
+                                    "revenueId": revenueId,
                                     "fixedExpense": false,
                                     "installmentsExpense": false,
                                     "creditCardInFull": false,
@@ -316,6 +321,7 @@ export class ModalAddExpenses implements OnInit {
                                     "value": 0.0,
                                     "categoryId": 0,
                                     "budgetId": id,
+                                    "revenueId": revenueId,
                                     "fixedExpense": false,
                                     "installmentsExpense": false,
                                     "creditCardInFull": false,
@@ -338,9 +344,10 @@ export class ModalAddExpenses implements OnInit {
       for(var i=0; i<this.expenses.length; i++) {
         if(checkbox.name==this.expenses[i].id) {
           var id = checkbox.id.split('-')[1];
+          var revenueId = checkbox.id.split('-')[2];
           for(var j=0; j<this.expenses[i].budgetSource.length; j++) {
             
-            if(id==this.expenses[i].budgetSource[j].id) {
+            if(id==this.expenses[i].budgetSource[j].id && revenueId==this.expenses[i].budgetSource[j].revenueId) {
               
               this.expenses[i].budgetSource[j].selected = false;
 
@@ -796,7 +803,7 @@ export class ModalAddExpenses implements OnInit {
         this.expensesList[i].description = input.value;
       }
     }
-
+    
     this.validateDescription();
 
     this.checkBudgetsSelection();
@@ -864,6 +871,7 @@ export class ModalAddExpenses implements OnInit {
                                     "value": parseFloat(this.expensesList[i].value),
                                     "categoryId": parseInt(this.expensesList[i].categoryId),
                                     "budgetId": parseInt(this.expensesList[i].budgetId),
+                                    "revenueId": parseInt(this.expensesList[i].revenueId),
                                     "fixedExpense": this.expensesList[i].fixedExpense,
                                     "installmentsExpense": this.expensesList[i].installmentsExpense,
                                     "billingMonthYear": this.expensesList[i].billingMonthYear,
