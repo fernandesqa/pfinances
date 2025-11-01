@@ -291,7 +291,7 @@ export class ModalAddSavings implements OnInit {
       //Verifica se a data informada não é futura
       const currentDate: Date = new Date();
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
+      const month = currentDate.getMonth()+1;
       const day = currentDate.getDate();
       
       if(splitDate[0]<=year.toString()) {
