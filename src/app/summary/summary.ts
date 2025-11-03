@@ -6,10 +6,11 @@ import { DomHtml } from '../share/dom-html';
 import { ExpensesService } from '../services/expenses.service';
 import { Years } from '../share/years';
 import { BudgetsService } from '../services/budgets.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-summary',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './summary.html',
   styleUrl: './summary.css'
 })
@@ -44,6 +45,8 @@ export class Summary implements OnInit {
   public budgetsUsageDataList: any = [];
   public isLoadingBudgetsUsageData: boolean = false;
   public isBudgetUsageDataLoaded: boolean = false;
+  private resultBudgetsSummary: any = [];
+  public style = {};
 
   constructor(
     private revenuesService: RevenuesService,
@@ -77,6 +80,7 @@ export class Summary implements OnInit {
     this.monthsList = this.months.getMonthsList();
     this.yearsList = this.years.getBillingYears();
     let resultBudgetUsage = await this.budgetsService.getBudgetsUsageData(this.monthYear);
+    this.resultBudgetsSummary = resultBudgetUsage;
     switch(resultBudgetUsage.status) {
       case 200:
         for(var i=0; i<resultBudgetUsage.response.data.length; i++) {
@@ -84,20 +88,121 @@ export class Summary implements OnInit {
           if(resultBudgetUsage.response.data[i].icon==null) {
             icon = "bi bi-wallet2";
           }
+
+          var categoriesList = [];
+          for(var j=0; j<resultBudgetUsage.response.data[i].categories.length; j++) {
+
+            switch(resultBudgetUsage.response.data[i].categories[j].category) {
+              case 'Moradia':
+                this.style = {'stroke': 'red', 'stroke-width': '12'};
+                break;
+              case 'Alimentação':
+                this.style = {'stroke': 'blue', 'stroke-width': '12'};
+                break;
+              case 'Saúde':
+                this.style = {'stroke': 'purple', 'stroke-width': '12'};
+                break;
+              case 'Educação':
+                this.style = {'stroke': 'gray', 'stroke-width': '12'};
+                break;
+              case 'Transporte':
+                this.style = {'stroke': 'gold', 'stroke-width': '12'};
+                break;
+              case 'Lazer':
+                this.style = {'stroke': 'brown', 'stroke-width': '12'};
+                break;
+              case 'Pessoal':
+                this.style = {'stroke': 'orange', 'stroke-width': '12'};
+                break;
+              case 'Financeiro':
+                this.style = {'stroke': 'black', 'stroke-width': '12'};
+                break;
+            }
+            
+            categoriesList.push({
+                              "category": resultBudgetUsage.response.data[i].categories[j].category,
+                              "percentage": parseFloat(resultBudgetUsage.response.data[i].categories[j].percentage),
+                              "value": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].categories[j].value.toString()),
+                              "style": this.style
+                            });
+          }
           
           this.budgetsUsageDataList.push({
                                             "description": resultBudgetUsage.response.data[i].description,
                                             "icon": icon,
                                             "totalSet":  this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalSet.toString()),
                                             "totalUsed": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalUsed.toString()),
-                                            "totalAvailable": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalAvailable.toString())
+                                            "totalAvailable": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalAvailable.toString()),
+                                            "categories": categoriesList
                                          });
         }
         this.isLoadingBudgetsUsageData = false;
         this.isBudgetUsageDataLoaded = true;
+        this.loadPercentageData();
         break;
     } 
+  }
 
+  public loadPercentageData() {
+    for(var i=0; i<this.resultBudgetsSummary.response.data.length; i++) {
+      for(var j=0; j<this.resultBudgetsSummary.response.data[i].categories.length; j++) {
+        var color;
+        switch(this.resultBudgetsSummary.response.data[i].categories[j].category) {
+          case 'Moradia':
+            color = '';
+            //color = 'red';
+            break;
+          case 'Alimentação':
+            //var id = this.resultBudgetsSummary.response.data[i].description+'-category-percentage';
+            var id = this.resultBudgetsSummary.response.data[i].description+'-'+this.resultBudgetsSummary.response.data[i].categories[j].category+'-percentage';
+            
+            const line = document.getElementById(id) as HTMLElement;
+            const svg = document.createElement('svg');
+            const svgLine = document.createElement('line');
+            const svgNode = document.createTextNode('Sorry, your browser does not support inline SVG. ');
+            
+            svg.setAttribute('height', '50');
+            svg.setAttribute('width', '300');
+            svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+            svgLine.setAttribute('x1', '0');
+            svgLine.setAttribute('y1', '10');
+
+            svgLine.setAttribute('x2', '250');
+
+            svgLine.setAttribute('y2', '10');
+            svgLine.setAttribute('stroke-linecap', 'round');
+            line.setAttribute('style', 'stroke: blue; stroke-width: 12;');
+            
+            svg.appendChild(svgLine);
+            svg.appendChild(svgNode);
+            break;
+          case 'Saúde':
+            color = 'style="stroke: red; stroke-width: 12;"'
+            //color = 'purple';
+            break;
+          case 'Educação':
+            color = 'style="stroke: red; stroke-width: 12;"'
+            //color = 'gray';
+            break;
+          case 'Transporte':
+            color = 'gold';
+            break;
+          case 'Lazer':
+            color = 'style="stroke: red; stroke-width: 12;"'
+            //color = 'brown';
+            break;
+          case 'Pessoal':
+            color = 'style="stroke: red; stroke-width: 12;"'
+            //color = 'silver';
+            break;
+          case 'Financeiro':
+            color = 'style="stroke: red; stroke-width: 12;"'
+            //color = 'black';
+            break;
+        }
+      }
+    }
   }
 
   public checkMonthCbo(e: Event) {
