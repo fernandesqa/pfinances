@@ -103,99 +103,150 @@
                                     <br>
                                     <i class="bi bi-arrow-right ms-2" style="color: green;"></i>
                                     <span class="fw-bold"> Total Disponível: {{ budgetUsage.totalAvailable }}</span>
-                                    <p class="fw-bold my-2" style="color: gray;">Despesas por Categoria</p>
-                                    <div class="row ms-2">
-                                        <div class="col col-md-2">
-                                            <span class="fw-bold">Entretenimento</span>
+                                    
+
+                                    @for(categories of budgetUsage.categories; track $index) {
+                                        @if($index==0) {
+                                            <p class="fw-bold my-2" style="color: gray;">Despesas por Categoria</p>
+                                        }
+                                        <div class="row ms-2">
+                                            <div class="col col-md-2">
+                                                <span class="fw-bold">{{ categories.category }}</span>
+                                            </div>
+                                            <div class="col">
+                                                <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
+                                                    @if(categories.percentage<="1.00" && categories.percentage>="0.96") {
+                                                        <line x1="0" y1="10" x2="280" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.95" && categories.percentage>="0.91") {
+                                                        <line x1="0" y1="10" x2="266" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.90" && categories.percentage>="0.86") {
+                                                        <line x1="0" y1="10" x2="252" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.85" && categories.percentage>="0.81") {
+                                                        <line x1="0" y1="10" x2="238" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.80" && categories.percentage>="0.76") {
+                                                        <line x1="0" y1="10" x2="224" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.75" && categories.percentage>="0.71") {
+                                                        <line x1="0" y1="10" x2="210" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.70" && categories.percentage>="0.66") {
+                                                        <line x1="0" y1="10" x2="196" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.65" && categories.percentage>="0.61") {
+                                                        <line x1="0" y1="10" x2="182" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.60" && categories.percentage>="0.56") {
+                                                        <line x1="0" y1="10" x2="168" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.55" && categories.percentage>="0.51") {
+                                                        <line x1="0" y1="10" x2="154" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.50" && categories.percentage>="0.46") {
+                                                        <line x1="0" y1="10" x2="140" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.45" && categories.percentage>="0.41") {
+                                                        <line x1="0" y1="10" x2="126" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.40" && categories.percentage>="0.36") {
+                                                        <line x1="0" y1="10" x2="112" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.35" && categories.percentage>="0.31") {
+                                                        <line x1="0" y1="10" x2="98" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.30" && categories.percentage>="0.26") {
+                                                        <line x1="0" y1="10" x2="84" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.25" && categories.percentage>="0.21") {
+                                                        <line x1="0" y1="10" x2="70" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.20" && categories.percentage>="0.16") {
+                                                        <line x1="0" y1="10" x2="56" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.15" && categories.percentage>="0.11") {
+                                                        <line x1="0" y1="10" x2="42" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage=="0.10") {
+                                                        <line x1="0" y1="10" x2="28" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+
+                                                    @if(categories.percentage<="0.09" && categories.percentage>="0.01") {
+                                                        <line x1="0" y1="10" x2="26" y2="10" stroke-linecap="round" [ngStyle]="categories.style"></line>
+                                                    }
+                                                    
+                                                    Sorry, your browser does not support inline SVG. 
+                                                </svg>
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="0" y1="10" x2="250" y2="10" stroke-linecap="round" style="stroke: red; stroke-width: 12;"></line>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="row ms-2">
-                                        <div class="col col-md-2">
-                                            <span class="fw-bold">Saúde</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="0" y1="10" x2="100" y2="10" stroke-linecap="round" style="stroke: blue; stroke-width: 12;"></line>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="row ms-2">
-                                        <div class="col col-md-2">
-                                            <span class="fw-bold">Alimentação</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="0" y1="10" x2="280" y2="10" stroke-linecap="round" style="stroke: purple; stroke-width: 12;"></line>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="row ms-2">
-                                        <div class="col col-md-2">
-                                            <span class="fw-bold">Transporte</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="0" y1="10" x2="220" y2="10" stroke-linecap="round" style="stroke: gray; stroke-width: 12;"></line>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="row ms-2">
-                                        <div class="col col-md-2">
-                                            <span class="fw-bold">Educação</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="50" width="300" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="0" y1="10" x2="280" y2="10" stroke-linecap="round" style="stroke: gold; stroke-width: 12;"></line>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <hr>
+                                    }
+
+                                    @if(budgetUsage.categories.length>0) {
+                                        <hr>
+                                    }
+                                    
                                     <div class="row">
-                                        <div class="col">
-                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                                <circle r="5" cx="5" cy="5" fill="red"></circle>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                            <span class="fw-bold"> R$ 800,00</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                                <circle r="5" cx="5" cy="5" fill="blue"></circle>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                            <span class="fw-bold"> R$ 200,00</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                                <circle r="5" cx="5" cy="5" fill="purple"></circle>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                            <span class="fw-bold"> R$ 835,00</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                                <circle r="5" cx="5" cy="5" fill="gray"></circle>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                            <span class="fw-bold"> R$ 700,00</span>
-                                        </div>
-                                        <div class="col">
-                                            <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                                <circle r="5" cx="5" cy="5" fill="gold"></circle>
-                                                Sorry, your browser does not support inline SVG. 
-                                            </svg>
-                                            <span class="fw-bold"> R$ 835,00</span>
-                                        </div>
+                                        @for(categoriesValue of budgetUsage.categories; track $index) {
+                                            <div class="col">
+                                                <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
+                                                    @if(categoriesValue.category=="Moradia") {
+                                                        <circle r="5" cx="5" cy="5" fill="red"></circle>
+                                                    }
+
+                                                    @if(categoriesValue.category=="Alimentação") {
+                                                        <circle r="5" cx="5" cy="5" fill="blue"></circle>
+                                                    }
+
+                                                    @if(categoriesValue.category=="Saúde") {
+                                                        <circle r="5" cx="5" cy="5" fill="purple"></circle>
+                                                    }
+
+                                                    @if(categoriesValue.category=="Educação") {
+                                                        <circle r="5" cx="5" cy="5" fill="gray"></circle>
+                                                    }
+
+                                                    @if(categoriesValue.category=="Transporte") {
+                                                        <circle r="5" cx="5" cy="5" fill="gold"></circle>
+                                                    }
+
+                                                    @if(categoriesValue.category=="Lazer") {
+                                                        <circle r="5" cx="5" cy="5" fill="brown"></circle>
+                                                    }
+
+                                                    @if(categoriesValue.category=="Pessoal") {
+                                                        <circle r="5" cx="5" cy="5" fill="orange"></circle>
+                                                    }
+
+                                                    @if(categoriesValue.category=="Financeiro") {
+                                                        <circle r="5" cx="5" cy="5" fill="black"></circle>
+                                                    }
+                                                    
+                                                    Sorry, your browser does not support inline SVG. 
+                                                </svg>
+                                                <span class="fw-bold"> {{ categoriesValue.value }}</span>
+                                            </div>
+                                        }
+                                        
                                     </div>
                                 </div>
                             </div>
