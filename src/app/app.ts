@@ -34,6 +34,7 @@ import { ModalInfo } from './modal-info/modal-info';
 import { ModalAddSavings } from './modal-add-savings/modal-add-savings';
 import { ModalAddExpenses } from './modal-add-expenses/modal-add-expenses';
 import { ExpensesService } from './services/expenses.service';
+import { ModalBudgetTransfering } from './modal-budget-transfering/modal-budget-transfering';
 @Component({
   selector: 'app-root',
   imports: [
@@ -58,6 +59,7 @@ import { ExpensesService } from './services/expenses.service';
     ModalInfo,
     ModalAddSavings,
     ModalAddExpenses,
+    ModalBudgetTransfering,
     Footer
   ],
   templateUrl: './app.html',
