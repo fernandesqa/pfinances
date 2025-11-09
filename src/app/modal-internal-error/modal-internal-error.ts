@@ -18,12 +18,12 @@ export class ModalInternalError {
     const elSpanNode = document.createTextNode(message);
     elSpan.appendChild(elSpanNode);
 
-    //Abre o modal de criação de pendências
-    const modalSuccess = document.getElementById('modalInternalError');
-    modalSuccess?.setAttribute('class', 'modal fade show');
-    modalSuccess?.removeAttribute('aria-hidden');
-    modalSuccess?.setAttribute('aria-modal', 'true');
-    modalSuccess?.setAttribute('style', 'display: block;');
+    //Abre o modal de erro
+    const modalInternalError = document.getElementById('modalInternalError');
+    modalInternalError?.setAttribute('class', 'modal fade show');
+    modalInternalError?.removeAttribute('aria-hidden');
+    modalInternalError?.setAttribute('aria-modal', 'true');
+    modalInternalError?.setAttribute('style', 'display: block;');
   }
   
   public closeModal() {

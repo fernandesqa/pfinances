@@ -92,4 +92,15 @@ export class BudgetsService {
 
     return result;
   }
+
+  //Transfere valores entre orçamentos
+  public async transferBudget(data: any) {
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/transfer-budget/users/'+userId+'/families/'+familyId;
+    var result = await this.http.postData(url, data);
+
+    return result;
+  }
 }

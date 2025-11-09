@@ -4,6 +4,7 @@ import { PendingIssuesService } from '../services/pending-issues.service';
 import { PendingIssues } from '../share/pending-issues';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-edit-pending-issues',
@@ -26,6 +27,7 @@ export class ModalEditPendingIssues implements OnInit {
   private pendingIssuesUpdateList: any = {"pendingIssues": []};
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
 
   constructor(
     private pendingIssuesService: PendingIssuesService
@@ -152,12 +154,15 @@ export class ModalEditPendingIssues implements OnInit {
   }
 
   public async editPendingIssues() {
+    this.modalLoading.openModal();
     let result = await this.pendingIssuesService.updatePendingIssues(this.pendingIssuesUpdateList);
     switch(result.status) {
       case 200:
+        this.modalLoading.closeModal();
         this.modalSuccess.openModal('Edição de Pendências', 'Pendência(s) editada(s) com sucesso!');
         break;
       default:
+        this.modalLoading.closeModal();
         this.modalInternalError.openModal('Edição de Pendências', 'Erro ao editar pendência(s), por favor tente novamente mais tarde.');
         break;
     }

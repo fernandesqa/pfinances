@@ -8,6 +8,7 @@ import { BudgetsService } from '../services/budgets.service';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
 import { SavingsService } from '../services/savings.service';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-add-savings',
@@ -45,6 +46,7 @@ export class ModalAddSavings implements OnInit {
   private finalSavingsList: any = [];
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
 
   constructor(
     private budgetsService: BudgetsService,
@@ -389,6 +391,7 @@ export class ModalAddSavings implements OnInit {
   }
 
   public async createSavings() {
+    this.modalLoading.openModal();
     for(var i=0; i<this.savingsList.length; i++) {
       this.finalSavingsList.push({
                                     "date": this.savingsList[i].date,
@@ -402,9 +405,11 @@ export class ModalAddSavings implements OnInit {
 
     switch(result.status) {
       case 200:
+        this.modalLoading.closeModal();
         this.modalSuccess.openModal("Registro de Economias", "Economia(s) registrada(s) com sucesso!");
         break;
       default:
+        this.modalLoading.closeModal();
         this.modalInternalError.openModal("Registro de Economias", "Erro ao tentar registrar a(s) economia(s), por favor tente novamente mais tarde!");
         break;
     }

@@ -1,0 +1,154 @@
+<div id="modalBudgetTransfering" tabindex="-1" aria-labelledby="modalBudgetTransfering" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-primary fw-bold">Transferência Entre Orçamentos</h1>
+        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <span class="text-primary fw-bold">Retirar De:</span>
+        <div class="border p-2 mb-2">
+            <span class="text-primary">Selecione o período:</span>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <select name="month" id="monthBudgetWithdraw" class="form-control w-75" (change)="checkMonthWithdrawCbo($event)">
+                            <option value="selecione o mês">Selecione o mês</option>
+                            @for(item of monthsList; track $index) {
+                                <option value="{{ item }}">{{ item }}</option>
+                            }
+                        </select>
+                        <label for="monthBudgetWithdraw">Mês</label>
+                    </div>
+                    @if(isMonthWithdrawNotSelected) {
+                        <p class="text-danger mb-2">Campo obrigatório</p>
+                    }
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <select name="year" id="yearBudgetWithdraw" class="form-control w-75" (change)="checkYearWithdrawCbo($event)">
+                            <option value="selecione o ano">Selecione o ano</option>
+                                @for(item of yearsList; track $index) {
+                                    <option value="{{ item }}">{{ item }}</option>
+                                }
+                        </select>
+                        <label for="yearBudgetWithdraw">Ano</label>
+                    </div>
+                    @if(isYearWithdrawNotSelected) {
+                        <p class="text-danger mb-2">Campo obrigatório</p>
+                    }
+                </div>
+            </div>
+            <div id="withdrawSpinner"></div>
+
+            @if(showBudgetsWithdrawCbo) {
+                <div class="form-floating my-2">
+                    <select name="budgetWithdrawCbo" id="selectBudgetWithdraw" class="form-control w-75" (change)="checkBudgetWithdrawCbo($event)">
+                        <option value="selecione o orçamento">Selecione o orçamento</option>
+                            @for(item of budgetWithdrawList; track $index) {
+                                <option value="{{ item.budgetDescription }}">{{ item.budgetDescription }}</option>
+                            }
+                    </select>
+                    <label for="selectBudgetWithdraw">Orçamento</label>
+                </div>
+                @if(isBudgetWithdrawNotSelected) {
+                    <p class="text-danger mb-2">Campo obrigatório</p>
+                }
+
+                <div class="form-floating">
+                    <input type="text" id="budgetWithdrawValue" class="form-control" disabled>
+                    <label for="budgetWithdrawValue">Valor disponível</label>
+                </div>
+            }
+        </div>
+        
+        <span class="text-primary fw-bold">Enviar Para:</span>
+        <div class="border p-2">
+            <span class="text-primary">Selecione o período:</span>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <select name="month" id="monthBudgetDestination" class="form-control w-75" (change)="checkMonthDestinationCbo($event)" disabled>
+                            <option value="selecione o mês">Selecione o mês</option>
+                            @for(item of monthsList; track $index) {
+                                <option value="{{ item }}">{{ item }}</option>
+                            }
+                        </select>
+                        <label for="monthBudgetDestination">Mês</label>
+                    </div>
+                    @if(isMonthDestinationNotSelected) {
+                        <p class="text-danger mb-2">Campo obrigatório</p>
+                    }
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <select name="year" id="yearBudgetDestination" class="form-control w-75" (change)="checkYearDestinationCbo($event)" disabled>
+                            <option value="selecione o ano">Selecione o ano</option>
+                                @for(item of yearsList; track $index) {
+                                    <option value="{{ item }}">{{ item }}</option>
+                                }
+                        </select>
+                        <label for="yearBudgetDestination">Ano</label>
+                    </div>
+                    @if(isYearDestinationNotSelected) {
+                        <p class="text-danger mb-2">Campo obrigatório</p>
+                    }
+                </div>
+            </div>
+
+            <div id="destinationSpinner"></div>
+
+            @if(showBudgetsDestinationCbo) {
+                <div class="form-floating my-2">
+                    <select name="budgetDestinationCbo" id="selectBudgetDestination" class="form-control w-75" (change)="checkBudgetDestinationCbo($event)">
+                        <option value="selecione o orçamento">Selecione o orçamento</option>
+                            @for(item of budgetDestinationList; track $index) {
+                                <option value="{{ item.budgetDescription }}">{{ item.budgetDescription }}</option>
+                            }
+                    </select>
+                    <label for="selectBudgetDestination">Orçamento</label>
+                </div>
+                @if(isBudgetDestinationNotSelected) {
+                    <p class="text-danger mb-2">Campo obrigatório</p>
+                }
+
+                <div class="form-floating">
+                    <input 
+                        type="text" 
+                        id="budgetDestinationValue" 
+                        class="form-control"
+                        style="text-align: left;" 
+                        currencyMask [options]="currencyMaskOptions"
+                        (blur)="addValue($event)"
+                    >
+                    <label for="budgetDestinationValue">Valor</label>
+                </div>
+
+                @if(isInvalidValue) {
+                    <p class="text-danger mb-2">O valor não pode ser maior que o valor disponível no orçamento selecionado.</p>
+                }
+            }
+
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button 
+            type="button" 
+            data-bs-dismiss="modal" 
+            aria-label="Close" 
+            class="btn btn-secondary"
+        >Cancelar</button>
+        <button
+            type="button"
+            id="buttonTransferBudget"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary"
+            (click)="transferBudget()"
+            disabled
+        >Transferir</button>
+      </div>
+    </div>
+  </div>
+</div>

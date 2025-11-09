@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PendingIssuesService } from '../services/pending-issues.service';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-delete-pending-issue',
@@ -19,6 +20,7 @@ export class ModalDeletePendingIssue implements OnInit {
   private id = '';
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
 
   constructor(
       private pendingIssuesService: PendingIssuesService
@@ -60,12 +62,15 @@ export class ModalDeletePendingIssue implements OnInit {
   }
 
   public async deletePendingIssue() {
+    this.modalLoading.openModal();
     let result = await this.pendingIssuesService.deletePendingIssue(this.id);
     switch(result) {
       case 200:
+        this.modalLoading.closeModal();
         this.modalSuccess.openModal('Exclusão de Pendência', 'Pendência excluída com sucesso!');
         break;
       default:
+        this.modalLoading.closeModal();
         this.modalInternalError.openModal('Exclusão de Pendência', 'Erro ao excluir pendência, por favor tente novamente mais tarde.');
         break;
     }
