@@ -6,6 +6,8 @@ import { BudgetsService } from '../services/budgets.service';
 import { Monetary } from '../share/monetary';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { ModalLoading } from '../modal-loading/modal-loading';
+import { ModalSuccess } from '../modal-success/modal-success';
+import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
 
 @Component({
   selector: 'app-modal-budget-transfering',
@@ -42,6 +44,8 @@ export class ModalBudgetTransfering implements OnInit {
   private finalList: any = [];
   public isInvalidValue: boolean = false;
   private modalLoading = new ModalLoading;
+  private modalSuccess = new ModalSuccess;
+  private modalInternalError = new ModalInternalError;
 
   constructor(
     private budgetsService: BudgetsService
@@ -100,6 +104,7 @@ export class ModalBudgetTransfering implements OnInit {
           this.domHtml.removeAllChildNodes('withdrawSpinner');
           for(var i=0; i<result.response.data.length; i++) {
             this.budgetWithdrawList.push({
+                                            "budgetWithdrawRevenueId": result.response.data[i].revenueId,
                                             "budgetId": result.response.data[i].budgetId,
                                             "budgetDescription": result.response.data[i].budgetDescription,
                                             "budgetCurrentValue": result.response.data[i].budgetCurrentValue
@@ -149,9 +154,11 @@ export class ModalBudgetTransfering implements OnInit {
         if(budgetCbo.value==this.budgetWithdrawList[i].budgetDescription) {
           input?.setAttribute('value', this.monetary.convertToMonetary(this.budgetWithdrawList[i].budgetCurrentValue.toString()));
           this.finalList.push({
+                                "budgetWithdrawRevenueId": parseInt(this.budgetWithdrawList[i].budgetWithdrawRevenueId),
                                 "budgetWithdrawId": parseInt(this.budgetWithdrawList[i].budgetId),
                                 "budgetWithdrawDescription": this.budgetWithdrawList[i].budgetDescription,
                                 "budgetWithdrawMonthYear": month+selectWithdrawYear.value,
+                                "budgetDestinationRevenueId": 0,
                                 "budgetDestinationId": 0,
                                 "budgetDestinationDescription": "",
                                 "budgetDestinationMonthYear": "",
@@ -209,6 +216,7 @@ export class ModalBudgetTransfering implements OnInit {
           this.domHtml.removeAllChildNodes('destinationSpinner');
           for(var i=0; i<result.response.data.length; i++) {
             this.budgetDestinationList.push({
+                                            "budgetDestinationRevenueId": result.response.data[i].revenueId,
                                             "budgetId": result.response.data[i].budgetId,
                                             "budgetDescription": result.response.data[i].budgetDescription,
                                             "budgetCurrentValue": result.response.data[i].budgetCurrentValue
@@ -243,6 +251,7 @@ export class ModalBudgetTransfering implements OnInit {
       this.isBudgetDestinationNotSelected = false;
       for(var i=0; i<this.budgetDestinationList.length; i++) {
         if(budgetCbo.value==this.budgetDestinationList[i].budgetDescription) {
+          this.finalList[0].budgetDestinationRevenueId = parseInt(this.budgetDestinationList[i].budgetDestinationRevenueId);
           this.finalList[0].budgetDestinationId = parseInt(this.budgetDestinationList[i].budgetId);
           this.finalList[0].budgetDestinationDescription = this.budgetDestinationList[i].budgetDescription;
           this.finalList[0].budgetDestinationMonthYear = month+selectDestinationYear.value;
@@ -321,5 +330,19 @@ export class ModalBudgetTransfering implements OnInit {
 
   public async transferBudget() {
     this.modalLoading.openModal();
+
+    let result = await this.budgetsService.transferBudget(this.finalList[0]);
+
+    switch(result.status) {
+      case 200:
+        this.modalLoading.closeModal();
+        this.modalSuccess.openModal('Transferência entre orçamentos', 'Transferência realizada com sucesso.');
+        break;
+      default:
+        this.modalLoading.closeModal();
+        this.modalInternalError.openModal('Transferência entre orçamentos', 'Erro ao tentar realizar a transferência, por favor tente novamente mais tarde.');
+        break;
+    }
+
   }
 }

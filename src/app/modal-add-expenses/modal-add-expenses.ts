@@ -9,6 +9,7 @@ import { Years } from '../share/years';
 import { ExpensesService } from '../services/expenses.service';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-add-expenses',
@@ -58,6 +59,7 @@ export class ModalAddExpenses implements OnInit {
   private finalExpensesList: any = [];
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
   
 
   constructor(
@@ -864,6 +866,7 @@ export class ModalAddExpenses implements OnInit {
   }
 
   public async createExpenses() {
+    this.modalLoading.openModal();
     for(var i=0; i<this.expensesList.length; i++) {
       this.finalExpensesList.push({
                                     "date": this.expensesList[i].date,
@@ -883,9 +886,11 @@ export class ModalAddExpenses implements OnInit {
 
     switch(result.status) {
       case 200:
+        this.modalLoading.closeModal();
         this.modalSuccess.openModal("Registro de Despesas", "Despesa(s) registrada(s) com sucesso!");
         break;
       default:
+        this.modalLoading.closeModal();
         this.modalInternalError.openModal("Registro de Despesas", "Erro ao tentar registrar a(s) despesa(s), por favor tente novamente mais tarde!");
         break;
     }

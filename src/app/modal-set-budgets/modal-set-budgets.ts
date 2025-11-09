@@ -10,6 +10,7 @@ import { BudgetsService } from '../services/budgets.service';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
 import { ModalInfo } from '../modal-info/modal-info';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-set-budgets',
@@ -48,6 +49,7 @@ export class ModalSetBudgets implements OnInit {
   private isRevenueSelected: boolean = false;
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
   private modalInfo = new ModalInfo;
   public loadPreviousBudgets: boolean = false;
   public previousBudgets: any = [];
@@ -533,6 +535,7 @@ export class ModalSetBudgets implements OnInit {
   }
 
   public async setBudgets() {
+    this.modalLoading.openModal();
     var budgetAlreadySet: boolean = false;
     for(var i=0; i<this.budgetsList.length; i++) {
       this.finalBudgetsList.push({
@@ -556,9 +559,11 @@ export class ModalSetBudgets implements OnInit {
       
       switch(result.status) {
         case 200:
+          this.modalLoading.closeModal();
           this.modalSuccess.openModal("Definição de orçamentos", "Oçamento(s) definido(s) com sucesso!");
           break;
         default:
+          this.modalLoading.closeModal();
           this.modalInternalError.openModal("Definição de orçamentos", "Erro ao tentar definir o(s) orçamento(s), por favor tente novamente mais tarde!");
           break;
       }
