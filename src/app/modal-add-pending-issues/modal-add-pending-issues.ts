@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { PendingIssuesService } from '../services/pending-issues.service';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-add-pending-issues',
@@ -20,6 +21,7 @@ export class ModalAddPendingIssues implements OnInit {
   private pendingIssues: any;
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
 
   constructor(
     private pendingIssuesService: PendingIssuesService
@@ -41,6 +43,7 @@ export class ModalAddPendingIssues implements OnInit {
   }
 
   public async addPendingIssues() {
+    this.modalLoading.openModal();
     this.pendingIssues = [];
     this.emptyField = false;
     //Verifica se todos os campos foram preenchidos
@@ -60,9 +63,11 @@ export class ModalAddPendingIssues implements OnInit {
       let result = await this.pendingIssuesService.createPendingIssues(this.pendingIssues);
       switch(result.status) {
         case 200:
+          this.modalLoading.closeModal();
           this.modalSuccess.openModal('Cadastro de Pendências', 'Pendência(s) cadastrada(s) com sucesso!');
           break;
         default:
+          this.modalLoading.closeModal();
           this.modalInternalError.openModal('Cadastro de Pendências', 'Erro ao cadastrar a(s) pendência(s), por favor tente novamente mais tarde.');
           break;
       }

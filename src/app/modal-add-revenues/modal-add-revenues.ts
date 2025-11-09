@@ -6,6 +6,7 @@ import { Months } from '../share/months';
 import { Years } from '../share/years';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-add-revenues',
@@ -34,6 +35,7 @@ export class ModalAddRevenues implements OnInit {
   private finalList: any;
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
 
   constructor(
     private revenuesService: RevenuesService
@@ -192,6 +194,7 @@ export class ModalAddRevenues implements OnInit {
   }
 
   public async addRevenues() {
+    this.modalLoading.openModal();
     this.finalList = [];
     const monthCbo = document.getElementById('monthRevenue') as HTMLSelectElement;
     const yearCbo = document.getElementById('yearRevenue') as HTMLSelectElement;
@@ -207,9 +210,11 @@ export class ModalAddRevenues implements OnInit {
 
     switch(result.status) {
       case 200:
+        this.modalLoading.closeModal();
         this.modalSuccess.openModal('Cadastro de Receitas', 'Receita(s) cadastrada(s) com sucesso!');
         break;
       default:
+        this.modalLoading.closeModal();
         this.modalInternalError.openModal('Cadastro de Receitas', 'Erro ao realizar o cadastro da(s) receita(s), por favor tente novamente mais tarde!');
         break;
     }
