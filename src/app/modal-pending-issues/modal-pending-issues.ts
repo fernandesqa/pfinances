@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PendingIssuesService } from '../services/pending-issues.service';
 import { ModalSuccess } from '../modal-success/modal-success';
 import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
+import { ModalLoading } from '../modal-loading/modal-loading';
 
 @Component({
   selector: 'app-modal-pending-issues',
@@ -30,6 +31,7 @@ export class ModalPendingIssues implements OnInit {
   public reset: boolean = false;
   private modalSuccess = new ModalSuccess;
   private modalInternalError = new ModalInternalError;
+  private modalLoading = new ModalLoading;
 
   constructor(
     private pendingIssuesService: PendingIssuesService
@@ -116,6 +118,7 @@ export class ModalPendingIssues implements OnInit {
   }
 
   public async updatePendingIssuesStatus() {
+    this.modalLoading.openModal();
     this.pendingIssuesUpdate = [];
     for(var i=0; i<this.updateControl.length; i++) {
       if(this.updateControl[i].selected) {
@@ -127,9 +130,11 @@ export class ModalPendingIssues implements OnInit {
     let result = await this.pendingIssuesService.updatePendingIssueStatus(this.pendingIssuesUpdate);
     switch(result.status) {
       case 200:
+        this.modalLoading.closeModal();
         this.modalSuccess.openModal('Pendências', 'Situação da(s) pendência(s) atualizada com sucesso!');
         break;
       default:
+        this.modalLoading.closeModal();
         this.modalInternalError.openModal('Pendências', 'Erro ao atualizar a situação da(s) pendência(s), por favor tente novamente mais tarde.');
         break;
     } 
@@ -137,12 +142,15 @@ export class ModalPendingIssues implements OnInit {
 
   //Reinicia as pendências
   public async resetPendingIssues() {
+    this.modalLoading.openModal();
     let result = await this.pendingIssuesService.resetPendingIssues();
     switch(result.status) {
       case 200:
+        this.modalLoading.closeModal();
         this.modalSuccess.openModal('Reiniciar Pendências', 'Pendência(s) reiniciada(s) com sucesso!');
         break;
       default:
+        this.modalLoading.closeModal();
         this.modalInternalError.openModal('Reiniciar Pendências', 'Erro ao reiniciar pendência(s), por favor tente novamente mais tarde.');
         break;
     }
