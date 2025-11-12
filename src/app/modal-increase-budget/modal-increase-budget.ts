@@ -35,6 +35,7 @@ export class ModalIncreaseBudget implements OnInit {
   private domHtml = new DomHtml;
   private monthYear: string = '';
   private monetary = new Monetary;
+  private finalList: any = [];
 
   constructor(
     private revenuesService: RevenuesService,
@@ -80,6 +81,7 @@ export class ModalIncreaseBudget implements OnInit {
       this.showResult = false;
       this.revenueSourceList = [];
       this.budgetsList = [];
+      this.finalList = [];
       this.domHtml.createSpinner('increaseBudgetSpinner');
       const monthCbo = document.getElementById('monthIncreaseBudget') as HTMLSelectElement;
       const yearCbo = document.getElementById('yearIncreaseBudget') as HTMLSelectElement;
@@ -96,7 +98,6 @@ export class ModalIncreaseBudget implements OnInit {
             var fixedString: String = value.toFixed(2);
             var RevenueCurrentValue: number = Number(fixedString);
             this.revenueSourceList.push({
-                                          "type": "revenue",
                                           "id": result.response.data[i].revenueId,
                                           "revenueSourceDescription": result.response.data[i].revenueDescription,
                                           "currentValue": this.monetary.convertToMonetary(RevenueCurrentValue.toString())
@@ -109,7 +110,6 @@ export class ModalIncreaseBudget implements OnInit {
             case 200:
               for(var i=0; i<result.response.data.length; i++) {
                 this.revenueSourceList.push({
-                                            "type": "savings",
                                             "id": result.response.data[i].savingsId,
                                             "revenueSourceDescription": result.response.data[i].savingsDescription,
                                             "currentValue": this.monetary.convertToMonetary(result.response.data[i].currentValue.toString())
@@ -124,7 +124,7 @@ export class ModalIncreaseBudget implements OnInit {
             case 200:
               for(var i=0; i<result.response.data.length; i++) {
                 this.budgetsList.push({
-                                                "budgetDestinationRevenueId": result.response.data[i].revenueId,
+                                                "budgetRevenueId": result.response.data[i].revenueId,
                                                 "budgetId": result.response.data[i].budgetId,
                                                 "budgetDescription": result.response.data[i].budgetDescription,
                                                 "budgetCurrentValue": result.response.data[i].budgetCurrentValue
@@ -158,12 +158,37 @@ export class ModalIncreaseBudget implements OnInit {
       for(var i=0; i<this.revenueSourceList.length; i++) {
         if(this.revenueSourceList[i].revenueSourceDescription==revenueSourceCbo.value) {
           input.setAttribute('value', this.revenueSourceList[i].currentValue);
+          this.finalList.push({
+                                "revenueSourceId": this.revenueSourceList[i].id,
+                                "revenueSourceDescription": this.revenueSourceList[i].revenueSourceDescription,
+                                "budgetId": 0,
+                                "budgetRevenueId": 0,
+                                "budgetDescription": "",
+                                "value": 0
+                              });
         }
       }
     }
   }
 
-  public checkBudgetToIncreaseCbo(e: Event) {}
+  public checkBudgetToIncreaseCbo(e: Event) {
+    const budgetCbo = e.target as HTMLSelectElement;
+
+    if(budgetCbo.value=='selecione o orçamento') {
+      this.isBudgetToIncreaseNotSelected = true;
+    } else {
+      this.isBudgetToIncreaseNotSelected = false;
+
+      for(var i=0; i<this.budgetsList.length; i++) {
+        if(this.budgetsList[i].budgetDescription==budgetCbo.value) {
+          this.finalList[0].budgetId = parseInt(this.budgetsList[i].budgetId);
+          this.finalList[0].budgetRevenueId = parseInt(this.budgetsList[i].budgetRevenueId);
+          this.finalList[0].budgetDescription = this.budgetsList[i].budgetDescription;
+        }
+      }
+      
+    }
+  }
 
   public currencyMaskOptions = {
     prefix: 'R$ ',
@@ -173,6 +198,40 @@ export class ModalIncreaseBudget implements OnInit {
     allowNegative: false
   };
 
-  public addValue(e: Event) {}
+  public addValue(e: Event) {
+    const inputBudget = e.target as HTMLInputElement;
+    const inputRevenueSource = document.getElementById('revenueSourceValue') as HTMLInputElement;
+    var budgetValue = this.monetary.convertFromMonetaryToNumber(inputBudget.value);
+    var revenueSourceValue = this.monetary.convertFromMonetaryToNumber(inputRevenueSource.value);
+
+    if(budgetValue=='') {
+      this.finalList[0].value = 0;
+    }
+    
+    if(parseFloat(budgetValue)>parseFloat(revenueSourceValue)) {
+      this.isInvalidValue = true;
+      this.finalList[0].value = 0;
+    } else {
+      this.isInvalidValue = false;
+      this.finalList[0].value = parseFloat(budgetValue);
+    }
+    this.manageButton();
+  }
+
+  private manageButton() {
+    const button = document.getElementById('buttonIncreaseBudget') as HTMLButtonElement;
+
+    if(!this.isMonthIncreaseBudgetNotSelected && 
+        !this.isYearIncreaseBudgetNotSelected && 
+        this.cboMonthChanged && 
+        this.cboYearChanged &&
+        !this.isRevenueSourceNotSelected &&
+        !this.isBudgetToIncreaseNotSelected &&
+        this.finalList[0].value > 0) {
+          button.removeAttribute('disabled');
+        } else {
+          button.setAttribute('disabled', 'true');
+        }
+  }
 
 }

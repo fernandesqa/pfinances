@@ -136,8 +136,7 @@ export class Summary implements OnInit {
                                             "categories": categoriesList
                                          });
         }
-
-        console.log(this.budgetsUsageDataList);
+        
         this.isLoadingBudgetsUsageData = false;
         this.isBudgetUsageDataLoaded = true;
         break;
