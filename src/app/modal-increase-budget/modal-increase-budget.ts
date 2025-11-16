@@ -7,6 +7,9 @@ import { RevenuesService } from '../services/revenues.service';
 import { SavingsService } from '../services/savings.service';
 import { DomHtml } from '../share/dom-html';
 import { Monetary } from '../share/monetary';
+import { ModalLoading } from '../modal-loading/modal-loading';
+import { ModalSuccess } from '../modal-success/modal-success';
+import { ModalInternalError } from '../modal-internal-error/modal-internal-error';
 
 @Component({
   selector: 'app-modal-increase-budget',
@@ -36,6 +39,9 @@ export class ModalIncreaseBudget implements OnInit {
   private monthYear: string = '';
   private monetary = new Monetary;
   private finalList: any = [];
+  private modalLoading = new ModalLoading;
+  private modalSuccess = new ModalSuccess;
+  private modalInternalError = new ModalInternalError;
 
   constructor(
     private revenuesService: RevenuesService,
@@ -232,6 +238,23 @@ export class ModalIncreaseBudget implements OnInit {
         } else {
           button.setAttribute('disabled', 'true');
         }
+  }
+
+  public async increaseBudget() {
+    this.modalLoading.openModal();
+
+    let result = await this.budgetsService.increaseBudget(this.monthYear, this.finalList[0]);
+
+    switch(result.status) {
+      case 200:
+        this.modalLoading.closeModal();
+        this.modalSuccess.openModal('Aumento de orçamento', 'Orçamento aumentado com sucesso.');
+        break;
+      default:
+        this.modalLoading.closeModal();
+        this.modalInternalError.openModal('Aumento de orçamento', 'Erro ao tentar aumentar o orçamento, por favor tente novamente mais tarde.');
+        break;
+    }
   }
 
 }

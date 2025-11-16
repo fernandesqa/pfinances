@@ -103,4 +103,15 @@ export class BudgetsService {
 
     return result;
   }
+
+  //Aumenta o valor do orçamento
+  public async increaseBudget(monthYear: string, data: any) {
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/increase-budget/users/'+userId+'/families/'+familyId+'/periods/'+monthYear;
+    var result = await this.http.patchData(url, data);
+
+    return result;
+  }
 }
