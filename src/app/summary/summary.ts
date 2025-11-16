@@ -136,73 +136,11 @@ export class Summary implements OnInit {
                                             "categories": categoriesList
                                          });
         }
+        
         this.isLoadingBudgetsUsageData = false;
         this.isBudgetUsageDataLoaded = true;
-        this.loadPercentageData();
         break;
     } 
-  }
-
-  public loadPercentageData() {
-    for(var i=0; i<this.resultBudgetsSummary.response.data.length; i++) {
-      for(var j=0; j<this.resultBudgetsSummary.response.data[i].categories.length; j++) {
-        var color;
-        switch(this.resultBudgetsSummary.response.data[i].categories[j].category) {
-          case 'Moradia':
-            color = '';
-            //color = 'red';
-            break;
-          case 'Alimentação':
-            //var id = this.resultBudgetsSummary.response.data[i].description+'-category-percentage';
-            var id = this.resultBudgetsSummary.response.data[i].description+'-'+this.resultBudgetsSummary.response.data[i].categories[j].category+'-percentage';
-            
-            const line = document.getElementById(id) as HTMLElement;
-            const svg = document.createElement('svg');
-            const svgLine = document.createElement('line');
-            const svgNode = document.createTextNode('Sorry, your browser does not support inline SVG. ');
-            
-            svg.setAttribute('height', '50');
-            svg.setAttribute('width', '300');
-            svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-
-            svgLine.setAttribute('x1', '0');
-            svgLine.setAttribute('y1', '10');
-
-            svgLine.setAttribute('x2', '250');
-
-            svgLine.setAttribute('y2', '10');
-            svgLine.setAttribute('stroke-linecap', 'round');
-            line.setAttribute('style', 'stroke: blue; stroke-width: 12;');
-            
-            svg.appendChild(svgLine);
-            svg.appendChild(svgNode);
-            break;
-          case 'Saúde':
-            color = 'style="stroke: red; stroke-width: 12;"'
-            //color = 'purple';
-            break;
-          case 'Educação':
-            color = 'style="stroke: red; stroke-width: 12;"'
-            //color = 'gray';
-            break;
-          case 'Transporte':
-            color = 'gold';
-            break;
-          case 'Lazer':
-            color = 'style="stroke: red; stroke-width: 12;"'
-            //color = 'brown';
-            break;
-          case 'Pessoal':
-            color = 'style="stroke: red; stroke-width: 12;"'
-            //color = 'silver';
-            break;
-          case 'Financeiro':
-            color = 'style="stroke: red; stroke-width: 12;"'
-            //color = 'black';
-            break;
-        }
-      }
-    }
   }
 
   public checkMonthCbo(e: Event) {

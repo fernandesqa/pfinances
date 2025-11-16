@@ -1,0 +1,111 @@
+<div id="modalIncreaseBudget" tabindex="-1" aria-labelledby="modalIncreaseBudget" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-primary fw-bold">Aumentar Orçamento</h1>
+        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <span class="text-primary">Selecione o período:</span>
+        <div class="row">
+            <div class="col">
+                <div class="form-floating">
+                    <select name="month" id="monthIncreaseBudget" class="form-control w-75" (change)="checkMonthIncreaseBudgetCbo($event)">
+                        <option value="selecione o mês">Selecione o mês</option>
+                        @for(item of monthsList; track $index) {
+                            <option value="{{ item }}">{{ item }}</option>
+                        }
+                    </select>
+                    <label for="monthIncreaseBudget">Mês</label>
+                </div>
+                @if(isMonthIncreaseBudgetNotSelected) {
+                    <p class="text-danger mb-2">Campo obrigatório</p>
+                }
+            </div>
+            <div class="col">
+                <div class="form-floating">
+                    <select name="year" id="yearIncreaseBudget" class="form-control w-75" (change)="checkYearIncreaseBudgetCbo($event)">
+                        <option value="selecione o ano">Selecione o ano</option>
+                            @for(item of yearsList; track $index) {
+                                <option value="{{ item }}">{{ item }}</option>
+                            }
+                    </select>
+                    <label for="yearIncreaseBudget">Ano</label>
+                </div>
+                @if(isYearIncreaseBudgetNotSelected) {
+                    <p class="text-danger mb-2">Campo obrigatório</p>
+                }
+            </div>
+        </div>
+        <div id="increaseBudgetSpinner"></div>
+
+        @if(showResult) {
+            <div class="form-floating my-2">
+                <select name="revenueSourceCbo" id="selectRevenueSource" class="form-control w-75" (change)="checkRevenueSourceCbo($event)">
+                    <option value="selecione a fonte de receita">Selecione a fonte receita</option>
+                        @for(item of revenueSourceList; track $index) {
+                            <option value="{{ item.revenueSourceDescription }}">{{ item.revenueSourceDescription }}</option>
+                        }
+                </select>
+                <label for="selectRevenueSource">Fonte de Receita</label>
+            </div>
+            @if(isRevenueSourceNotSelected) {
+                <p class="text-danger mb-2">Campo obrigatório</p>
+            }
+
+            <div class="form-floating">
+                <input type="text" id="revenueSourceValue" class="form-control" disabled>
+                <label for="revenueSourceValue">Valor disponível</label>
+            </div>
+
+            <div class="form-floating my-2">
+                <select name="budgetToIncreaseCbo" id="selectBudgetToIncrease" class="form-control w-75" (change)="checkBudgetToIncreaseCbo($event)">
+                    <option value="selecione o orçamento">Selecione o orçamento</option>
+                        @for(item of budgetsList; track $index) {
+                            <option value="{{ item.budgetDescription }}">{{ item.budgetDescription }}</option>
+                        }
+                </select>
+                <label for="selectBudgetToIncrease">Orçamento</label>
+            </div>
+            @if(isBudgetToIncreaseNotSelected) {
+                <p class="text-danger mb-2">Campo obrigatório</p>
+            }
+
+            <div class="form-floating">
+                <input 
+                    type="text" 
+                    id="budgetToIncreasenValue" 
+                    class="form-control"
+                    style="text-align: left;" 
+                    currencyMask [options]="currencyMaskOptions"
+                    (blur)="addValue($event)"
+                >
+                <label for="budgetToIncreasenValue">Valor</label>
+            </div>
+
+            @if(isInvalidValue) {
+                <p class="text-danger mb-2">O valor não pode ser maior que o valor disponível na fonte de receita selecionada.</p>
+            }
+        }
+        
+      </div>
+      <div class="modal-footer">
+        <button 
+            type="button" 
+            data-bs-dismiss="modal" 
+            aria-label="Close" 
+            class="btn btn-secondary"
+        >Cancelar</button>
+        <button
+            type="button"
+            id="buttonIncreaseBudget"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary"
+            (click)="increaseBudget()"
+            disabled
+        >Aumentar</button>
+      </div>
+    </div>
+  </div>
+</div>
