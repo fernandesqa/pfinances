@@ -88,44 +88,6 @@ export class Summary implements OnInit {
           if(resultBudgetUsage.response.data[i].icon==null) {
             icon = "bi bi-wallet2";
           }
-
-          var categoriesList = [];
-          for(var j=0; j<resultBudgetUsage.response.data[i].categories.length; j++) {
-
-            switch(resultBudgetUsage.response.data[i].categories[j].category) {
-              case 'Moradia':
-                this.style = {'stroke': 'red', 'stroke-width': '12'};
-                break;
-              case 'Alimentação':
-                this.style = {'stroke': 'blue', 'stroke-width': '12'};
-                break;
-              case 'Saúde':
-                this.style = {'stroke': 'purple', 'stroke-width': '12'};
-                break;
-              case 'Educação':
-                this.style = {'stroke': 'gray', 'stroke-width': '12'};
-                break;
-              case 'Transporte':
-                this.style = {'stroke': 'gold', 'stroke-width': '12'};
-                break;
-              case 'Lazer':
-                this.style = {'stroke': 'brown', 'stroke-width': '12'};
-                break;
-              case 'Pessoal':
-                this.style = {'stroke': 'orange', 'stroke-width': '12'};
-                break;
-              case 'Financeiro':
-                this.style = {'stroke': 'black', 'stroke-width': '12'};
-                break;
-            }
-            
-            categoriesList.push({
-                              "category": resultBudgetUsage.response.data[i].categories[j].category,
-                              "percentage": parseFloat(resultBudgetUsage.response.data[i].categories[j].percentage),
-                              "value": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].categories[j].value.toString()),
-                              "style": this.style
-                            });
-          }
           
           this.budgetsUsageDataList.push({
                                             "description": resultBudgetUsage.response.data[i].description,
@@ -133,7 +95,7 @@ export class Summary implements OnInit {
                                             "totalSet":  this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalSet.toString()),
                                             "totalUsed": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalUsed.toString()),
                                             "totalAvailable": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalAvailable.toString()),
-                                            "categories": categoriesList
+                                            "categories": this.loadCategories(resultBudgetUsage.response.data[i])
                                          });
         }
         
@@ -141,6 +103,47 @@ export class Summary implements OnInit {
         this.isBudgetUsageDataLoaded = true;
         break;
     } 
+  }
+
+  private loadCategories(data: any) {
+    var categoriesList = [];
+    for(var i=0; i<data.categories.length; i++) {
+
+      switch(data.categories[i].category) {
+        case 'Moradia':
+          this.style = {'stroke': 'red', 'stroke-width': '12'};
+          break;
+        case 'Alimentação':
+          this.style = {'stroke': 'blue', 'stroke-width': '12'};
+          break;
+        case 'Saúde':
+          this.style = {'stroke': 'purple', 'stroke-width': '12'};
+          break;
+        case 'Educação':
+          this.style = {'stroke': 'gray', 'stroke-width': '12'};
+          break;
+        case 'Transporte':
+          this.style = {'stroke': 'gold', 'stroke-width': '12'};
+          break;
+        case 'Lazer':
+          this.style = {'stroke': 'brown', 'stroke-width': '12'};
+          break;
+        case 'Pessoal':
+          this.style = {'stroke': 'orange', 'stroke-width': '12'};
+          break;
+        case 'Financeiro':
+          this.style = {'stroke': 'black', 'stroke-width': '12'};
+          break;
+      }
+      
+      categoriesList.push({
+                        "category": data.categories[i].category,
+                        "percentage": parseFloat(data.categories[i].percentage),
+                        "value": this.monetary.convertToMonetary(data.categories[i].value.toString()),
+                        "style": this.style
+                      });
+    }
+    return categoriesList;
   }
 
   public checkMonthCbo(e: Event) {
@@ -244,7 +247,8 @@ export class Summary implements OnInit {
                                               "icon": icon,
                                               "totalSet":  this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalSet.toString()),
                                               "totalUsed": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalUsed.toString()),
-                                              "totalAvailable": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalAvailable.toString())
+                                              "totalAvailable": this.monetary.convertToMonetary(resultBudgetUsage.response.data[i].totalAvailable.toString()),
+                                              "categories": this.loadCategories(resultBudgetUsage.response.data[i])
                                           });
           }
           this.isLoadingBudgetsUsageData = false;
