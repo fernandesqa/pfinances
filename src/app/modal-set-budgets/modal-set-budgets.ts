@@ -400,7 +400,6 @@ export class ModalSetBudgets implements OnInit {
     const input = e.target as HTMLInputElement;
     var value = this.monetary.convertFromMonetaryToNumber(input.value);
     for(var i=0; i<this.budgetsList.length; i++) {
-      console.log(this.budgetsList[i]);
       if(this.budgetsList[i].checkboxId==input.name) {
         this.budgetsList[i].value = value;
       }
