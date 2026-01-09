@@ -46,12 +46,12 @@ export class BudgetsService {
   }
 
   //Consulta os orçamentos definidos no mês anterior ao atual
-  public async getPreviousBudgets(): Promise<any> {
+  public async getBudgetsNotSetOnPeriod(monthYear: string): Promise<any> {
     let result: any;
     let userId = this.localStorage.getUserId();
     let familyId = this.localStorage.getFamilyId();
     let url = this.http.getApiUrl();
-    url = url + '/list-previous-budgets/users/'+userId+'/families/'+familyId;
+    url = url + '/list-budgets-not-set-on-period/users/'+userId+'/families/'+familyId+'/periods/'+monthYear;
     await this.http.getData(url).then( (data) => {
       result = data;
     }).catch (error => {
