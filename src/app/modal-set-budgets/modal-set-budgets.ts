@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Months } from '../share/months';
 import { Years } from '../share/years';
 import { DomHtml } from '../share/dom-html';
@@ -54,27 +54,19 @@ export class ModalSetBudgets implements OnInit {
   public loadPreviousBudgets: boolean = false;
   public previousBudgets: any = [];
   private budgetsAlreadySetList: any = [];
+  public budgetSelected: boolean = false;
+  public budgetId: number = 0;
+  public budgetValue: string = '';
 
   constructor(
     private revenuesService: RevenuesService,
     private savingsService: SavingsService,
-    private budgetsService: BudgetsService
+    private budgetsService: BudgetsService,
   ) {}
 
   async ngOnInit() {
     this.monthsList = this.months.getMonthsList();
     this.yearsList = this.years.getBillingYears();
-    var result = await this.budgetsService.getPreviousBudgets();
-    switch(result.status) {
-      case 200:
-        for(var i=0; i<result.response.data.length; i++) {
-          this.previousBudgets.push({
-                                      "description": result.response.data[i].budgetDescription,
-                                      "value": result.response.data[i].budgetValue
-                                   });
-        }
-        break;
-    }
   }
 
   public checkMonthCbo(e: Event) {
@@ -177,16 +169,31 @@ export class ModalSetBudgets implements OnInit {
             "revenuesSource": this.revenuesSource
           });
 
+          var result = await this.budgetsService.getBudgetsNotSetOnPeriod(this.monthYear);
+          switch(result.status) {
+            case 200:
+              for(var i=0; i<result.response.data.length; i++) {
+                this.previousBudgets.push({
+                                            "id": result.response.data[i].budgetId,
+                                            "description": result.response.data[i].budgetDescription,
+                                            "value": result.response.data[i].budgetValue
+                                        });
+              }
+              break;
+          }
+
           this.domHTML.removeAllChildNodes('spinnerParent');
           this.showForm = true;
           break;
         case 404:
           this.budgets = [];
+          this.previousBudgets = [];
           this.domHTML.removeAllChildNodes('spinnerParent');
           this.domHTML.createMsgDataNotFound('spinnerParent');
           break;
         default:
           this.budgets = [];
+          this.previousBudgets = [];
           this.domHTML.removeAllChildNodes('spinnerParent');
           this.domHTML.createMsgInternalError('spinnerParent');
           break;
@@ -203,8 +210,9 @@ export class ModalSetBudgets implements OnInit {
 
     const elflexSwitch = e.target as HTMLInputElement;
     if(elflexSwitch.checked) {
+      this.totalBudgets = 99;
+      this.reset();
       for(var i=0; i<this.previousBudgets.length; i++) {
-        this.totalBudgets = this.totalBudgets + 1;
         var sources = [];
         for(var j=0; j<this.revenuesControl.length; j++) {
           sources.push({
@@ -238,6 +246,7 @@ export class ModalSetBudgets implements OnInit {
       this.isDescriptionEmpty = false;
     } else {
         this.totalBudgets = 1;
+        this.reset();
         this.budgets.push({
             "id": this.totalBudgets,
             "revenuesSource": this.revenuesSource
@@ -250,6 +259,40 @@ export class ModalSetBudgets implements OnInit {
     
   }
 
+  public checkBudgetSelected(e: Event) {
+    var budgetCbo = e.target as HTMLSelectElement;
+
+    if(budgetCbo.value!='selecione o orçamento') {
+      this.budgetSelected = true;
+      this.isDescriptionEmpty = false;
+      for(var i=0; i<this.previousBudgets.length; i++) {
+        if(budgetCbo.value==this.previousBudgets[i].description) {
+          this.budgetId = this.previousBudgets[i].id;
+          this.budgetValue = this.monetary.convertToMonetary(this.previousBudgets[i].value.toString());
+        }
+      }
+      
+    } else {
+      this.budgetSelected = false;
+      this.reset();
+    }
+    
+  }
+
+  private reset() {
+    this.budgetsList = [];
+    for(var i=0; i<this.budgets.length; i++) {
+      for(var j=0; j<this.budgets[i].revenuesSource[j].length; j++) {
+        this.budgets[i].revenuesSource[j].selected = false;
+      }
+    }
+    this.isDescriptionEmpty = true; 
+    this.isValueEmpty = true; 
+    this.isInvalidAmount = true; 
+    this.isRevenueSelected = false;
+    this.manageButton();
+  }
+
   public currencyMaskOptions = {
     prefix: 'R$ ',
     thousands: '.',
@@ -260,11 +303,24 @@ export class ModalSetBudgets implements OnInit {
 
   public checkSource(e: Event) {
     const checkbox = e.target as HTMLInputElement;
-    const inputDescriptionId = checkbox.id.split('-')[0];
-    let inputDescription = document.getElementById(inputDescriptionId) as HTMLInputElement;
+    let inputDescription;
+    if(!this.loadPreviousBudgets) {
+      const inputDescriptionId = checkbox.id.split('-')[0];
+      inputDescription = document.getElementById(inputDescriptionId) as HTMLInputElement;
+    } else {
+
+      inputDescription = document.getElementById('cbo-budgets') as HTMLSelectElement; 
+    }
+    
     if(checkbox.checked) {
       this.isValueEmpty = true;
-      for(var i=0; i<this.budgets.length; i++) {
+      let total;
+      if(this.loadPreviousBudgets) {
+        total = 1;
+      } else {
+        total = this.budgets.length;
+      }
+      for(var i=0; i<total; i++) {
         if(checkbox.name==this.budgets[i].id) {
           var id = checkbox.id.split('-')[1];
           for(var j=0; j<this.budgets[i].revenuesSource.length; j++) {
@@ -344,6 +400,7 @@ export class ModalSetBudgets implements OnInit {
     const input = e.target as HTMLInputElement;
     var value = this.monetary.convertFromMonetaryToNumber(input.value);
     for(var i=0; i<this.budgetsList.length; i++) {
+      console.log(this.budgetsList[i]);
       if(this.budgetsList[i].checkboxId==input.name) {
         this.budgetsList[i].value = value;
       }
