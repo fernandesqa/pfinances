@@ -199,3 +199,7 @@ body {
 .bg-card {
     background-color: #f8f9fa;
 }
+
+.card-button {
+    width: 300px;
+}

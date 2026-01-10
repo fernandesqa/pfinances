@@ -37,6 +37,7 @@ import { ExpensesService } from './services/expenses.service';
 import { ModalBudgetTransfering } from './modal-budget-transfering/modal-budget-transfering';
 import { ModalLoading } from './modal-loading/modal-loading';
 import { ModalIncreaseBudget } from './modal-increase-budget/modal-increase-budget';
+import { ModalSetNewBudgetValue } from './modal-set-new-budget-value/modal-set-new-budget-value';
 @Component({
   selector: 'app-root',
   imports: [
@@ -64,6 +65,7 @@ import { ModalIncreaseBudget } from './modal-increase-budget/modal-increase-budg
     ModalBudgetTransfering,
     ModalLoading,
     ModalIncreaseBudget,
+    ModalSetNewBudgetValue,
     Footer
   ],
   templateUrl: './app.html',
