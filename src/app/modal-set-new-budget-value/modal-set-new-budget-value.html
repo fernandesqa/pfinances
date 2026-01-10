@@ -1,0 +1,71 @@
+<div id="modalSetNewBudgetValue" tabindex="-1" aria-labelledby="modalSetNewBudgetValue" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-primary fw-bold">Alterar valor do orçamento</h1>
+        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-2">
+            <div class="col">
+                <div class="form-floating">
+                    <select name="month" id="selectBudget" class="form-control w-75" (change)="checkBudgetsCbo($event)">
+                        <option value="selecione o orçamento">Selecione o orçamento</option>
+                        @for(item of budgetsList; track $index) {
+                            <option value="{{ item.budgetDescription }}">{{ item.budgetDescription }}</option>
+                        }
+                    </select>
+                    <label for="selectBudget">Orçamento</label>
+                </div>
+                @if(isBudgetNotSelected) {
+                    <p class="text-danger mb-2">Campo obrigatório</p>
+                }
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col col-md-6">
+                <div class="form-floating">
+                    <input type="text" id="inputCurrentBudgetValue" class="form-control" disabled>
+                    <label for="inputCurrentBudgetValue">Valor atual</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-6">
+                <div class="form-floating">
+                    <input 
+                        type="text" 
+                        id="inputBudgetNewValue" 
+                        class="form-control" 
+                        style="text-align: left;" 
+                        currencyMask [options]="currencyMaskOptions"
+                        (blur)="checkValue($event)"
+                    >
+                    <label for="inputBudgetNewValue">Novo valor</label>
+                </div>
+                @if(isValueNotInformed) {
+                    <p class="text-danger mb-2">Campo obrigatório</p>
+                }
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button 
+            type="button" 
+            data-bs-dismiss="modal" 
+            aria-label="Close" 
+            class="btn btn-secondary"
+        >Cancelar</button>
+        <button
+            type="button"
+            id="buttonSetNewBudgetValue"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary"
+            (click)="setNewBudgetValue()"
+            disabled
+        >Alterar</button>
+      </div>
+    </div>
+  </div>
+</div>

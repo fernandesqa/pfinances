@@ -114,4 +114,31 @@ export class BudgetsService {
 
     return result;
   }
+
+  //Consulta todos os orçamentos da família
+  public async getAllBudgets(): Promise<any> {
+    let result: any;
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/get-all-budgets/users/'+userId+'/families/'+familyId;
+    await this.http.getData(url).then( (data) => {
+      result = data;
+    }).catch (error => {
+      result = error;
+    });
+
+    return result;
+  }
+
+  //Altera o valor do orçamento
+  public async setNewBudgetValue(data: any) {
+    let userId = this.localStorage.getUserId();
+    let familyId = this.localStorage.getFamilyId();
+    let url = this.http.getApiUrl();
+    url = url + '/set-new-budget-value/users/'+userId+'/families/'+familyId;
+    var result = await this.http.patchData(url, data);
+
+    return result;
+  }
 }
